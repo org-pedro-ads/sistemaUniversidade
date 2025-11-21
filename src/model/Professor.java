@@ -16,11 +16,56 @@ public abstract class Professor {
         this.tipo = tipo;
         this.disciplinas = disciplinas;
     }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public TituloProfessor getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(TituloProfessor titulo) {
+        this.titulo = titulo;
+    }
+
+    public TipoProfessor getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoProfessor tipo) {
+        this.tipo = tipo;
+    }
+
+    public List<Disciplina> getDisciplinas() {
+        return disciplinas;
+    }
+
+    public void setDisciplinas(List<Disciplina> disciplinas) {
+        this.disciplinas = disciplinas;
+    }
+
     public abstract Double calcularSalario(Double horasTrabalhadas);
 
-    public abstract void adicionarDisciplina(Disciplina disciplina);
+    public void adicionarDisciplina(Disciplina disciplina){
 
-    public abstract void removerDisciplina(Disciplina disciplina);
+    }
+
+    public void removerDisciplina(Disciplina disciplina){
+
+    }
 
     public List<Disciplina> listarDisciplinas(){
         return null;

@@ -14,18 +14,34 @@ public class ProfessorSubstituto extends Professor{
         this.tempoDeContrato = tempoDeContrato;
     }
 
+    public void update(ProfessorSubstituto professor){
+        this.nome = professor.getNome();
+        this.matricula = professor.getMatricula();
+        this.titulo = professor.getTitulo();
+        this.tipo = professor.getTipo();
+        this.disciplinas = professor.getDisciplinas();
+        this.horasAula = professor.getHorasAula();
+        this.tempoDeContrato = professor.getTempoDeContrato();
+    }
+
+    public Double getHorasAula() {
+        return horasAula;
+    }
+
+    public void setHorasAula(Double horasAula) {
+        this.horasAula = horasAula;
+    }
+
+    public LocalDate getTempoDeContrato() {
+        return tempoDeContrato;
+    }
+
+    public void setTempoDeContrato(LocalDate tempoDeContrato) {
+        this.tempoDeContrato = tempoDeContrato;
+    }
+
     @Override
-    public Double calcularSalario(Double horasTrabalhadas) {
+    public Double calcularSalario(Double horasAula) {
         return 0.0;
-    }
-
-    @Override
-    public void adicionarDisciplina(Disciplina disciplina) {
-
-    }
-
-    @Override
-    public void removerDisciplina(Disciplina disciplina) {
-
     }
 }

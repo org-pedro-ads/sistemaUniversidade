@@ -69,7 +69,7 @@ public class ProjetoPesquisa {
         }
     }
 
-    // Método do diagrama: alterarOrientador(ProfessorVitalicio professor)
+    // Metodo do diagrama: alterarOrientador(ProfessorVitalicio professor)
     // Assumindo que ProfessorVitalicio é uma subclasse ou tipo específico de
     // Professor
     public void alterarOrientador(Professor professorVitalicio) {

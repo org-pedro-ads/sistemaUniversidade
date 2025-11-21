@@ -1,0 +1,42 @@
+package model;
+
+import java.util.List;
+
+public class DisciplinaEletiva extends Disciplina{
+    private List<Alunos> interessados;
+
+    public DisciplinaEletiva(
+            int id,
+            String nome,
+            int cargaHoraria,
+            Professor professorResponsavel,
+            List<Alunos> alunos,
+            List<Alunos> interessados
+    ){
+        this.id = id;
+        this.nome = nome;
+        this.cargaHoraria = cargaHoraria;
+        this.professorResponsavel = professorResponsavel;
+        this.alunos = alunos;
+        this.interessados = interessados;
+    }
+
+    public List<Alunos> getInteressados() {
+        return interessados;
+    }
+
+    @Override
+    public String getTipo() {
+        return "Eletiva";
+    }
+
+    public Alunos declararInteresse(Alunos aluno) {
+        // TODO: implementar funcao declarar interesse
+        return aluno;
+    }
+
+    public Alunos retirarInteresse(Alunos aluno) {
+        // TODO: implementar funcao retirar interesse
+        return aluno;
+    }
+}
