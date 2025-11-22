@@ -21,10 +21,6 @@ public class DisciplinaEletiva extends Disciplina{
         this.interessados = interessados;
     }
 
-    public List<String> getInteressados() {
-        return interessados;
-    }
-
     @Override
     public String getTipo() {
         return "Eletiva";
@@ -38,5 +34,9 @@ public class DisciplinaEletiva extends Disciplina{
     public Alunos retirarInteresse(Alunos aluno) {
         // TODO: implementar funcao retirar interesse
         return aluno;
+    }
+
+    public List<String> listarInteressados(){
+        return interessados;
     }
 }
