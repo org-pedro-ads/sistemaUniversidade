@@ -59,8 +59,11 @@ public class DisciplinaRepository implements IDisciplinaRepository {
 
     @Override
     public boolean removerDisciplina(int id) {
-        // Implementação correta para remover a disciplina baseada no ID e retorna true/false
-        return this.disciplinas.removeIf(d -> d.getId() == id);
+        Disciplina disciplina = this.buscarDisciplinaPorId(id);
+
+        if(disciplina == null) return false;
+        this.disciplinas.remove(disciplina);
+        return true;
     }
 
     @Override
@@ -104,6 +107,16 @@ public class DisciplinaRepository implements IDisciplinaRepository {
 
         if (disciplina != null) {
             return disciplina.getAlunos();
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    List<String> listarMatriculasAlunosInteressados(int idDisciplina) {
+        Disciplina disciplina = this.buscarDisciplinaPorId(idDisciplina);
+
+        if (disciplina != null) {
+            return disciplina.getAlunosInteressados();
         }
         return new ArrayList<>();
     }
