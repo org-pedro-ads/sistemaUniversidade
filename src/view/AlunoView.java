@@ -1,4 +1,3 @@
-// src/view/AlunoView.java
 package view;
 
 import model.Alunos;
@@ -9,7 +8,6 @@ import java.util.Scanner;
 public class AlunoView {
     private final Scanner scanner = new Scanner(System.in);
 
-    // ====================== EXIBIÇÃO ======================
     public void exibirTitulo(String titulo) {
         System.out.println("\n" + "=".repeat(60));
         System.out.println(" ".repeat((60 - titulo.length()) / 2) + titulo);
@@ -30,14 +28,13 @@ public class AlunoView {
         System.out.println("Total de alunos: " + alunos.size());
     }
 
-    // ====================== LEITURA DE DADOS (SÓ LÊ!) ======================
     public String lerNome() {
         System.out.print("Nome completo: ");
         return scanner.nextLine().trim();
     }
 
     public String lerMatricula() {
-        System.out.print("Matrícula (ex: 2023001): ");
+        System.out.print("Matrícula (ex: BT2023001): ");
         return scanner.nextLine().trim();
     }
 
@@ -51,7 +48,6 @@ public class AlunoView {
         return scanner.nextLine().trim();
     }
 
-    // ====================== MENSAGENS (só exibe o que mandar) ======================
     public void sucesso(String mensagem) {
         System.out.println("SUCESSO: " + mensagem);
     }
@@ -64,7 +60,6 @@ public class AlunoView {
         System.out.println("INFO: " + mensagem);
     }
 
-    // ====================== PAUSA ======================
     public void pausar() {
         System.out.print("\nPressione ENTER para continuar...");
         scanner.nextLine();

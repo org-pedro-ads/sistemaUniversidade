@@ -1,14 +1,22 @@
 import java.util.Scanner;
 import controller.AlunoController;
+import controller.ProjetoPesquisaController;
 import repository.AlunoRepository;
+import repository.ProfessorRepository;
+import repository.ProjetoPesquisaRepository;
 import view.AlunoView;
+import view.ProjetoPesquisaView;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
 
     private static final AlunoRepository alunoRepository = new AlunoRepository();
+    private static final ProjetoPesquisaRepository projetoPesquisaRepository = new ProjetoPesquisaRepository();
     private static final AlunoView alunoView = new AlunoView();
     private static final AlunoController alunoController = new AlunoController(alunoRepository, alunoView);
+    private static final ProjetoPesquisaView projetoPesquisaView = new ProjetoPesquisaView();
+    private static final ProfessorRepository professorRepository = new ProfessorRepository();
+    private static final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
 
     public static void main(String[] args) {
         System.out.println("""
@@ -141,8 +149,8 @@ public class Main {
 
             switch (escolha) {
                 case "a", "b" -> System.out.println("[Implementar] Funcionalidade em desenvolvimento...");
-                case "c" -> System.out.println("[Implementar] Funcionalidade em desenvolvimento..."); // davi
-                case "d" -> System.out.println("[Implementar] Funcionalidade em desenvolvimento..."); // davi
+                case "c" -> projetoPesquisaController.cadastrarProjeto(); // davi
+                case "d" -> projetoPesquisaController.listarProjetosDoProfessor(); // davi
                 case "0" -> System.out.println("Voltando...\n");
                 default -> System.out.println("Opção inválida!");
             }

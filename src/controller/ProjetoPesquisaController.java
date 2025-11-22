@@ -19,14 +19,14 @@ public class ProjetoPesquisaController {
             ProjetoPesquisaRepository projetoRepo,
             ProfessorRepository professorRepo,
             AlunoRepository alunoRepo,
-            ProjetoPesquisaView view) {
+            ProjetoPesquisaView view
+        ) {
         this.projetoRepo = projetoRepo;
         this.professorRepo = professorRepo;
         this.alunoRepo = alunoRepo;
         this.view = view;
     }
 
-    // (c) CADASTRAR PROJETO DE PESQUISA
     public void cadastrarProjeto() {
         view.exibirTitulo("CADASTRAR NOVO PROJETO DE PESQUISA");
 
@@ -66,18 +66,17 @@ public class ProjetoPesquisaController {
     }
 
     // (d) LISTAR TODOS OS PROJETOS
-    public void listarTodosProjetos() {
-        view.exibirTitulo("TODOS OS PROJETOS DE PESQUISA");
+    // public void listarTodosProjetos() {
+    //     view.exibirTitulo("TODOS OS PROJETOS DE PESQUISA");
 
-        if (projetoRepo.getTodosProjetos().isEmpty()) {
-            System.out.println("Nenhum projeto de pesquisa cadastrado.");
-            return;
-        }
-        view.exibirListaProjetos(projetoRepo.getTodosProjetos());
-        view.pausar();
-    }
+    //     if (projetoRepo.getTodosProjetos().isEmpty()) {
+    //         System.out.println("Nenhum projeto de pesquisa cadastrado.");
+    //         return;
+    //     }
+    //     view.exibirListaProjetos(projetoRepo.getTodosProjetos());
+    //     view.pausar();
+    // }
 
-    // LISTAR PROJETOS DE UM PROFESSOR ESPECÍFICO
     public void listarProjetosDoProfessor() {
         view.exibirTitulo("BUSCAR PROJETOS POR ORIENTADOR");
 
@@ -95,7 +94,6 @@ public class ProjetoPesquisaController {
         view.pausar();
     }
 
-    // ADICIONAR ALUNO BOLSISTA AO PROJETO
     public void adicionarAlunoBolsista() {
         view.exibirTitulo("ADICIONAR ALUNO BOLSISTA");
 
@@ -126,16 +124,10 @@ public class ProjetoPesquisaController {
         projeto.adicionarAluno(aluno);
         view.sucesso("Aluno " + aluno.getNome() + " adicionado como bolsista!");
 
-        if (projeto == null) {
-            System.out.println("Projeto não encontrado.");
-            return;
-        }
-
         view.exibirProjetoDetalhado(projeto);
         view.pausar();
     }
 
-    // REMOVER ALUNO BOLSISTA
     public void removerAlunoBolsista() {
         view.exibirTitulo("REMOVER ALUNO BOLSISTA");
 
@@ -168,7 +160,6 @@ public class ProjetoPesquisaController {
         view.pausar();
     }
 
-    // ALTERAR ORIENTADOR (só aceita ProfessorVitalicio)
     public void alterarOrientador() {
         view.exibirTitulo("ALTERAR ORIENTADOR DO PROJETO");
 
@@ -199,16 +190,10 @@ public class ProjetoPesquisaController {
         projeto.alterarOrientador((ProfessorVitalicio) novoOrientador);
         view.sucesso("Orientador alterado com sucesso!");
 
-        if (projeto == null) {
-            System.out.println("Projeto não encontrado.");
-            return;
-        }
-
         view.exibirProjetoDetalhado(projeto);
         view.pausar();
     }
 
-    // DETALHAR UM PROJETO ESPECÍFICO
     public void detalharProjeto() {
         view.exibirTitulo("DETALHES DO PROJETO");
 
@@ -218,11 +203,6 @@ public class ProjetoPesquisaController {
         if (projeto == null) {
             view.erro("Projeto não encontrado!");
         } else {
-            if (projeto == null) {
-                System.out.println("Projeto não encontrado.");
-                return;
-            }
-
             view.exibirProjetoDetalhado(projeto);
         }
         view.pausar();
