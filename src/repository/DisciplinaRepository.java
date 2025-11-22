@@ -3,10 +3,10 @@ package repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Alunos;
+import model.Alunos; // Mantido para referência, mas não usado diretamente na lista
 import model.Disciplina;
 
-public class DisciplinaRepository {
+public class DisciplinaRepository implements IDisciplinaRepository {
 
     private static DisciplinaRepository instance;
     private List<Disciplina> disciplinas;
@@ -16,6 +16,7 @@ public class DisciplinaRepository {
         this.disciplinas = new ArrayList<>();
     }
 
+    // Método estático Singleton
     public static DisciplinaRepository getInstance() {
         if (instance == null) {
             instance = new DisciplinaRepository();
@@ -23,21 +24,20 @@ public class DisciplinaRepository {
         return instance;
     }
 
-    public int getNextId() {
-        return this.sequenceId;
-    }
-
-    public Disciplina adicionar(Disciplina disciplina) {
+    @Override
+    public Disciplina adicionarDisciplina(Disciplina disciplina) {
         disciplina.setId(this.sequenceId);
         this.disciplinas.add(disciplina);
         this.sequenceId++;
         return disciplina;
     }
 
+    @Override
     public List<Disciplina> listarDisciplinas() {
         return this.disciplinas;
     }
 
+    @Override
     public Disciplina buscarDisciplinaPorId(int id) {
         for (Disciplina d : this.disciplinas) {
             if (d.getId() == id) {
@@ -47,6 +47,7 @@ public class DisciplinaRepository {
         return null;
     }
 
+    @Override
     public Disciplina buscarDisciplinaPorNome(String nome) {
         for (Disciplina d : this.disciplinas) {
             if (d.getNome().equals(nome)) {
@@ -56,11 +57,14 @@ public class DisciplinaRepository {
         return null;
     }
 
+    @Override
     public boolean removerDisciplina(int id) {
+        // Implementação correta para remover a disciplina baseada no ID e retorna true/false
         return this.disciplinas.removeIf(d -> d.getId() == id);
     }
 
-    public void updateDisciplina(Disciplina disciplina) {
+    @Override
+    public void atualizarDisciplina(Disciplina disciplina) {
         Disciplina disciplinaExistente = buscarDisciplinaPorId(disciplina.getId());
 
         if (disciplinaExistente != null) {
@@ -71,13 +75,36 @@ public class DisciplinaRepository {
         }
     }
 
-    public Disciplina matricularAluno(Alunos aluno, int idDisciplina) {
+    @Override
+    public Disciplina matricularAluno(int idDisciplina, String matriculaAluno) {
         Disciplina disciplina = this.buscarDisciplinaPorId(idDisciplina);
 
         if (disciplina != null) {
-            disciplina.getAlunos().add(aluno);
-            this.updateDisciplina(disciplina);
+            if (!disciplina.getAlunos().contains(matriculaAluno)) {
+                disciplina.getAlunos().add(matriculaAluno);
+            }
+
         }
         return disciplina;
+    }
+
+    @Override
+    public Disciplina removerAluno(int idDisciplina, String matriculaAluno) {
+        Disciplina disciplina = this.buscarDisciplinaPorId(idDisciplina);
+
+        if (disciplina != null) {
+            disciplina.getAlunos().remove(matriculaAluno);
+        }
+        return disciplina;
+    }
+
+    @Override
+    public List<String> listarMatriculasAlunosPorDisciplina(int idDisciplina) {
+        Disciplina disciplina = this.buscarDisciplinaPorId(idDisciplina);
+
+        if (disciplina != null) {
+            return disciplina.getAlunos();
+        }
+        return new ArrayList<>();
     }
 }
