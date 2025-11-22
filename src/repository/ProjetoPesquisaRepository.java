@@ -79,7 +79,7 @@ public class ProjetoPesquisaRepository {
             System.out.println("\nPROJETOS ORIENTADOS POR " + professor.getNome().toUpperCase() + ":");
             System.out.println("─".repeat(80));
             for (ProjetoPesquisa p : projetosDoProf) {
-                System.out.printf("• %s (Bolsistas: %d)%n", p.getTitulo(), p.getAlunosBolsistas().size());
+                System.out.printf("%s (Bolsistas: %d)%n", p.getTitulo() ,p.getAlunosBolsistas().size());
             }
             System.out.println("─".repeat(80));
             System.out.println("Total: " + projetosDoProf.size() + " projeto(s)\n");
