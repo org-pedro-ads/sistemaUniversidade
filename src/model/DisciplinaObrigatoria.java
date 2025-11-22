@@ -9,8 +9,8 @@ public class DisciplinaObrigatoria extends Disciplina {
             String nome,
             int cargaHoraria,
             Professor professorResponsavel,
-            List<Alunos> alunos
-    ){
+            List<String> alunos
+    ) {
         this.id = id;
         this.nome = nome;
         this.cargaHoraria = cargaHoraria;
