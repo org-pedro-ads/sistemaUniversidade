@@ -3,15 +3,15 @@ package model;
 import java.util.List;
 
 public class DisciplinaEletiva extends Disciplina{
-    private List<Alunos> interessados;
+    private List<String> interessados;
 
     public DisciplinaEletiva(
             int id,
             String nome,
             int cargaHoraria,
             Professor professorResponsavel,
-            List<Alunos> alunos,
-            List<Alunos> interessados
+            List<String> alunos,
+            List<String> interessados
     ){
         this.id = id;
         this.nome = nome;
@@ -21,7 +21,7 @@ public class DisciplinaEletiva extends Disciplina{
         this.interessados = interessados;
     }
 
-    public List<Alunos> getInteressados() {
+    public List<String> getInteressados() {
         return interessados;
     }
 
