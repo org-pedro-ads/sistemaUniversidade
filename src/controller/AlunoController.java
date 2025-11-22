@@ -2,6 +2,7 @@ package controller;
 
 import model.Alunos;
 import repository.AlunoRepository;
+import util.MatriculaGenerator;
 import view.AlunoView;
 
 public class AlunoController {
@@ -23,7 +24,8 @@ public class AlunoController {
             return;
         }
 
-        String matricula = view.lerMatricula();
+        String matricula = MatriculaGenerator.gerarParaAluno();
+        
         if (matricula.isBlank()) {
             view.erro("A matrícula não pode estar vazia!");
             view.pausar();
@@ -44,7 +46,7 @@ public class AlunoController {
 
     public void listarAlunos() {
         if (repository.getTodos().isEmpty()) {
-            System.out.println("   → Nenhum aluno cadastrado.");
+            System.out.println(" -> Nenhum aluno cadastrado.");
             return;
         }
 

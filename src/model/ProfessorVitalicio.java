@@ -2,12 +2,20 @@ package model;
 
 import java.util.List;
 
-public class ProfessorVitalicio extends Professor{
+public class ProfessorVitalicio extends Professor {
     private List<ProjetoPesquisa> projetos;
     private Double salarioBase;
 
-    public ProfessorVitalicio(String nome, String matricula, TituloProfessor titulo, TipoProfessor tipo,
-                               List<Disciplina> disciplinas, List<ProjetoPesquisa> projetos, Double salarioBase){
+    public ProfessorVitalicio
+    (
+        String nome,
+        String matricula,
+        TituloProfessor titulo,
+        TipoProfessor tipo,
+        List<Disciplina> disciplinas,
+        List<ProjetoPesquisa> projetos,
+        Double salarioBase
+    ) {
         super(nome, matricula, titulo, tipo, disciplinas);
         this.projetos = projetos;
         this.salarioBase = salarioBase;
@@ -34,7 +42,7 @@ public class ProfessorVitalicio extends Professor{
         return 0.0;
     }
 
-    public List<ProjetoPesquisa> listarProjetos(){
+    public List<ProjetoPesquisa> listarProjetos() {
         return null;
     }
 }
