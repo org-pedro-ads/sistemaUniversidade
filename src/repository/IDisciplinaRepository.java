@@ -10,7 +10,7 @@ public interface IDisciplinaRepository {
     Disciplina buscarDisciplinaPorId(int id);
     Disciplina adicionarDisciplina(Disciplina disciplina);
     void atualizarDisciplina(Disciplina disciplina);
-    boolean removerDisciplina(int id);
+    boolean removerDisciplina(int id) ;
 
     // ------------------ Listas --------------------------
     List<Disciplina> listarDisciplinas();
@@ -19,7 +19,7 @@ public interface IDisciplinaRepository {
     List<String> listarMatriculasAlunosPorDisciplina(int idDisciplina);
 
     // Listar as matriculas dos alunos que tem interesse em uma disciplina eletiva especifica
-    List<String> listarMatriculasAlunosInteressados(int idDisciplina);
+    List<String> listarMatriculasAlunosInteressados(int idDisciplina) throws Exception;
 
     // ------------------ Aluno (Gerenciamento de Matrícula) --------------------------
     // Os métodos agora lidam com strings (matrículas) e retornam a disciplina atualizada

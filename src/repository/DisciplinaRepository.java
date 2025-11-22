@@ -5,6 +5,7 @@ import java.util.List;
 
 import model.Alunos; // Mantido para referência, mas não usado diretamente na lista
 import model.Disciplina;
+import model.DisciplinaEletiva;
 
 public class DisciplinaRepository implements IDisciplinaRepository {
 
@@ -112,12 +113,25 @@ public class DisciplinaRepository implements IDisciplinaRepository {
     }
 
     @Override
-    List<String> listarMatriculasAlunosInteressados(int idDisciplina) {
+    public List<String> listarMatriculasAlunosInteressados(int idDisciplina) throws Exception {
+
+        // 1. Busca Genérica
         Disciplina disciplina = this.buscarDisciplinaPorId(idDisciplina);
 
-        if (disciplina != null) {
-            return disciplina.getAlunosInteressados();
+        // 2. Validação de Existência
+        if (disciplina == null) {
+            throw new Exception("Disciplina com ID " + idDisciplina + " não encontrada.");
         }
-        return new ArrayList<>();
+
+        // 3. Validação de Tipo e Extração de Dados (O Pulo do Gato)
+        if (disciplina instanceof DisciplinaEletiva) {
+
+            DisciplinaEletiva eletiva = (DisciplinaEletiva) disciplina;
+
+            return eletiva.listarInteressados();
+
+        } else {
+            throw new Exception("Apenas disciplinas eletivas possuem lista de interesse.");
+        }
     }
 }
