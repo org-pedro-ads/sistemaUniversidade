@@ -26,14 +26,8 @@ public class DisciplinaEletiva extends Disciplina{
         return "Eletiva";
     }
 
-    public Alunos declararInteresse(Alunos aluno) {
-        // TODO: implementar funcao declarar interesse
-        return aluno;
-    }
-
-    public Alunos retirarInteresse(Alunos aluno) {
-        // TODO: implementar funcao retirar interesse
-        return aluno;
+    public void setListaAlunosInteressados(List<String> lista) {
+        this.interessados = lista;
     }
 
     public List<String> listarInteressados(){
