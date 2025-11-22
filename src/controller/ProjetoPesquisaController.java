@@ -88,9 +88,16 @@ public class ProjetoPesquisaController {
             view.pausar();
             return;
         }
+        
+        if (!(prof instanceof ProfessorVitalicio)) {
+            view.erro("Apenas professores vitalícios podem orientar projetos de pesquisa!");
+            view.pausar();
+            return;
+        }
+
 
         view.info("Projetos orientados por: " + prof.getNome());
-        projetoRepo.listarProjetosDoProfessor(prof);
+        projetoRepo.listarProjetosDoProfessor((ProfessorVitalicio) prof);
         view.pausar();
     }
 

@@ -33,27 +33,6 @@ public class ProjetoPesquisaRepository {
         System.out.println("Projeto de pesquisa cadastrado com sucesso: " + projeto.getTitulo());
     }
 
-    // (d) Listar projetos de um professor
-    public void listarProjetosDoProfessor(ProfessorVitalicio professor) {
-        if (professor == null) {
-            System.out.println("Professor inválido.");
-            return;
-        }
-
-        List<ProjetoPesquisa> projetosDoProf = projetos.stream()
-                .filter(p -> p.getOrientador() != null && p.getOrientador().equals(professor)).toList();
-
-        System.out.println("\n=== PROJETOS DE PESQUISA DE " + professor.getNome().toUpperCase() + " ===");
-        if (projetosDoProf.isEmpty()) {
-            System.out.println("Nenhum projeto encontrado.");
-        } else {
-            for (ProjetoPesquisa p : projetosDoProf) {
-                System.out.printf("• %s | Alunos bolsistas: %d%n", p.getTitulo(), p.getAlunosBolsistas().size());
-            }
-        }
-        System.out.println("Total: " + projetosDoProf.size() + " projeto(s)\n");
-    }
-
     public ProjetoPesquisa buscarPorTitulo(String titulo) {
         if (titulo == null || titulo.isBlank()) return null;
 
@@ -63,8 +42,7 @@ public class ProjetoPesquisaRepository {
                 .orElse(null);
     }
 
-    // LISTAR PROJETOS DE UM PROFESSOR ESPECÍFICO
-    public void listarProjetosDoProfessor(Professor professor) {
+    public void listarProjetosDoProfessor(ProfessorVitalicio professor) {
         if (professor == null) {
             System.out.println("Professor inválido.");
             return;
@@ -87,12 +65,10 @@ public class ProjetoPesquisaRepository {
 
     }
 
-    // VERIFICAR SE EXISTE PROJETO COM ESSE TÍTULO
     public boolean existeProjetoComTitulo(String titulo) {
         return buscarPorTitulo(titulo) != null;
     }
 
-    // REMOVER PROJETO (opcional, se precisar no futuro)
     public boolean removerProjeto(ProjetoPesquisa projeto) {
         return projetos.remove(projeto);
     }
