@@ -14,7 +14,7 @@ import java.util.Scanner;
  * Blocos e Sombras: █ ▀ ▄ ░ ▒ ▓
  */
 
-public class DisciplinaView implements IDisciplinaRepository {
+public class DisciplinaView implements IDisciplinaView {
 
     private final Scanner scanner = new Scanner(System.in);
 
