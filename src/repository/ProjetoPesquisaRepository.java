@@ -1,6 +1,5 @@
 package repository;
 
-import model.Professor;
 import model.ProjetoPesquisa;
 import model.ProfessorVitalicio;
 
@@ -14,7 +13,6 @@ public class ProjetoPesquisaRepository {
         this.projetos = new ArrayList<>();
     }
 
-    // (c) Cadastrar projeto de pesquisa (só professor vitalício)
     public void cadastrarProjeto(ProjetoPesquisa projeto) {
         if (projeto == null) {
             System.out.println("Projeto inválido.");
