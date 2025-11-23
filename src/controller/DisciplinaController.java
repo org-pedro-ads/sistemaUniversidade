@@ -614,6 +614,19 @@ public class DisciplinaController implements IDisciplinaController {
         return d;
     }
 
+    public int getPopularidadeDisciplina(int idDisciplina) throws Exception {
+        Disciplina disciplina = buscarDisciplinaPorId(idDisciplina);
+
+        if(disciplina == null) throw new Exception("ID nao encontrado");
+
+        if(disciplina instanceof DisciplinaEletiva disciplinaEletiva) {
+            return disciplinaEletiva.listarInteressados().size();
+        }else {
+            return 0;
+        }
+
+    }
+
     // ==================================================================================
     // RELATORIOS
     // ==================================================================================
