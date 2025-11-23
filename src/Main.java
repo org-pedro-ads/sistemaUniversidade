@@ -137,8 +137,8 @@ public class Main {
             escolha = scanner.nextLine().trim().toLowerCase();
 
             switch (escolha) {
-                case "a" -> alunoController.cadastrarAluno();
-                case "b" -> alunoController.listarAlunos();
+                case "a" -> alunoView.cadastrarAluno();
+                case "b" -> alunoView.listarAlunos();
                 case "c", "d" -> System.out.println("[Implementar] Funcionalidade em desenvolvimento...");
                 case "0" -> System.out.println("Voltando...\n");
                 default -> System.out.println("Opção inválida!");

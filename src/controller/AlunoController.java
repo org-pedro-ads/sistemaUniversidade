@@ -14,10 +14,7 @@ public class AlunoController {
         this.view = view;
     }
 
-    public void cadastrarAluno() {
-        view.exibirTitulo("CADASTRAR ALUNO");
-
-        String nome = view.lerNome();
+    public void cadastrarAluno(String nome) {
         if (nome.isBlank()) {
             view.erro("O nome não pode estar vazio!");
             view.pausar();
