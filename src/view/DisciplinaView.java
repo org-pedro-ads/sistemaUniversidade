@@ -322,7 +322,7 @@ public class DisciplinaView implements IDisciplinaView {
 
     public void relatorioPopularidadeDisciplina() throws Exception {
         try {
-            print(" ================= Popularidade das disciplinas ================ \n");
+            print("\n ================= Popularidade das disciplinas ================ \n");
 
             List<Disciplina> disciplinas = disciplinaController.listarDisciplinas();
 
@@ -334,6 +334,7 @@ public class DisciplinaView implements IDisciplinaView {
                 }
             }
 
+            print("\n____________________________________________________________________\n");
 
         } catch (Exception e) {
             throw new Exception("Erro ao fazer relatorio de popularidade: " + e.getMessage());

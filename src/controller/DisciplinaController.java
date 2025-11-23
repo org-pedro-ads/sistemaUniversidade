@@ -27,7 +27,7 @@ public class DisciplinaController implements IDisciplinaController {
     }
 
     // ==================================================================================
-    // METODOS AUXILIARES (Private) - Para evitar repeticao de codigo
+    // METODOS AUXILIARES (Private)
     // ==================================================================================
 
     /**
@@ -41,7 +41,6 @@ public class DisciplinaController implements IDisciplinaController {
 
     /**
      * Auxiliar: Busca disciplina e lanca erro se nao existir.
-     * Usado pelos metodos logicos.
      */
     public Disciplina validarExistenciaDisciplina(int id) throws Exception {
         Disciplina disciplina = this.disciplinaRepository.buscarDisciplinaPorId(id);
@@ -60,13 +59,11 @@ public class DisciplinaController implements IDisciplinaController {
         try {
             this.disciplinaView.print(" ================= Cadastro Disciplina ================ \n");
 
-            // Coleta de dados
             String nome = this.disciplinaView.getInfo("\nDigite o nome da disciplina: ");
             int cargaHoraria = lerIdInteiro("\nDigite a carga-horaria da disciplina: ");
             String matriculaProf = this.disciplinaView.getInfo("\nDigite a matricula do professor responsavel: ");
             int tipo = lerIdInteiro("\nDigite o tipo (1 - Obrigatoria, 2 - Eletiva): ");
 
-            // Validacoes de Negocio
             Professor professor = this.professorController.encontrarProfessor(matriculaProf);
             if (professor == null) {
                 throw new Exception("Professor com matricula " + matriculaProf + " nao encontrado.");
@@ -82,7 +79,6 @@ public class DisciplinaController implements IDisciplinaController {
                 throw new Exception("Carga horaria deve ser no minimo 10 horas.");
             }
 
-            // Instanciacao
             Disciplina novaDisciplina;
             List<String> listaVazia = new ArrayList<>();
 
@@ -92,7 +88,6 @@ public class DisciplinaController implements IDisciplinaController {
                 novaDisciplina = new DisciplinaEletiva(0, nome, cargaHoraria, professor, listaVazia, new ArrayList<>());
             }
 
-            // Persistencia
             novaDisciplina = this.disciplinaRepository.adicionarDisciplina(novaDisciplina);
 
             this.disciplinaView.print("\nDisciplina '" + nome + "' adicionada com sucesso! (ID: " + novaDisciplina.getId() + ")\n");
@@ -113,7 +108,7 @@ public class DisciplinaController implements IDisciplinaController {
 
     @Override
     public void removerDisciplina(int id) throws Exception {
-        validarExistenciaDisciplina(id); // Valida se existe antes de tentar remover
+        validarExistenciaDisciplina(id);
         this.disciplinaRepository.removerDisciplina(id);
     }
 
@@ -125,7 +120,7 @@ public class DisciplinaController implements IDisciplinaController {
                 this.disciplinaView.print(" ================= Remover Disciplina ================ \n");
                 int id = lerIdInteiro("\nDigite o ID da disciplina a ser removida: ");
 
-                this.removerDisciplina(id); // Chama metodo logico
+                this.removerDisciplina(id);
 
                 this.disciplinaView.print("\nDisciplina " + id + " removida com sucesso.\n");
                 sucesso = true;
@@ -153,26 +148,17 @@ public class DisciplinaController implements IDisciplinaController {
 
     @Override
     public List<Disciplina> listarDisciplinas() throws Exception {
-
-        // 1. Busca a lista de disciplinas no Repository
         List<Disciplina> lista = this.disciplinaRepository.listarDisciplinas();
 
-        // Verifica se a lista não é nula, usando ArrayList vazia como fallback
         if (lista == null) {
             lista = new ArrayList<>();
         }
 
-        // 2. Verifica se a lista está vazia para fornecer feedback ao usuário
         if (lista.isEmpty()) {
-            this.disciplinaView.print("\n⚠️ Nenhuma disciplina cadastrada.\n");
+            this.disciplinaView.print("\nNenhuma disciplina cadastrada.\n");
             return lista;
         }
 
-        // 3. Envia a lista para a View para exibição formatada (Relatório)
-        // O metodo printRelatorios da View deve se encarregar de exibir a lista.
-        this.disciplinaView.printRelatorios(lista);
-
-        // 4. Retorna a lista (útil para testes ou outros Controllers)
         return lista;
     }
 
@@ -202,7 +188,7 @@ public class DisciplinaController implements IDisciplinaController {
         while (!sucesso) {
             try {
                 int id = lerIdInteiro("\nDigite o ID da disciplina: ");
-                lista = this.listarAlunosMatriculados(id); // Chama logico
+                lista = this.listarAlunosMatriculados(id);
                 sucesso = true;
             } catch (NumberFormatException e) {
                 this.disciplinaView.print("\nERRO: ID invalido.\n");
@@ -291,7 +277,6 @@ public class DisciplinaController implements IDisciplinaController {
             try {
                 int id = lerIdInteiro("\nDigite o ID da disciplina: ");
 
-                // Validacao rapida para UX
                 if (buscarDisciplinaPorId(id) == null) throw new Exception("ID nao encontrado.");
 
                 String novoNome = this.disciplinaView.getInfo("Digite o novo nome: ");
@@ -331,7 +316,6 @@ public class DisciplinaController implements IDisciplinaController {
             try {
                 int id = lerIdInteiro("\nDigite o ID da disciplina: ");
 
-                // Validacao rapida para UX
                 if (buscarDisciplinaPorId(id) == null) throw new Exception("ID nao encontrado.");
 
                 int carga = lerIdInteiro("Digite a nova carga horaria: ");
@@ -393,7 +377,6 @@ public class DisciplinaController implements IDisciplinaController {
             try {
                 int id = lerIdInteiro("\nDigite o ID da disciplina: ");
 
-                // Validacao rapida
                 if (buscarDisciplinaPorId(id) == null) throw new Exception("ID nao encontrado.");
 
                 String mat = this.disciplinaView.getInfo("Digite a matricula do novo professor: ");
