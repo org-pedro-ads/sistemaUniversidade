@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Alunos {
     private String nome;
     private String matricula;
-    private final List<Disciplina> disciplinas = new ArrayList<>();
+    private final List<Integer> disciplinas = new ArrayList<>();
 
     // Construtor com parâmetros
     public Alunos(String nome, String matricula) {
@@ -20,16 +20,16 @@ public class Alunos {
         return matricula;
     }
 
-    public List<Disciplina> getDisciplinasMatriculadas() {
+    public List<Integer> getDisciplinasMatriculadas() {
         return new ArrayList<>(disciplinas);
     }
 
-    public void removerDisciplina(Disciplina d) {
-        disciplinas.remove(d);
+    public void removerDisciplina(int d) {
+        disciplinas.remove(Integer.valueOf(d));
     }
 
-    public void adicionarDisciplina(Disciplina d) {
-        if (d != null && !disciplinas.contains(d)) {
+    public void adicionarDisciplina(int d) {
+        if (d > 0 && !disciplinas.contains(d)) {
             disciplinas.add(d);
         }
     }

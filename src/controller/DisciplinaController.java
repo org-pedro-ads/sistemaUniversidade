@@ -1,6 +1,7 @@
 package controller;
 
 import model.*;
+import repository.AlunoRepository;
 import repository.DisciplinaRepository;
 import view.DisciplinaView;
 
@@ -416,6 +417,7 @@ public class DisciplinaController implements IDisciplinaController {
             throw new Exception("Aluno ja esta matriculado nesta disciplina.");
         }
 
+        aluno.adicionarDisciplina(idDisciplina);
         alunosMatriculados.add(matricula);
         disciplina.setAlunos(alunosMatriculados);
         this.disciplinaRepository.atualizarDisciplina(disciplina);
@@ -449,8 +451,8 @@ public class DisciplinaController implements IDisciplinaController {
     }
 
     @Override
-    public Disciplina desmatricularAlunoDisciplina(int id, String matricula) throws Exception {
-        Disciplina disciplina = validarExistenciaDisciplina(id);
+    public Disciplina desmatricularAlunoDisciplina(int idDisciplina, String matricula) throws Exception {
+        Disciplina disciplina = validarExistenciaDisciplina(idDisciplina);
         Alunos aluno = this.alunoController.encontrarAluno(matricula);
 
         if (aluno == null) throw new Exception("Aluno nao encontrado.");
@@ -461,6 +463,7 @@ public class DisciplinaController implements IDisciplinaController {
             throw new Exception("Aluno nao esta matriculado nesta disciplina.");
         }
 
+        aluno.removerDisciplina(idDisciplina);
         alunosMatriculados.remove(matricula);
         disciplina.setAlunos(alunosMatriculados);
         this.disciplinaRepository.atualizarDisciplina(disciplina);
