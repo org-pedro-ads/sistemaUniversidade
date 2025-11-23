@@ -16,7 +16,7 @@ public class DisciplinaRepository implements IDisciplinaRepository {
         this.disciplinas = new ArrayList<>();
     }
 
-    // Método estático Singleton
+    // Metodo estático Singleton
     public static DisciplinaRepository getInstance() {
         if (instance == null) {
             instance = new DisciplinaRepository();

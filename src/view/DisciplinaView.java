@@ -1,7 +1,12 @@
 package view;
 
+import controller.AlunoController;
+import controller.DisciplinaController;
+import controller.ProfessorController;
 import model.Alunos;
 import model.Disciplina;
+import repository.AlunoRepository;
+import repository.DisciplinaRepository;
 import repository.IDisciplinaRepository;
 
 import java.util.List;
@@ -15,6 +20,16 @@ import java.util.Scanner;
  */
 
 public class DisciplinaView implements IDisciplinaView {
+
+    private final DisciplinaRepository disciplinaRepository = DisciplinaRepository.getInstance();
+    private final AlunoRepository alunoRepository = AlunoRepository.getInstance();
+
+    private final AlunoView alunoView =  new AlunoView();
+
+    private final ProfessorController professorController = new  ProfessorController();
+    private final AlunoController alunoController = new AlunoController(alunoRepository, alunoView);
+    private final DisciplinaController disciplinaController = new DisciplinaController(disciplinaRepository, professorController, alunoController);
+
 
     private final Scanner scanner = new Scanner(System.in);
 
@@ -86,5 +101,83 @@ public class DisciplinaView implements IDisciplinaView {
     // ----------------- Relatorios ---------------------
     public void printRelatorios(List<Disciplina> disciplina) {
         this.print("Implementar relatorio");
+    }
+
+
+    // ----------------- Funcoes do menu ---------------------
+    @Override
+    public void adicionarDisciplina() throws Exception {
+        try {
+            this.disciplinaController.adicionarDisciplina();
+        } catch(Exception e) {
+            this.print("Erro ao cadastrar disciplina: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void listarDisciplinas() throws Exception {
+        try {
+            this.disciplinaController.listarDisciplinas();
+        } catch(Exception e) {
+            this.print("Erro ao listar disciplina: " + e.getMessage());
+        }
+    }
+    @Override
+    public void editarDisciplina() throws Exception {
+        try {
+            this.print(" ================= Editar Disciplina ================ \n");
+            int id = Integer.getInteger(this.getInfo("\nDigite o id da disciplina: "));
+
+            this.disciplinaController.validarExistenciaDisciplina(id);
+            Disciplina disciplina = this.disciplinaController.buscarDisciplinaPorId(id);
+
+            this.printDisciplina(disciplina);
+
+            String escolha;
+            this.print("\n\n === Selecione a propridade que deseja editar: ");
+            this.print("1. Nome: ");
+            this.print("2. Carga horaria: ");
+            this.print("3. Professore responsavel: ");
+            this.print("4. Voltar: ");
+            escolha = scanner.nextLine().trim();
+
+            switch (escolha) {
+                case "1":
+                    disciplina = this.disciplinaController.atualizarNome();
+                    break;
+                case "2":
+                    disciplina = this.disciplinaController.atualizarCargaHoraria();
+                    break;
+                case "3":
+                    disciplina = this.disciplinaController.atualizarProfessorResponsavel();
+                    break;
+                case "4":
+                    return;
+                default:
+                    this.print("\n\nOpcao invalida, tente novamente: ");
+            }
+
+            disciplina = this.disciplinaController.alterarDisciplina(disciplina);
+            this.print("\n\nDisciplina alterada com sucesso!\n");
+            this.printDisciplina(disciplina);
+        } catch(Exception e) {
+            throw new Exception("Erro ao editar disciplina: " + e.getMessage());
+        }
+    }
+    @Override
+    public void removerDisciplina() throws Exception {
+        try {
+            this.disciplinaController.removerDisciplina();
+        } catch(Exception e) {
+            this.print("Erro ao remover disciplina: " + e.getMessage());
+        }
+    }
+    @Override
+    public void listarAlunosMatriculados() throws Exception {
+        try {
+            this.disciplinaController.listarAlunosMatriculados();
+        } catch(Exception e){
+            this.print("Erro ao listar alunos matriculados: " + e.getMessage());
+        }
     }
 }

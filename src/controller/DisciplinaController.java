@@ -16,12 +16,11 @@ public class DisciplinaController implements IDisciplinaController {
 
     public DisciplinaController(
             DisciplinaRepository disciplinaRepository,
-            DisciplinaView disciplinaView,
             ProfessorController professorController,
             AlunoController alunoController
     ) {
         this.disciplinaRepository = disciplinaRepository;
-        this.disciplinaView = disciplinaView;
+        this.disciplinaView = new DisciplinaView();
         this.professorController = professorController;
         this.alunoController = alunoController;
     }
@@ -43,7 +42,7 @@ public class DisciplinaController implements IDisciplinaController {
      * Auxiliar: Busca disciplina e lanca erro se nao existir.
      * Usado pelos metodos logicos.
      */
-    private Disciplina validarExistenciaDisciplina(int id) throws Exception {
+    public Disciplina validarExistenciaDisciplina(int id) throws Exception {
         Disciplina disciplina = this.disciplinaRepository.buscarDisciplinaPorId(id);
         if (disciplina == null) {
             throw new Exception("Disciplina com ID " + id + " nao encontrada.");
@@ -240,6 +239,18 @@ public class DisciplinaController implements IDisciplinaController {
     // ==================================================================================
     // ATUALIZACAO - DADOS BASICOS
     // ==================================================================================
+
+    @Override
+    public Disciplina alterarDisciplina(Disciplina disciplina) throws Exception {
+        try {
+            this.validarExistenciaDisciplina(disciplina.getId());
+            this.disciplinaRepository.atualizarDisciplina(disciplina);
+            return disciplina;
+        } catch (Exception e) {
+            this.disciplinaView.print("\nERRO: " + e.getMessage() + " Tente novamente.\n");
+            return null;
+        }
+    }
 
     @Override
     public Disciplina atualizarNome(int id, String nome) throws Exception {
