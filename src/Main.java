@@ -1,10 +1,7 @@
 import java.util.Scanner;
 import controller.AlunoController;
-import controller.DisciplinaController;
-import controller.ProfessorController;
 import controller.ProjetoPesquisaController;
 import repository.AlunoRepository;
-import repository.DisciplinaRepository;
 import repository.ProfessorRepository;
 import repository.ProjetoPesquisaRepository;
 import view.AlunoView;
@@ -21,10 +18,9 @@ public class Main {
     private static final ProjetoPesquisaView projetoPesquisaView = new ProjetoPesquisaView();
     private static final ProfessorRepository professorRepository = new ProfessorRepository();
     private static final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
-    private static final ProfessorController professorController = new ProfessorController();
     private static final DisciplinaView disciplinaView = new DisciplinaView();
 
-    public static void main(String[] args) {
+    static void main(String[] args) throws Exception {
         System.out.println("""
             ╔══════════════════════════════════════════════════╗
             ║    SISTEMA DE GESTÃO ACADÊMICA - IFSP 2025       ║
@@ -96,7 +92,7 @@ public class Main {
     }
 
     // ====================== MENU DISCIPLINAS ======================
-    private static void menuDisciplinas() {
+    private static void menuDisciplinas() throws Exception{
         String escolha;
         do {
             System.out.println("\n>>> DISCIPLINAS");
