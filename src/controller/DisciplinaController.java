@@ -369,6 +369,21 @@ public class DisciplinaController implements IDisciplinaController {
         return disciplina;
     }
 
+    public Disciplina removerProfessorResponsavel(int id) throws Exception {
+        try {
+            Disciplina disciplina = buscarDisciplinaPorId(id);
+            if(disciplina == null) { throw new Exception("Disciplina nao encontrado."); }
+
+            disciplina.setProfessorResponsavel(null);
+            disciplinaRepository.atualizarDisciplina(disciplina);
+            return disciplina;
+
+        } catch (Exception e) {
+            throw new Exception("Erro ao remover professor de disciplina: " + e.getMessage());
+        }
+
+    }
+
     @Override
     public Disciplina atualizarProfessorResponsavel() {
         boolean sucesso = false;
