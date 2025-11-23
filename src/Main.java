@@ -169,7 +169,7 @@ public class Main {
     }
 
     // ====================== MENU ELETIVAS ======================
-    private static void menuEletivasInteresse() {
+    private static void menuEletivasInteresse() throws Exception{
         String escolha;
         do {
             System.out.println("\n>>> ELETIVAS — INTERESSE DOS ALUNOS");
@@ -181,7 +181,9 @@ public class Main {
             escolha = scanner.nextLine().trim().toLowerCase();
 
             switch (escolha) {
-                case "a", "b", "c" -> System.out.println("[Implementar] Funcionalidade em desenvolvimento...");
+                case "a" -> disciplinaView.declararInteresseDisciplina();
+                case "b" -> disciplinaView.calcularIndiceInteresseDisciplina();
+                case "c" -> disciplinaView.relatorioPopularidadeDisciplina();
                 case "0" -> System.out.println("Voltando...\n");
                 default -> System.out.println("Opção inválida!");
             }

@@ -64,7 +64,6 @@ public interface IDisciplinaController {
 
     /** Registra o interesse do aluno na disciplina eletiva (Lógica de Negócio). */
     Disciplina declararInteresseDisciplina(int idDisciplina, String matriculaAluno) throws  Exception;
-    Disciplina declararInteresseDisciplina() throws  Exception;
 
     /** Remove o interesse do aluno na disciplina eletiva (Lógica de Negócio). */
     Disciplina removerInteresseDisciplina(int idDisciplina, String matriculaAluno) throws  Exception;

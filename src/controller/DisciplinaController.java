@@ -57,55 +57,53 @@ public class DisciplinaController implements IDisciplinaController {
 
     @Override
     public Disciplina adicionarDisciplina() {
-        while (true) {
-            try {
-                this.disciplinaView.print(" ================= Cadastro Disciplina ================ \n");
+        try {
+            this.disciplinaView.print(" ================= Cadastro Disciplina ================ \n");
 
-                // Coleta de dados
-                String nome = this.disciplinaView.getInfo("\nDigite o nome da disciplina: ");
-                int cargaHoraria = lerIdInteiro("\nDigite a carga-horaria da disciplina: ");
-                String matriculaProf = this.disciplinaView.getInfo("\nDigite a matricula do professor responsavel: ");
-                int tipo = lerIdInteiro("\nDigite o tipo (1 - Obrigatoria, 2 - Eletiva): ");
+            // Coleta de dados
+            String nome = this.disciplinaView.getInfo("\nDigite o nome da disciplina: ");
+            int cargaHoraria = lerIdInteiro("\nDigite a carga-horaria da disciplina: ");
+            String matriculaProf = this.disciplinaView.getInfo("\nDigite a matricula do professor responsavel: ");
+            int tipo = lerIdInteiro("\nDigite o tipo (1 - Obrigatoria, 2 - Eletiva): ");
 
-                // Validacoes de Negocio
-                Professor professor = this.professorController.encontrarProfessor(matriculaProf);
-                if (professor == null) {
-                    throw new Exception("Professor com matricula " + matriculaProf + " nao encontrado.");
-                }
-
-                if (tipo != 1 && tipo != 2) {
-                    throw new Exception("Tipo invalido. Use 1 (Obrigatoria) ou 2 (Eletiva).");
-                }
-                if (nome.length() < 5) {
-                    throw new Exception("Nome deve conter ao menos 5 caracteres.");
-                }
-                if (cargaHoraria < 10) {
-                    throw new Exception("Carga horaria deve ser no minimo 10 horas.");
-                }
-
-                // Instanciacao
-                Disciplina novaDisciplina;
-                List<String> listaVazia = new ArrayList<>();
-
-                if (tipo == 1) {
-                    novaDisciplina = new DisciplinaObrigatoria(0, nome, cargaHoraria, professor, listaVazia);
-                } else {
-                    novaDisciplina = new DisciplinaEletiva(0, nome, cargaHoraria, professor, listaVazia, new ArrayList<>());
-                }
-
-                // Persistencia
-                novaDisciplina = this.disciplinaRepository.adicionarDisciplina(novaDisciplina);
-
-                this.disciplinaView.print("\nDisciplina '" + nome + "' adicionada com sucesso! (ID: " + novaDisciplina.getId() + ")\n");
-                return novaDisciplina;
-
-            } catch (NumberFormatException e) {
-                this.disciplinaView.print("\nERRO DE FORMATO: Digite apenas numeros inteiros onde solicitado.\n");
-                return null;
-            } catch (Exception e) {
-                this.disciplinaView.print("\nERRO AO CADASTRAR: " + e.getMessage() + "\n");
-                return null;
+            // Validacoes de Negocio
+            Professor professor = this.professorController.encontrarProfessor(matriculaProf);
+            if (professor == null) {
+                throw new Exception("Professor com matricula " + matriculaProf + " nao encontrado.");
             }
+
+            if (tipo != 1 && tipo != 2) {
+                throw new Exception("Tipo invalido. Use 1 (Obrigatoria) ou 2 (Eletiva).");
+            }
+            if (nome.length() < 5) {
+                throw new Exception("Nome deve conter ao menos 5 caracteres.");
+            }
+            if (cargaHoraria < 10) {
+                throw new Exception("Carga horaria deve ser no minimo 10 horas.");
+            }
+
+            // Instanciacao
+            Disciplina novaDisciplina;
+            List<String> listaVazia = new ArrayList<>();
+
+            if (tipo == 1) {
+                novaDisciplina = new DisciplinaObrigatoria(0, nome, cargaHoraria, professor, listaVazia);
+            } else {
+                novaDisciplina = new DisciplinaEletiva(0, nome, cargaHoraria, professor, listaVazia, new ArrayList<>());
+            }
+
+            // Persistencia
+            novaDisciplina = this.disciplinaRepository.adicionarDisciplina(novaDisciplina);
+
+            this.disciplinaView.print("\nDisciplina '" + nome + "' adicionada com sucesso! (ID: " + novaDisciplina.getId() + ")\n");
+            return novaDisciplina;
+
+        } catch (NumberFormatException e) {
+            this.disciplinaView.print("\nERRO DE FORMATO: Digite apenas numeros inteiros onde solicitado.\n");
+            return null;
+        } catch (Exception e) {
+            this.disciplinaView.print("\nERRO AO CADASTRAR: " + e.getMessage() + "\n");
+            return null;
         }
     }
 
@@ -538,31 +536,6 @@ public class DisciplinaController implements IDisciplinaController {
         this.disciplinaRepository.atualizarDisciplina(disciplinaEletiva);
 
         return disciplinaEletiva;
-    }
-
-    @Override
-    public Disciplina declararInteresseDisciplina() {
-        boolean sucesso = false;
-        Disciplina d = null;
-
-        this.disciplinaView.print(" ================= Declarar Interesse ================ \n");
-
-        while (!sucesso) {
-            try {
-                int id = lerIdInteiro("\nDigite o ID da disciplina eletiva: ");
-                String mat = this.disciplinaView.getInfo("Digite a matricula do aluno: ");
-
-                d = this.declararInteresseDisciplina(id, mat);
-
-                this.disciplinaView.print("\nInteresse registrado com sucesso!\n");
-                sucesso = true;
-            } catch (NumberFormatException e) {
-                this.disciplinaView.print("\nERRO: ID invalido.\n");
-            } catch (Exception e) {
-                this.disciplinaView.print("\nERRO: " + e.getMessage() + "\n");
-            }
-        }
-        return d;
     }
 
     @Override

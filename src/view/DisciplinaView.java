@@ -5,6 +5,7 @@ import controller.DisciplinaController;
 import controller.ProfessorController;
 import model.Alunos;
 import model.Disciplina;
+import model.DisciplinaEletiva;
 import repository.AlunoRepository;
 import repository.DisciplinaRepository;
 
@@ -291,7 +292,51 @@ public class DisciplinaView implements IDisciplinaView {
 
         int idDisciplina = getIntInfo("Digite o ID da disciplina: ");
 
-        disciplinaController.removerProfessorResponsavel(idDisciplina);
+        Disciplina disciplina = disciplinaController.removerProfessorResponsavel(idDisciplina);
 
+    }
+
+    public void declararInteresseDisciplina() throws Exception {
+        try {
+
+            int idDisciplina = getIntInfo("Digite o ID disciplina: ");
+            String matrculaAluno = getInfo("Digite a matricula da aluno: ");
+
+            disciplinaController.declararInteresseDisciplina(idDisciplina, matrculaAluno);
+        } catch (Exception e) {
+            throw new Exception("Erro ao declarar interesse em disciplina: " + e.getMessage());
+        }
+    }
+
+    public void calcularIndiceInteresseDisciplina() throws Exception {
+        try {
+            int idDisciplina = getIntInfo("Digite o ID disciplina: ");
+            int interesse = disciplinaController.getPopularidadeDisciplina(idDisciplina);
+
+            print(">>> Interesse na disciplina: " + interesse);
+
+        } catch (Exception e) {
+            throw new Exception("Erro ao calcular interesse em disciplina: " + e.getMessage());
+        }
+    }
+
+    public void relatorioPopularidadeDisciplina() throws Exception {
+        try {
+            print(" ================= Popularidade das disciplinas ================ \n");
+
+            List<Disciplina> disciplinas = disciplinaController.listarDisciplinas();
+
+            for (Disciplina disciplina : disciplinas) {
+                if( disciplina instanceof DisciplinaEletiva) {
+                    print("Disciplina: " + disciplina.getNome());
+                    print("Professor responsavel: " + disciplina.getProfessorResponsavel().getNome());
+                    print("Popularidade: " + disciplinaController.getPopularidadeDisciplina(disciplina.getId()));
+                }
+            }
+
+
+        } catch (Exception e) {
+            throw new Exception("Erro ao fazer relatorio de popularidade: " + e.getMessage());
+        }
     }
 }
