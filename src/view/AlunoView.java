@@ -12,6 +12,28 @@ public class AlunoView {
     private final Scanner scanner = new Scanner(System.in);
     private final AlunoController alunoController = new AlunoController(AlunoRepository.getInstance(), this);
 
+    public void menuAlunos () {
+          String escolha;
+        do {
+            System.out.println("\n>>> ALUNOS");
+            System.out.println("a) Cadastrar aluno");
+            System.out.println("b) Listar alunos");
+            System.out.println("c) Matricular aluno em disciplina");
+            System.out.println("d) Desmatricular aluno de disciplina");
+            System.out.println("0) Voltar");
+            System.out.print("→ Opção: ");
+            escolha = scanner.nextLine().trim().toLowerCase();
+
+            switch (escolha) {
+                case "a" -> this.cadastrarAluno();
+                case "b" -> this.listarAlunos();
+                case "c", "d" -> System.out.println("[Implementar] Funcionalidade em desenvolvimento...");
+                case "0" -> System.out.println("Voltando...\n");
+                default -> System.out.println("Opção inválida!");
+            }
+        } while (!escolha.equals("0"));
+    }
+
     public void cadastrarAluno() {
         this.exibirTitulo("CADASTRAR ALUNO");
         String nome = this.lerNome();

@@ -18,7 +18,7 @@ public class Main {
     private static final ProfessorView professorView = new ProfessorView();
     private static final AlunoController alunoController = new AlunoController(alunoRepository, alunoView);
     private static final ProjetoPesquisaView projetoPesquisaView = new ProjetoPesquisaView();
-    private static final ProfessorRepository professorRepository = new ProfessorRepository();
+    private static final ProfessorRepository professorRepository = ProfessorRepository.getInstance();
     private static final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
     private static final DisciplinaView disciplinaView = new DisciplinaView();
 
@@ -141,25 +141,26 @@ public class Main {
 
     // ====================== MENU ALUNOS ======================
     private static void menuAlunos() {
-        String escolha;
-        do {
-            System.out.println("\n>>> ALUNOS");
-            System.out.println("a) Cadastrar aluno");
-            System.out.println("b) Listar alunos");
-            System.out.println("c) Matricular aluno em disciplina");
-            System.out.println("d) Desmatricular aluno de disciplina");
-            System.out.println("0) Voltar");
-            System.out.print("→ Opção: ");
-            escolha = scanner.nextLine().trim().toLowerCase();
+        alunoView.menuAlunos();
+        // String escolha;
+        // do {
+        //     System.out.println("\n>>> ALUNOS");
+        //     System.out.println("a) Cadastrar aluno");
+        //     System.out.println("b) Listar alunos");
+        //     System.out.println("c) Matricular aluno em disciplina");
+        //     System.out.println("d) Desmatricular aluno de disciplina");
+        //     System.out.println("0) Voltar");
+        //     System.out.print("→ Opção: ");
+        //     escolha = scanner.nextLine().trim().toLowerCase();
 
-            switch (escolha) {
-                case "a" -> alunoView.cadastrarAluno();
-                case "b" -> alunoView.listarAlunos();
-                case "c", "d" -> System.out.println("[Implementar] Funcionalidade em desenvolvimento...");
-                case "0" -> System.out.println("Voltando...\n");
-                default -> System.out.println("Opção inválida!");
-            }
-        } while (!escolha.equals("0"));
+        //     switch (escolha) {
+        //         case "a" -> alunoView.cadastrarAluno();
+        //         case "b" -> alunoView.listarAlunos();
+        //         case "c", "d" -> System.out.println("[Implementar] Funcionalidade em desenvolvimento...");
+        //         case "0" -> System.out.println("Voltando...\n");
+        //         default -> System.out.println("Opção inválida!");
+        //     }
+        // } while (!escolha.equals("0"));
     }
 
     // ====================== MENU VÍNCULOS E PROJETOS ======================
@@ -177,8 +178,8 @@ public class Main {
 
             switch (escolha) {
                 case "a", "b" -> System.out.println("[Implementar] Funcionalidade em desenvolvimento...");
-                case "c" -> projetoPesquisaController.cadastrarProjeto(); // davi
-                case "d" -> projetoPesquisaController.listarProjetosDoProfessor(); // davi
+                case "c" -> projetoPesquisaView.cadastrarProjeto(); // davi
+                case "d" -> projetoPesquisaView.listarProjetosDoProfessor(); // davi
                 case "0" -> System.out.println("Voltando...\n");
                 default -> System.out.println("Opção inválida!");
             }

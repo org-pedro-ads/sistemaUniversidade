@@ -8,9 +8,17 @@ import java.util.List;
 
 public class ProjetoPesquisaRepository {
     private final List<ProjetoPesquisa> projetos;
+    private static ProjetoPesquisaRepository instance;
 
     public ProjetoPesquisaRepository() {
         this.projetos = new ArrayList<>();
+    }
+
+    public static ProjetoPesquisaRepository getInstance() {
+        if (instance == null) {
+            instance = new ProjetoPesquisaRepository();
+        }
+        return instance;
     }
 
     public void cadastrarProjeto(ProjetoPesquisa projeto) {
@@ -32,7 +40,8 @@ public class ProjetoPesquisaRepository {
     }
 
     public ProjetoPesquisa buscarPorTitulo(String titulo) {
-        if (titulo == null || titulo.isBlank()) return null;
+        if (titulo == null || titulo.isBlank())
+            return null;
 
         return projetos.stream()
                 .filter(p -> p.getTitulo().equalsIgnoreCase(titulo.trim()))
@@ -55,7 +64,7 @@ public class ProjetoPesquisaRepository {
             System.out.println("\nPROJETOS ORIENTADOS POR " + professor.getNome().toUpperCase() + ":");
             System.out.println("─".repeat(80));
             for (ProjetoPesquisa p : projetosDoProf) {
-                System.out.printf("%s (Bolsistas: %d)%n", p.getTitulo() ,p.getAlunosBolsistas().size());
+                System.out.printf("%s (Bolsistas: %d)%n", p.getTitulo(), p.getAlunosBolsistas().size());
             }
             System.out.println("─".repeat(80));
             System.out.println("Total: " + projetosDoProf.size() + " projeto(s)\n");
