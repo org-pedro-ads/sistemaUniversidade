@@ -16,4 +16,11 @@ public interface IDisciplinaView {
 
     // ----------------- Relatorios ---------------------
     public void printRelatorios(List<Disciplina> disciplina);
+
+    // ----------------- Prints menu ---------------------
+    public void adicionarDisciplina();
+    public void listarDisciplinas();
+    public void editarDisciplina();
+    public void removerDisciplina();
+    public void listarAlunosMatriculados();
 }
