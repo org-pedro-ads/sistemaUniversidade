@@ -84,7 +84,7 @@ public class Main {
                 case "d" -> System.out.println("[Implementar] Remover professor...");
                 case "e" -> System.out.println("[Implementar] Calcular salário...");
                 case "0" -> System.out.println("Voltando ao menu principal...\n");
-                default -> System.out.println("Opção inválida!");
+                default ->  System.out.println("Opção inválida!");
             }
         } while (!escolha.equals("0"));
     }
@@ -203,8 +203,8 @@ public class Main {
         System.out.println("Sistema desenvolvido para a disciplina de");
         System.out.println("Programação Orientada a Objetos - IFSP 2025");
         System.out.println("\nProfessor: Prof. Dr. Anísio Silva");
-        System.out.println("Aluno: SEU NOME AQUI");
-        System.out.println("GitHub: https://github.com/seuusuario/poo-2025");
+        System.out.println("Alunos: Davi Celso, Pedro Paulino, Vitor Santos");
+        System.out.println("GitHub: https://github.com/org-pedro-ads/sistemaUniversidade.git");
         System.out.println("\nPressione ENTER para voltar...");
         scanner.nextLine();
     }
