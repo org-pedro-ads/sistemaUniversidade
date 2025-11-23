@@ -15,11 +15,6 @@ public class ProfessorSubstituto extends Professor{
     }
 
     public void update(ProfessorSubstituto professor){
-        this.nome = professor.getNome();
-        this.matricula = professor.getMatricula();
-        this.titulo = professor.getTitulo();
-        this.tipo = professor.getTipo();
-        this.disciplinas = professor.getDisciplinas();
         this.horasAula = professor.getHorasAula();
         this.tempoDeContrato = professor.getTempoDeContrato();
     }

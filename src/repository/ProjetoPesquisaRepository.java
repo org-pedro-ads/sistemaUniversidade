@@ -63,6 +63,19 @@ public class ProjetoPesquisaRepository {
 
     }
 
+    public void atualizarProjeto(ProjetoPesquisa projeto) {
+        if (projeto == null) {
+            System.out.println("Projeto inválido.");
+            return;
+        }
+        if (!projetos.contains(projeto)) {
+            System.out.println("Projeto não encontrado.");
+            return;
+        }
+        projetos.set(projetos.indexOf(projeto), projeto);
+        System.out.println("Projeto de pesquisa atualizado com sucesso: " + projeto.getTitulo());
+    }
+
     public boolean existeProjetoComTitulo(String titulo) {
         return buscarPorTitulo(titulo) != null;
     }
