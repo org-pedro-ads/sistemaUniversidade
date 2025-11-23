@@ -5,6 +5,7 @@ import model.ProjetoPesquisa;
 import model.Professor;
 import model.ProfessorVitalicio;
 import repository.AlunoRepository;
+import repository.DisciplinaRepository;
 import repository.ProfessorRepository;
 import repository.ProjetoPesquisaRepository;
 import view.ProjetoPesquisaView;
@@ -19,18 +20,17 @@ public class ProjetoPesquisaController {
             ProjetoPesquisaRepository projetoRepo,
             ProfessorRepository professorRepo,
             AlunoRepository alunoRepo,
-            ProjetoPesquisaView view
-        ) {
+            ProjetoPesquisaView view) {
         this.projetoRepo = projetoRepo;
         this.professorRepo = professorRepo;
         this.alunoRepo = alunoRepo;
         this.view = view;
     }
 
-    public void cadastrarProjeto() {
-        view.exibirTitulo("CADASTRAR NOVO PROJETO DE PESQUISA");
+    public void cadastrarProjeto(String titulo, String descricao, String matriculaProf) {
+        // view.exibirTitulo("CADASTRAR NOVO PROJETO DE PESQUISA");
 
-        String titulo = view.lerTituloProjeto();
+        // String titulo = view.lerTituloProjeto();
         if (titulo.isBlank()) {
             view.erro("O título não pode estar vazio!");
             view.pausar();
@@ -43,9 +43,9 @@ public class ProjetoPesquisaController {
             return;
         }
 
-        String descricao = view.lerDescricaoProjeto();
+        // String descricao = view.lerDescricaoProjeto();
 
-        String matriculaProf = view.lerMatriculaOrientador();
+        // String matriculaProf = view.lerMatriculaOrientador();
         Professor orientador = professorRepo.findByMatricula(matriculaProf);
 
         if (orientador == null) {
@@ -67,20 +67,20 @@ public class ProjetoPesquisaController {
 
     // (d) LISTAR TODOS OS PROJETOS
     // public void listarTodosProjetos() {
-    //     view.exibirTitulo("TODOS OS PROJETOS DE PESQUISA");
+    // view.exibirTitulo("TODOS OS PROJETOS DE PESQUISA");
 
-    //     if (projetoRepo.getTodosProjetos().isEmpty()) {
-    //         System.out.println("Nenhum projeto de pesquisa cadastrado.");
-    //         return;
-    //     }
-    //     view.exibirListaProjetos(projetoRepo.getTodosProjetos());
-    //     view.pausar();
+    // if (projetoRepo.getTodosProjetos().isEmpty()) {
+    // System.out.println("Nenhum projeto de pesquisa cadastrado.");
+    // return;
+    // }
+    // view.exibirListaProjetos(projetoRepo.getTodosProjetos());
+    // view.pausar();
     // }
 
-    public void listarProjetosDoProfessor() {
-        view.exibirTitulo("BUSCAR PROJETOS POR ORIENTADOR");
+    public void listarProjetosDoProfessor(String matricula) {
+        // view.exibirTitulo("BUSCAR PROJETOS POR ORIENTADOR");
 
-        String matricula = view.lerString("Matrícula do professor: ");
+        // String matricula = view.lerString("Matrícula do professor: ");
         Professor prof = professorRepo.findByMatricula(matricula);
 
         if (prof == null) {
@@ -88,13 +88,12 @@ public class ProjetoPesquisaController {
             view.pausar();
             return;
         }
-        
+
         if (!(prof instanceof ProfessorVitalicio)) {
             view.erro("Apenas professores vitalícios podem orientar projetos de pesquisa!");
             view.pausar();
             return;
         }
-
 
         view.info("Projetos orientados por: " + prof.getNome());
         projetoRepo.listarProjetosDoProfessor((ProfessorVitalicio) prof);

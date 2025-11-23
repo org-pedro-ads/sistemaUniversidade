@@ -1,13 +1,43 @@
 package view;
 
 import model.ProjetoPesquisa;
+import repository.AlunoRepository;
+import repository.ProfessorRepository;
+import repository.ProjetoPesquisaRepository;
 import model.Alunos;
 
 import java.util.List;
 import java.util.Scanner;
 
+import controller.ProjetoPesquisaController;
+
 public class ProjetoPesquisaView {
     private final Scanner scanner = new Scanner(System.in);
+    private final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(
+            ProjetoPesquisaRepository.getInstance(),
+            ProfessorRepository.getInstance(),
+            AlunoRepository.getInstance(),
+            this);
+
+    public void cadastrarProjeto() {
+        this.exibirTitulo("CADASTRAR NOVO PROJETO DE PESQUISA");
+        String titulo = this.lerTituloProjeto();
+
+        String descricao = this.lerDescricaoProjeto();
+
+        String matriculaProf = this.lerMatriculaOrientador();
+
+        this.projetoPesquisaController.cadastrarProjeto(titulo, descricao, matriculaProf);
+    }
+
+    public void listarProjetosDoProfessor() {
+        this.exibirTitulo("BUSCAR PROJETOS POR ORIENTADOR");
+
+        String matricula = this.lerString("Matrícula do professor: ");
+
+        this.projetoPesquisaController.listarProjetosDoProfessor(matricula);
+
+    }
 
     // ====================== EXIBIÇÃO DE TÍTULOS ======================
     public void exibirTitulo(String titulo) {
@@ -99,7 +129,8 @@ public class ProjetoPesquisaView {
 
     // Utilitário para não quebrar a tabela
     private String truncar(String texto, int max) {
-        if (texto == null) return "";
+        if (texto == null)
+            return "";
         return texto.length() > max ? texto.substring(0, max - 3) + "..." : texto;
     }
 }
