@@ -12,6 +12,9 @@ public interface IDisciplinaController {
     /** Processa a entrada da View, valida e envia ao Repositório. */
     Disciplina adicionarDisciplina() throws Exception;
 
+    /** Processa a entrada da View, valida e envia ao Repositório. */
+    Disciplina alterarDisciplina(Disciplina disciplina) throws Exception;
+
     /** Remove a disciplina e trata as exceções/regras de negócio. */
     void removerDisciplina(int id) throws Exception;
     void removerDisciplina() throws Exception;
