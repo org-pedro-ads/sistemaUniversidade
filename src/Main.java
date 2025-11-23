@@ -23,7 +23,7 @@ public class Main {
     private static final ProjetoPesquisaView projetoPesquisaView = new ProjetoPesquisaView();
     private static final ProfessorRepository professorRepository = ProfessorRepository.getInstance();
     private static final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
-    private static final DisciplinaView disciplinaView = new DisciplinaView();
+    private static final DisciplinaView disciplinaView = DisciplinaView.getInstance();
 
     static void main(String[] args) throws Exception {
         System.out.println("""

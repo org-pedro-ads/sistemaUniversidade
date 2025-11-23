@@ -5,22 +5,38 @@ import model.Disciplina;
 
 import java.util.List;
 
+/**
+ * Interface que define as operações de visualização (entrada e saída de dados)
+ * relacionadas à entidade Disciplina no sistema.
+ */
 public interface IDisciplinaView {
+
     // ----------------- Funcoes genericas ---------------------
-    public void print(String s);
-    public String getInfo(String message);
+    // Métodos de utilidade para comunicação com o usuário
+
+    void print(String s);
+    String getInfo(String message);
+
+    // Método utilitário para obter inteiros de forma segura (Adicionado por padronização)
+    int getIntInfo(String message);
 
     // ----------------- Prints especificos ---------------------
-    public void printDisciplina(Disciplina disciplina);
-    public void printAlunos(Disciplina disciplina, List<Alunos> alunos);
+    // Métodos para formatar e exibir dados complexos
+
+    void printDisciplina(Disciplina disciplina);
+    void printAlunos(Disciplina disciplina, List<Alunos> alunos);
 
     // ----------------- Relatorios ---------------------
-    public void printRelatorios(List<Disciplina> disciplina);
+    // Métodos para exibição de relatórios
 
-    // ----------------- Prints menu ---------------------
-    public void adicionarDisciplina() throws Exception;
-    public void listarDisciplinas() throws Exception;
-    public void editarDisciplina() throws Exception;
-    public void removerDisciplina() throws Exception;
-    public void listarAlunosMatriculados() throws Exception;
+    void printRelatorios(List<Disciplina> disciplina);
+
+    // ----------------- Funcoes de Menu (Fluxo de Operações) ---------------------
+    // Métodos que iniciam ou gerenciam o fluxo de ações da interface de usuário
+
+    void adicionarDisciplina() throws Exception;
+    void listarDisciplinas() throws Exception;
+    void editarDisciplina() throws Exception;
+    void removerDisciplina() throws Exception;
+    void listarAlunosMatriculados() throws Exception;
 }

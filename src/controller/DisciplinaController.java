@@ -16,11 +16,12 @@ public class DisciplinaController implements IDisciplinaController {
 
     public DisciplinaController(
             DisciplinaRepository disciplinaRepository,
+            DisciplinaView disciplinaView,
             ProfessorController professorController,
             AlunoController alunoController
     ) {
         this.disciplinaRepository = disciplinaRepository;
-        this.disciplinaView = new DisciplinaView();
+        this.disciplinaView = disciplinaView;
         this.professorController = professorController;
         this.alunoController = alunoController;
     }
@@ -152,8 +153,27 @@ public class DisciplinaController implements IDisciplinaController {
 
     @Override
     public List<Disciplina> listarDisciplinas() throws Exception {
+
+        // 1. Busca a lista de disciplinas no Repository
         List<Disciplina> lista = this.disciplinaRepository.listarDisciplinas();
-        return (lista != null) ? lista : new ArrayList<>();
+
+        // Verifica se a lista não é nula, usando ArrayList vazia como fallback
+        if (lista == null) {
+            lista = new ArrayList<>();
+        }
+
+        // 2. Verifica se a lista está vazia para fornecer feedback ao usuário
+        if (lista.isEmpty()) {
+            this.disciplinaView.print("\n⚠️ Nenhuma disciplina cadastrada.\n");
+            return lista;
+        }
+
+        // 3. Envia a lista para a View para exibição formatada (Relatório)
+        // O metodo printRelatorios da View deve se encarregar de exibir a lista.
+        this.disciplinaView.printRelatorios(lista);
+
+        // 4. Retorna a lista (útil para testes ou outros Controllers)
+        return lista;
     }
 
     // --- Listar Alunos Matriculados ---
