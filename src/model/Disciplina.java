@@ -7,14 +7,14 @@ public class Disciplina {
     protected String nome;
     protected int cargaHoraria;
     protected Professor professorResponsavel;
-    protected List<Alunos> alunos;
+    protected List<String> alunos;
 
-    public Disciplina(int id, String nome, int cargaHoraria, Professor professorResponsavel, List<Alunos> alunos) {
+    public Disciplina(int id, String nome, int cargaHoraria, Professor professorResponsavel, List<String> alunos) {
+        this.id = id;
         this.nome = nome;
         this.cargaHoraria = cargaHoraria;
         this.professorResponsavel = professorResponsavel;
         this.alunos = alunos;
-        this.id = id;
     }
 
     public Disciplina() {}
@@ -37,11 +37,11 @@ public class Disciplina {
         return professorResponsavel;
     }
 
-    public List<Alunos> getAlunos() {
+    public List<String> getAlunos() {
         return alunos;
     }
 
-    public String getTipo() {
+    public String getTipo(){
         return "";
     }
 
@@ -64,19 +64,7 @@ public class Disciplina {
         this.professorResponsavel = professorResponsavel;
     }
 
-    public void setAlunos(List<Alunos> alunos) {
+    public void setAlunos(List<String> alunos) {
         this.alunos = alunos;
-    }
-
-    // ------------------- METODOS -------------------
-
-    public Alunos matricularAluno(Alunos aluno) {
-        // TODO: implementar funcao matricular aluno
-        return aluno;
-    }
-
-    public Alunos desmatricularAluno(Alunos aluno) {
-        // TODO: implementar funcao desmatricular aluno
-        return aluno;
     }
 }

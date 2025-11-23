@@ -34,7 +34,7 @@ public class ProfessorVitalicio extends Professor{
         return 0.0;
     }
 
-    public List<ProjetoPesquisa> listarProjetos(){
+    public ProjetoPesquisa listarProjetos() {
         return null;
     }
 }

@@ -1,12 +1,22 @@
 package repository;
 
 import model.Professor;
+import model.ProfessorVitalicio;
+import model.TipoProfessor;
+import model.TituloProfessor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProfessorRepository {
-    private final List<Professor> professores = new ArrayList<>();
+    private final List<Professor> professores = new ArrayList<>() {
+        {
+            add(new ProfessorVitalicio("Ana Silva", "XX0001",
+                    TituloProfessor.MESTRADO,
+                    TipoProfessor.VITALICIO,
+                    new ArrayList<>(), null, 8000.0));
+        }
+    };
 
     public void save(Professor professor) {
         professores.add(professor);
