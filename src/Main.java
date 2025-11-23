@@ -40,7 +40,7 @@ public class Main {
 
             switch (opcao) {
                 case 1 -> menuProfessores();
-                case 2 -> menuDisciplinas();
+                case 2 -> disciplinaView.menuDisciplinas();
                 case 3 -> menuAlunos();
                 case 4 -> menuVinculosEProjetos();
                 case 5 -> menuEletivasInteresse();
@@ -110,33 +110,6 @@ public class Main {
                     return;
                 }
                 default ->  System.out.println("Opção inválida!");
-            }
-        } while (!escolha.equals("0"));
-    }
-
-    // ====================== MENU DISCIPLINAS ======================
-    private static void menuDisciplinas() throws Exception{
-        String escolha;
-        do {
-            System.out.println("\n>>> DISCIPLINAS");
-            System.out.println("a) Cadastrar disciplina (obrigatória / eletiva)");
-            System.out.println("b) Listar disciplinas");
-            System.out.println("c) Editar disciplina");
-            System.out.println("d) Remover disciplina");
-            System.out.println("e) Visualizar alunos matriculados em uma disciplina");
-            System.out.println("0) Voltar");
-            System.out.print("→ Opção: ");
-            escolha = scanner.nextLine().trim().toLowerCase();
-
-            switch (escolha) {
-
-                case "a" -> disciplinaView.adicionarDisciplina();
-                case "b" -> disciplinaView.listarDisciplinas();
-                case "c" -> disciplinaView.editarDisciplina();
-                case "d" -> disciplinaView.removerDisciplina();
-                case "e" -> disciplinaView.listarAlunosMatriculados();
-                case "0" -> System.out.println("Voltando...\n");
-                default -> System.out.println("Opção inválida!");
             }
         } while (!escolha.equals("0"));
     }

@@ -43,6 +43,33 @@ public class DisciplinaView implements IDisciplinaView {
         return scanner.nextLine().trim();
     }
 
+    // ====================== MENU DISCIPLINAS ======================
+    public void menuDisciplinas() throws Exception{
+        String escolha;
+        do {
+            System.out.println("\n>>> DISCIPLINAS");
+            System.out.println("a) Cadastrar disciplina (obrigatória / eletiva)");
+            System.out.println("b) Listar disciplinas");
+            System.out.println("c) Editar disciplina");
+            System.out.println("d) Remover disciplina");
+            System.out.println("e) Visualizar alunos matriculados em uma disciplina");
+            System.out.println("0) Voltar");
+            System.out.print("→ Opção: ");
+            escolha = scanner.nextLine().trim().toLowerCase();
+
+            switch (escolha) {
+
+                case "a" -> this.adicionarDisciplina();
+                case "b" -> this.listarDisciplinas();
+                case "c" -> this.editarDisciplina();
+                case "d" -> this.removerDisciplina();
+                case "e" -> this.listarAlunosMatriculados();
+                case "0" -> System.out.println("Voltando...\n");
+                default -> System.out.println("Opção inválida!");
+            }
+        } while (!escolha.equals("0"));
+    }
+
     // ----------------- Prints especificos ---------------------
     public void printDisciplina(Disciplina disciplina) {
 
