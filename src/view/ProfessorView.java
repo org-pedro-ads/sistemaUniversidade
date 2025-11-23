@@ -258,6 +258,23 @@ public class ProfessorView {
                 System.out.println("Opção inválida!");
         }
     }
+
+    public void gerarRelatorioProfessores() throws Exception {
+
+        System.out.println("\n===== RELATÓRIO DE PROFESSORES =====");
+        List<Professor> professores = controller.listarProfessores();
+        for (Professor p : professores) {
+            double salario = controller.calcularSalario(p.getMatricula());
+            System.out.println(
+                    "Nome: " + p.getNome() +
+                            " | Disciplinas: " + p.getDisciplinas().size() +
+                            " | Salário: R$ " + salario
+            );
+        }
+
+        System.out.println("=====================================\n");
+    }
+
     private void editarTipoEspecifico(Professor professor) {
 
         if (professor instanceof ProfessorSubstituto sub) {

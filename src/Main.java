@@ -195,19 +195,23 @@ public class Main {
     }
 
     // ====================== MENU RELATÓRIOS ======================
-    private static void menuRelatorios() {
+    private static void menuRelatorios() throws Exception {
         String escolha;
         do {
             System.out.println("\n>>> RELATÓRIOS");
             System.out.println("a) Relatório resumo de professores");
             System.out.println("b) Relatório de disciplinas");
-            System.out.println("c) Exportar dados (JSON/CSV) - opcional");
             System.out.println("0) Voltar");
             System.out.print("→ Opção: ");
             escolha = scanner.nextLine().trim().toLowerCase();
 
             switch (escolha) {
-                case "a", "b", "c" -> System.out.println("[Implementar] Gerando relatório...");
+                case "a" -> {
+                    professorView.gerarRelatorioProfessores();
+                }
+                case "b" -> {
+                    disciplinaView.gerarRelatorioDisciplina();
+                }
                 case "0" -> System.out.println("Voltando...\n");
                 default -> System.out.println("Opção inválida!");
             }

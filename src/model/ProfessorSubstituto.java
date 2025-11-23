@@ -37,6 +37,6 @@ public class ProfessorSubstituto extends Professor{
 
     @Override
     public Double calcularSalario(Double horasAula) {
-        return 0.0;
+        return horasAula * 80.0;
     }
 }

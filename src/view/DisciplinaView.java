@@ -340,4 +340,24 @@ public class DisciplinaView implements IDisciplinaView {
             throw new Exception("Erro ao fazer relatorio de popularidade: " + e.getMessage());
         }
     }
+
+    public void gerarRelatorioDisciplina() throws Exception {
+
+        List<Disciplina> disciplinas = disciplinaController.listarDisciplinas();
+        for (Disciplina d : disciplinas) {
+            List<Alunos> listarInteressados = null;
+            if(d instanceof DisciplinaEletiva){
+                listarInteressados = disciplinaController.listarAlunosInteressados(d.getId());
+            }
+            System.out.println(
+                    "Nome: " + d.getNome() +
+                            " | Tipo: " + d.getTipo() +
+                            " | Alunos Matriculados: " +  d.getAlunos()+
+                            " | Popularidade: " + listarInteressados
+            );
+        }
+
+        System.out.println("=====================================\n");
+    }
+
 }

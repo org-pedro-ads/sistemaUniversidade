@@ -183,7 +183,7 @@ public class ProfessorController {
                 salarioProfessor = calcularSalarioProfessorVitalicio(professor.getTitulo(), professor);
             } else{
                 ProfessorSubstituto professorSubstituto = (ProfessorSubstituto) professor;
-                salarioProfessor = professor.calcularSalario(professorSubstituto.getHorasAula());
+                salarioProfessor = professorSubstituto.calcularSalario(professorSubstituto.getHorasAula());
             }
             return salarioProfessor;
         } catch (Exception e){
@@ -192,7 +192,8 @@ public class ProfessorController {
     }
 
     private Double calcularSalarioProfessorVitalicio(TituloProfessor titulo, Professor professor) {
-        Double salarioProfessor = professor.calcularSalario(0.0);
+        ProfessorVitalicio professorVitalicio = (ProfessorVitalicio) professor;
+        Double salarioProfessor = professorVitalicio.calcularSalario(0.0);
         if(titulo == TituloProfessor.DOUTORADO){
             salarioProfessor = salarioProfessor + (salarioProfessor*0.2);
         }

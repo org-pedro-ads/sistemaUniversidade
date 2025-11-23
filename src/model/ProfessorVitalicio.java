@@ -31,7 +31,7 @@ public class ProfessorVitalicio extends Professor{
 
     @Override
     public Double calcularSalario(Double horasTrabalhadas) {
-        return 0.0;
+        return salarioBase;
     }
 
     public ProjetoPesquisa listarProjetos() {
