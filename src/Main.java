@@ -1,8 +1,10 @@
+import java.util.List;
 import java.util.Scanner;
 import controller.AlunoController;
 import controller.DisciplinaController;
 import controller.ProfessorController;
 import controller.ProjetoPesquisaController;
+import model.Alunos;
 import repository.AlunoRepository;
 import repository.DisciplinaRepository;
 import repository.ProfessorRepository;
@@ -15,7 +17,7 @@ import view.ProjetoPesquisaView;
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
 
-    private static final AlunoRepository alunoRepository = new AlunoRepository();
+    private static final AlunoRepository alunoRepository = AlunoRepository.getInstance();
     private static final ProjetoPesquisaRepository projetoPesquisaRepository = new ProjetoPesquisaRepository();
     private static final AlunoView alunoView = new AlunoView();
     private static final ProfessorView professorView = new ProfessorView();
@@ -27,13 +29,15 @@ public class Main {
     private static final DisciplinaView disciplinaView = DisciplinaView.getInstance();
 
     public static void main(String[] args) throws Exception {
-        try{
+        try {
+            alunoRepository.criarMockAlunos();
+
             System.out.println("""
-            ╔══════════════════════════════════════════════════╗
-            ║    SISTEMA DE GESTÃO ACADÊMICA - IFSP 2025       ║
-            ║        Programação Orientada a Objetos           ║
-            ╚══════════════════════════════════════════════════╝
-            """);
+                    ╔══════════════════════════════════════════════════╗
+                    ║    SISTEMA DE GESTÃO ACADÊMICA - IFSP 2025       ║
+                    ║        Programação Orientada a Objetos           ║
+                    ╚══════════════════════════════════════════════════╝
+                    """);
 
             int opcao;
             do {
@@ -55,7 +59,7 @@ public class Main {
                     default -> System.out.println("Opção inválida! Tente novamente.");
                 }
             } while (true);
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println("Ocorreu um erro inesperado: " + e.getMessage());
         }
     }
