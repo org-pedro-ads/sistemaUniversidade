@@ -16,12 +16,11 @@ public class DisciplinaController implements IDisciplinaController {
 
     public DisciplinaController(
             DisciplinaRepository disciplinaRepository,
-            DisciplinaView disciplinaView,
             ProfessorController professorController,
             AlunoController alunoController
     ) {
         this.disciplinaRepository = disciplinaRepository;
-        this.disciplinaView = disciplinaView;
+        this.disciplinaView = new DisciplinaView();
         this.professorController = professorController;
         this.alunoController = alunoController;
     }
