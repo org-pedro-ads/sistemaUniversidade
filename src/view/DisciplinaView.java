@@ -64,7 +64,7 @@ public class DisciplinaView implements IDisciplinaView {
     }
 
     // ====================== MENU DISCIPLINAS ======================
-    public void menuDisciplinas() throws Exception {
+    public void menuDisciplinas() {
         String escolha;
         do {
             System.out.println("\n>>>DISCIPLINAS");
@@ -169,7 +169,7 @@ public class DisciplinaView implements IDisciplinaView {
     // ----------------- Funcoes do menu (Implementação da Interface)
     // ---------------------
     @Override
-    public void adicionarDisciplina() throws Exception {
+    public void adicionarDisciplina() {
         try {
             this.disciplinaController.adicionarDisciplina();
         } catch (Exception e) {
@@ -178,7 +178,7 @@ public class DisciplinaView implements IDisciplinaView {
     }
 
     @Override
-    public void listarDisciplinas() throws Exception {
+    public void listarDisciplinas() {
         try {
             this.disciplinaController.listarDisciplinas();
         } catch (Exception e) {
@@ -187,7 +187,7 @@ public class DisciplinaView implements IDisciplinaView {
     }
 
     @Override
-    public void editarDisciplina() throws Exception {
+    public void editarDisciplina() {
         try {
             this.print(" ================= Editar Disciplina ================ \n");
 
@@ -244,7 +244,7 @@ public class DisciplinaView implements IDisciplinaView {
     }
 
     @Override
-    public void removerDisciplina() throws Exception {
+    public void removerDisciplina() {
         try {
             // Chama o metodo do Controller, que gerencia o loop de UI e remoção
             this.disciplinaController.removerDisciplina();
@@ -254,7 +254,7 @@ public class DisciplinaView implements IDisciplinaView {
     }
 
     @Override
-    public void listarAlunosMatriculados() throws Exception {
+    public void listarAlunosMatriculados() {
         try {
             print(" ================= Listar alunos ================ \n");
             int idDisciplina = getIntInfo("Digite o ID da disciplina: ");
