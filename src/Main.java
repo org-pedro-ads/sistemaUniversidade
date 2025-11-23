@@ -22,37 +22,42 @@ public class Main {
     private static final AlunoController alunoController = new AlunoController(alunoRepository, alunoView);
     private static final ProjetoPesquisaView projetoPesquisaView = new ProjetoPesquisaView();
     private static final ProfessorRepository professorRepository = ProfessorRepository.getInstance();
-    private static final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
+    private static final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(
+            projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
     private static final DisciplinaView disciplinaView = DisciplinaView.getInstance();
 
     static void main(String[] args) throws Exception {
-        System.out.println("""
-            ╔══════════════════════════════════════════════════╗
-            ║    SISTEMA DE GESTÃO ACADÊMICA - IFSP 2025       ║
-            ║        Programação Orientada a Objetos           ║
-            ╚══════════════════════════════════════════════════╝
-            """);
+        try {
+            System.out.println("""
+                    ╔══════════════════════════════════════════════════╗
+                    ║    SISTEMA DE GESTÃO ACADÊMICA - IFSP 2025       ║
+                    ║        Programação Orientada a Objetos           ║
+                    ╚══════════════════════════════════════════════════╝
+                    """);
 
-        int opcao;
-        do {
-            exibirMenuPrincipal();
-            opcao = lerInteiro("→ Digite a opção desejada: ");
+            int opcao;
+            do {
+                exibirMenuPrincipal();
+                opcao = lerInteiro("→ Digite a opção desejada: ");
 
-            switch (opcao) {
-                case 1 -> menuProfessores();
-                case 2 -> disciplinaView.menuDisciplinas();
-                case 3 -> menuAlunos();
-                case 4 -> menuVinculosEProjetos();
-                case 5 -> menuEletivasInteresse();
-                case 6 -> menuRelatorios();
-                case 7 -> menuAjudaSobre();
-                case 8 -> {
-                    System.out.println("Saindo do sistema... Até logo!");
-                    return;
+                switch (opcao) {
+                    case 1 -> menuProfessores();
+                    case 2 -> disciplinaView.menuDisciplinas();
+                    case 3 -> menuAlunos();
+                    case 4 -> menuVinculosEProjetos();
+                    case 5 -> menuEletivasInteresse();
+                    case 6 -> menuRelatorios();
+                    case 7 -> menuAjudaSobre();
+                    case 8 -> {
+                        System.out.println("Saindo do sistema... Até logo!");
+                        return;
+                    }
+                    default -> System.out.println("Opção inválida! Tente novamente.");
                 }
-                default -> System.out.println("Opção inválida! Tente novamente.");
-            }
-        } while (true);
+            } while (true);
+        } catch (Exception e) {
+            System.out.println("Erro inesperado: " + e.getMessage());
+        }
     }
 
     private static void exibirMenuPrincipal() {
@@ -109,13 +114,13 @@ public class Main {
                     System.out.println("Voltando ao menu principal...\n");
                     return;
                 }
-                default ->  System.out.println("Opção inválida!");
+                default -> System.out.println("Opção inválida!");
             }
         } while (!escolha.equals("0"));
     }
 
     // ====================== MENU ALUNOS ======================
-    private static void menuAlunos() {
+    private static void menuAlunos() throws Exception {
         // alunoView.menuAlunos();
         String escolha;
         do {
@@ -131,7 +136,8 @@ public class Main {
             switch (escolha) {
                 case "a" -> alunoView.cadastrarAluno();
                 case "b" -> alunoView.listarAlunos();
-                case "c", "d" -> System.out.println("[Implementar] Funcionalidade em desenvolvimento...");
+                case "c" -> disciplinaView.matricularAlunoEmDisciplina();
+                case "d" -> disciplinaView.desmatricularAlunoEmDisciplina();
                 case "0" -> System.out.println("Voltando...\n");
                 default -> System.out.println("Opção inválida!");
             }

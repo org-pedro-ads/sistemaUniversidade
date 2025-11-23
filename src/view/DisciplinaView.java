@@ -22,7 +22,8 @@ public class DisciplinaView implements IDisciplinaView {
 
     private static DisciplinaView instance;
 
-    // Dependências (usando getInstance para garantir que o Controller seja inicializado corretamente)
+    // Dependências (usando getInstance para garantir que o Controller seja
+    // inicializado corretamente)
     private final DisciplinaController disciplinaController;
     private final Scanner scanner = new Scanner(System.in);
 
@@ -41,8 +42,7 @@ public class DisciplinaView implements IDisciplinaView {
                 disciplinaRepository,
                 this,
                 professorController,
-                alunoController
-        );
+                alunoController);
     }
 
     // Metodo estático para obter a instância (Singleton)
@@ -53,7 +53,8 @@ public class DisciplinaView implements IDisciplinaView {
         return instance;
     }
 
-    // ----------------- Funcoes genericas (Implementação da Interface) ---------------------
+    // ----------------- Funcoes genericas (Implementação da Interface)
+    // ---------------------
     @Override
     public void print(String s) {
         System.out.println(s);
@@ -78,7 +79,7 @@ public class DisciplinaView implements IDisciplinaView {
     }
 
     // ====================== MENU DISCIPLINAS ======================
-    public void menuDisciplinas() throws Exception{
+    public void menuDisciplinas() throws Exception {
         String escolha;
         do {
             System.out.println("\n>>> 🏫 DISCIPLINAS");
@@ -107,7 +108,8 @@ public class DisciplinaView implements IDisciplinaView {
         } while (!escolha.equals("0"));
     }
 
-    // ----------------- Prints especificos (Implementação da Interface) ---------------------
+    // ----------------- Prints especificos (Implementação da Interface)
+    // ---------------------
     @Override
     public void printDisciplina(Disciplina disciplina) {
 
@@ -115,7 +117,9 @@ public class DisciplinaView implements IDisciplinaView {
         String nomeDisciplina = disciplina.getNome();
         String tipoDisciplina = disciplina.getTipo();
         int cargaHoraria = disciplina.getCargaHoraria();
-        String nomeProfessor = disciplina.getProfessorResponsavel() != null ? disciplina.getProfessorResponsavel().getNome() : "N/A";
+        String nomeProfessor = disciplina.getProfessorResponsavel() != null
+                ? disciplina.getProfessorResponsavel().getNome()
+                : "N/A";
         int qtdeAlunos = disciplina.getAlunos().size();
 
         // Exemplo de cálculo de popularidade
@@ -134,7 +138,8 @@ public class DisciplinaView implements IDisciplinaView {
         System.out.printf("║ Professor Responsável: %-49s ║%n", nomeProfessor);
         print("╠════════════════════════════════════════════════════════════════╣");
         // Status de popularidade com formatação corrigida
-        System.out.printf("║ Status de Popularidade: [%s] %s (%.0f%% de interesse) %-17s║%n", statusPopularidade, iconePopularidade, percentualInteresse, "");
+        System.out.printf("║ Status de Popularidade: [%s] %s (%.0f%% de interesse) %-17s║%n", statusPopularidade,
+                iconePopularidade, percentualInteresse, "");
         System.out.printf("║ Alunos Matriculados: %-47s ║%n", qtdeAlunos);
         print("╚════════════════════════════════════════════════════════════════╝");
     }
@@ -167,7 +172,8 @@ public class DisciplinaView implements IDisciplinaView {
         print("╚════════════╧═══════════════════════════════════════════════════╝");
     }
 
-    // ----------------- Relatorios (Implementação da Interface) ---------------------
+    // ----------------- Relatorios (Implementação da Interface)
+    // ---------------------
     @Override
     public void printRelatorios(List<Disciplina> disciplina) {
         // Dispara o relatório que foi implementado dentro do Controller,
@@ -175,13 +181,13 @@ public class DisciplinaView implements IDisciplinaView {
         this.disciplinaController.gerarRelatorioDisciplinas();
     }
 
-
-    // ----------------- Funcoes do menu (Implementação da Interface) ---------------------
+    // ----------------- Funcoes do menu (Implementação da Interface)
+    // ---------------------
     @Override
     public void adicionarDisciplina() throws Exception {
         try {
             this.disciplinaController.adicionarDisciplina();
-        } catch(Exception e) {
+        } catch (Exception e) {
             this.print("Erro ao cadastrar disciplina: " + e.getMessage());
         }
     }
@@ -190,7 +196,7 @@ public class DisciplinaView implements IDisciplinaView {
     public void listarDisciplinas() throws Exception {
         try {
             this.disciplinaController.listarDisciplinas();
-        } catch(Exception e) {
+        } catch (Exception e) {
             this.print("Erro ao listar disciplina: " + e.getMessage());
         }
     }
@@ -219,7 +225,8 @@ public class DisciplinaView implements IDisciplinaView {
 
             switch (escolha) {
                 case "1":
-                    // Chama o metodo sem parâmetros do seu Controller, que gerencia a coleta de dados
+                    // Chama o metodo sem parâmetros do seu Controller, que gerencia a coleta de
+                    // dados
                     disciplinaAtualizada = this.disciplinaController.atualizarNome();
                     break;
                 case "2":
@@ -244,8 +251,9 @@ public class DisciplinaView implements IDisciplinaView {
                 this.printDisciplina(disciplinaAtualizada);
             }
 
-        } catch(Exception e) {
-            // Captura NumberFormatException (se usar getInfo direto) ou exceções de negócio do Controller
+        } catch (Exception e) {
+            // Captura NumberFormatException (se usar getInfo direto) ou exceções de negócio
+            // do Controller
             this.print("❌ Erro ao editar disciplina: " + e.getMessage());
         }
     }
@@ -255,7 +263,7 @@ public class DisciplinaView implements IDisciplinaView {
         try {
             // Chama o metodo do Controller, que gerencia o loop de UI e remoção
             this.disciplinaController.removerDisciplina();
-        } catch(Exception e) {
+        } catch (Exception e) {
             this.print("Erro ao remover disciplina: " + e.getMessage());
         }
     }
@@ -265,8 +273,16 @@ public class DisciplinaView implements IDisciplinaView {
         try {
             // Chama o metodo do Controller, que gerencia o loop de UI e a exibição
             this.disciplinaController.listarAlunosMatriculados();
-        } catch(Exception e){
+        } catch (Exception e) {
             this.print("Erro ao listar alunos matriculados: " + e.getMessage());
         }
+    }
+
+    public void matricularAlunoEmDisciplina() throws Exception {
+        disciplinaController.matricularAlunoDisciplina();
+    }
+
+    public void desmatricularAlunoEmDisciplina() throws Exception {
+        disciplinaController.desmatricularAlunoDisciplina();
     }
 }

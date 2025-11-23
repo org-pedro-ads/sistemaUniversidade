@@ -403,8 +403,8 @@ public class DisciplinaController implements IDisciplinaController {
     // ==================================================================================
 
     @Override
-    public Disciplina matricularAlunoDisciplina(int id, String matricula) throws Exception {
-        Disciplina disciplina = validarExistenciaDisciplina(id);
+    public Disciplina matricularAlunoDisciplina(int idDisciplina, String matricula) throws Exception {
+        Disciplina disciplina = validarExistenciaDisciplina(idDisciplina);
         Alunos aluno = this.alunoController.encontrarAluno(matricula);
 
         if (aluno == null) throw new Exception("Aluno com matricula " + matricula + " nao encontrado.");
