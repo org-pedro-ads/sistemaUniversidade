@@ -11,41 +11,31 @@ import repository.DisciplinaRepository;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Caracteres de Desenho de Caixa (Box-Drawing Characters):
- * Linha Dupla: ╔ ╗ ╚ ╝ ═ ║ ╦ ╩ ╠ ╣ ╬
- * Linha Simples: ┌ ┐ └ ┘ ─ │ ┬ ┴ ├ ┤ ┼
- * Blocos e Sombras: █ ▀ ▄ ░ ▒ ▓
- */
-
 public class DisciplinaView implements IDisciplinaView {
 
     private static DisciplinaView instance;
 
-    // Dependências (usando getInstance para garantir que o Controller seja
-    // inicializado corretamente)
     private final DisciplinaController disciplinaController;
     private final Scanner scanner = new Scanner(System.in);
 
-    // Construtor Privado (Singleton)
     private DisciplinaView() {
-        // Inicialização das dependências necessárias para o Controller
         DisciplinaRepository disciplinaRepository = DisciplinaRepository.getInstance();
         AlunoRepository alunoRepository = AlunoRepository.getInstance();
 
         ProfessorController professorController = new ProfessorController();
         AlunoView alunoView = new AlunoView();
         AlunoController alunoController = new AlunoController(alunoRepository, alunoView);
+        AlunoRepository alunoRepository1 = AlunoRepository.getInstance();
 
-        // Inicializa o Controller com as dependências
         this.disciplinaController = new DisciplinaController(
                 disciplinaRepository,
                 this,
                 professorController,
-                alunoController);
+                alunoController,
+                alunoRepository
+        );
     }
 
-    // Metodo estático para obter a instância (Singleton)
     public static DisciplinaView getInstance() {
         if (instance == null) {
             instance = new DisciplinaView();
@@ -53,8 +43,6 @@ public class DisciplinaView implements IDisciplinaView {
         return instance;
     }
 
-    // ----------------- Funcoes genericas (Implementação da Interface)
-    // ---------------------
     @Override
     public void print(String s) {
         System.out.println(s);
@@ -73,7 +61,7 @@ public class DisciplinaView implements IDisciplinaView {
                 String input = getInfo(message);
                 return Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                print("❌ Entrada inválida. Por favor, digite um número inteiro.");
+                print("Entrada inválida. Por favor, digite um número inteiro.");
             }
         }
     }
@@ -82,7 +70,7 @@ public class DisciplinaView implements IDisciplinaView {
     public void menuDisciplinas() throws Exception {
         String escolha;
         do {
-            System.out.println("\n>>> 🏫 DISCIPLINAS");
+            System.out.println("\n>>>DISCIPLINAS");
             System.out.println("a) Cadastrar disciplina (obrigatória / eletiva)");
             System.out.println("b) Listar disciplinas");
             System.out.println("c) Editar disciplina");
@@ -100,10 +88,10 @@ public class DisciplinaView implements IDisciplinaView {
                     case "d" -> this.removerDisciplina();
                     case "e" -> this.listarAlunosMatriculados();
                     case "0" -> System.out.println("Voltando ao menu principal...\n");
-                    default -> System.out.println("❌ Opção inválida!");
+                    default -> System.out.println("Opção inválida!");
                 }
             } catch (Exception e) {
-                System.out.println("⚠️ Ocorreu um erro: " + e.getMessage());
+                System.out.println("Ocorreu um erro: " + e.getMessage());
             }
         } while (!escolha.equals("0"));
     }
@@ -124,7 +112,7 @@ public class DisciplinaView implements IDisciplinaView {
 
         // Exemplo de cálculo de popularidade
         String statusPopularidade = qtdeAlunos >= 5 ? "ALTA" : "BAIXA";
-        String iconePopularidade = qtdeAlunos >= 5 ? "📈" : "📉";
+        String iconePopularidade = qtdeAlunos >= 5 ? "📈" : "";
         double percentualInteresse = (double) qtdeAlunos / 20 * 100; // Exemplo: 20 alunos e o máximo
 
         print("╔════════════════════════════════════════════════════════════════╗");
@@ -204,7 +192,7 @@ public class DisciplinaView implements IDisciplinaView {
     @Override
     public void editarDisciplina() throws Exception {
         try {
-            this.print(" ================= ✏️ Editar Disciplina ================ \n");
+            this.print(" ================= Editar Disciplina ================ \n");
 
             // A View solicita o ID de forma segura
             int id = this.getIntInfo("\nDigite o ID da disciplina: ");
@@ -247,14 +235,14 @@ public class DisciplinaView implements IDisciplinaView {
             if (disciplinaAtualizada != null) {
                 // Chama o metodo que persiste a alteração
                 this.disciplinaController.alterarDisciplina(disciplinaAtualizada);
-                this.print("\n\n✅ Disciplina alterada com sucesso!\n");
+                this.print("\n\nDisciplina alterada com sucesso!\n");
                 this.printDisciplina(disciplinaAtualizada);
             }
 
         } catch (Exception e) {
             // Captura NumberFormatException (se usar getInfo direto) ou exceções de negócio
             // do Controller
-            this.print("❌ Erro ao editar disciplina: " + e.getMessage());
+            this.print("Erro ao editar disciplina: " + e.getMessage());
         }
     }
 
@@ -271,8 +259,13 @@ public class DisciplinaView implements IDisciplinaView {
     @Override
     public void listarAlunosMatriculados() throws Exception {
         try {
-            // Chama o metodo do Controller, que gerencia o loop de UI e a exibição
-            this.disciplinaController.listarAlunosMatriculados();
+            print(" ================= Listar alunos ================ \n");
+            int idDisciplina = getIntInfo("Digite o ID da disciplina: ");
+            List<Alunos> alunos = disciplinaController.listarAlunosMatriculados(idDisciplina);
+
+            AlunoView alunoView = new AlunoView();
+            alunoView.exibirListaAlunos(alunos);
+
         } catch (Exception e) {
             this.print("Erro ao listar alunos matriculados: " + e.getMessage());
         }
@@ -284,5 +277,24 @@ public class DisciplinaView implements IDisciplinaView {
 
     public void desmatricularAlunoEmDisciplina() throws Exception {
         disciplinaController.desmatricularAlunoDisciplina();
+    }
+
+    public void atribuirDisciplinaAProfessor() throws Exception {
+
+        print("\n================= Atribuir professor responsavel ================\n");
+
+        int idDisciplina = getIntInfo("Digite o ID da disciplina: ");
+        String matriculaProfessor = getInfo("Digite a matricula da professor: ");
+
+        disciplinaController.atualizarProfessorResponsavel(idDisciplina, matriculaProfessor);
+    }
+
+    public void removerProfessorDisciplina() throws Exception {
+        print("\n================= Remover professor responsavel ================\n");
+
+        int idDisciplina = getIntInfo("Digite o ID da disciplina: ");
+
+        disciplinaController.removerProfessorResponsavel(idDisciplina);
+
     }
 }

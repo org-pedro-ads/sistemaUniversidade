@@ -48,7 +48,7 @@ public class Main {
                     case 5 -> menuEletivasInteresse();
                     case 6 -> menuRelatorios();
                     case 7 -> menuAjudaSobre();
-                    case 8 -> {
+                    case 0 -> {
                         System.out.println("Saindo do sistema... Até logo!");
                         return;
                     }
@@ -71,7 +71,7 @@ public class Main {
         System.out.println("5. Eletivas — Interesse dos Alunos");
         System.out.println("6. Relatórios");
         System.out.println("7. Ajuda / Sobre");
-        System.out.println("8. Sair");
+        System.out.println("0. Sair");
         System.out.println("=".repeat(50));
     }
 
@@ -145,7 +145,7 @@ public class Main {
     }
 
     // ====================== MENU VÍNCULOS E PROJETOS ======================
-    private static void menuVinculosEProjetos() {
+    private static void menuVinculosEProjetos() throws Exception {
         String escolha;
         do {
             System.out.println("\n>>> VÍNCULOS E PROJETOS");
@@ -158,7 +158,8 @@ public class Main {
             escolha = scanner.nextLine().trim().toLowerCase();
 
             switch (escolha) {
-                case "a", "b" -> System.out.println("[Implementar] Funcionalidade em desenvolvimento...");
+                case "a" -> disciplinaView.atribuirDisciplinaAProfessor(); // Pedro
+                case "b" -> disciplinaView.removerProfessorDisciplina(); // Pedro
                 case "c" -> projetoPesquisaView.cadastrarProjeto(); // davi
                 case "d" -> projetoPesquisaView.listarProjetosDoProfessor(); // davi
                 case "0" -> System.out.println("Voltando...\n");
