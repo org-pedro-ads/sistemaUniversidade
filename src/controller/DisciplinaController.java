@@ -431,6 +431,7 @@ public class DisciplinaController implements IDisciplinaController {
             throw new Exception("Aluno ja esta matriculado nesta disciplina.");
         }
 
+        aluno.adicionarDisciplina(idDisciplina);
         alunosMatriculados.add(matricula);
         disciplina.setAlunos(alunosMatriculados);
         this.disciplinaRepository.atualizarDisciplina(disciplina);
@@ -476,6 +477,7 @@ public class DisciplinaController implements IDisciplinaController {
             throw new Exception("Aluno nao esta matriculado nesta disciplina.");
         }
 
+        aluno.removerDisciplina(id);
         alunosMatriculados.remove(matricula);
         disciplina.setAlunos(alunosMatriculados);
         this.disciplinaRepository.atualizarDisciplina(disciplina);
