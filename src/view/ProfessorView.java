@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class ProfessorView {
     private Scanner sc = new Scanner(System.in);
-    private ProfessorController controller;
+    private static final ProfessorController controller = new ProfessorController();
 
     public void cadastrarProfessor() throws Exception {
         System.out.println("===== Cadastro de Professor =====");
@@ -170,7 +170,7 @@ public class ProfessorView {
         System.out.println();
     }
 
-    private void editarProfessor() throws Exception {
+    public void editarProfessor() throws Exception {
         System.out.println("==== EDITAR PROFESSOR ====");
 
         // listar para escolha

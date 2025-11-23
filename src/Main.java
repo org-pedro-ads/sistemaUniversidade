@@ -1,13 +1,11 @@
 import java.util.Scanner;
 import controller.AlunoController;
-import controller.DisciplinaController;
-import controller.ProfessorController;
 import controller.ProjetoPesquisaController;
 import repository.AlunoRepository;
-import repository.DisciplinaRepository;
 import repository.ProfessorRepository;
 import repository.ProjetoPesquisaRepository;
 import view.AlunoView;
+import view.ProfessorView;
 import view.DisciplinaView;
 import view.ProjetoPesquisaView;
 
@@ -17,11 +15,11 @@ public class Main {
     private static final AlunoRepository alunoRepository = new AlunoRepository();
     private static final ProjetoPesquisaRepository projetoPesquisaRepository = new ProjetoPesquisaRepository();
     private static final AlunoView alunoView = new AlunoView();
+    private static final ProfessorView professorView = new ProfessorView();
     private static final AlunoController alunoController = new AlunoController(alunoRepository, alunoView);
     private static final ProjetoPesquisaView projetoPesquisaView = new ProjetoPesquisaView();
     private static final ProfessorRepository professorRepository = new ProfessorRepository();
     private static final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
-    private static final ProfessorController professorController = new ProfessorController();
     private static final DisciplinaView disciplinaView = new DisciplinaView();
 
     public static void main(String[] args) {
@@ -84,12 +82,30 @@ public class Main {
             escolha = scanner.nextLine().trim().toLowerCase();
 
             switch (escolha) {
-                case "a" -> System.out.println("[Implementar] Cadastrar professor...");
-                case "b" -> System.out.println("[Implementar] Listar professores...");
-                case "c" -> System.out.println("[Implementar] Editar professor...");
-                case "d" -> System.out.println("[Implementar] Remover professor...");
-                case "e" -> System.out.println("[Implementar] Calcular salário...");
-                case "0" -> System.out.println("Voltando ao menu principal...\n");
+                case "a" -> {
+                    professorView.cadastrarProfessor();
+                    System.out.println("Cadastrar professor...");
+                }
+                case "b" -> {
+                    professorView.listarProfessores();
+                    System.out.println("Listar professores...");
+                }
+                case "c" -> {
+                    professorView.editarProfessor();
+                    System.out.println("Editar professor...");
+                }
+                case "d" -> {
+                    professorView.removerProfessor();
+                    System.out.println("Remover professor...");
+                }
+                case "e" -> {
+                    professorView.calcularSalarioProfessor();
+                    System.out.println("Calcular salário...");
+                }
+                case "0" -> {
+                    System.out.println("Voltando ao menu principal...\n");
+                    return;
+                }
                 default ->  System.out.println("Opção inválida!");
             }
         } while (!escolha.equals("0"));

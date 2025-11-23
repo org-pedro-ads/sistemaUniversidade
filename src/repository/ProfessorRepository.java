@@ -9,14 +9,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProfessorRepository {
+
+    private static ProfessorRepository instance;
+
     private final List<Professor> professores = new ArrayList<>() {
         {
-            add(new ProfessorVitalicio("Ana Silva", "XX0001",
+            add(new ProfessorVitalicio(
+                    "Ana Silva",
+                    "XX0001",
                     TituloProfessor.MESTRADO,
                     TipoProfessor.VITALICIO,
-                    new ArrayList<>(), null, 8000.0));
+                    new ArrayList<>(),
+                    null,
+                    8000.0
+            ));
         }
     };
+
+    // Construtor privado
+    private ProfessorRepository() {}
+
+    // Método para obter a única instância
+    public static ProfessorRepository getInstance() {
+        if (instance == null) {
+            instance = new ProfessorRepository();
+        }
+        return instance;
+    }
 
     public void save(Professor professor) {
         professores.add(professor);
@@ -48,3 +67,4 @@ public class ProfessorRepository {
         }
     }
 }
+

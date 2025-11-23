@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProfessorController {
-    private ProfessorRepository professorRepository;
-    private DisciplinaRepository disciplinaRepository;
-    private ProjetoPesquisaRepository projetoPesquisaRepository;
+    private static final ProfessorRepository professorRepository = ProfessorRepository.getInstance();
+    private static final DisciplinaRepository disciplinaRepository = DisciplinaRepository.getInstance();
+    private static final ProjetoPesquisaRepository projetoPesquisaRepository = new ProjetoPesquisaRepository();
     public void cadastrarProfessorVitalicio(
             String nome,
             String matricula,
