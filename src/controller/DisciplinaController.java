@@ -1,7 +1,6 @@
 package controller;
 
 import model.*;
-import repository.AlunoRepository;
 import repository.DisciplinaRepository;
 import view.DisciplinaView;
 
@@ -14,20 +13,17 @@ public class DisciplinaController implements IDisciplinaController {
     private final DisciplinaView disciplinaView;
     private final ProfessorController professorController;
     private final AlunoController alunoController;
-    private final AlunoRepository alunoRepository;
 
     public DisciplinaController(
             DisciplinaRepository disciplinaRepository,
             DisciplinaView disciplinaView,
             ProfessorController professorController,
-            AlunoController alunoController,
-            AlunoRepository alunoRepository
+            AlunoController alunoController
     ) {
         this.disciplinaRepository = disciplinaRepository;
         this.disciplinaView = disciplinaView;
         this.professorController = professorController;
         this.alunoController = alunoController;
-        this.alunoRepository = alunoRepository;
     }
 
     // ==================================================================================
@@ -170,7 +166,7 @@ public class DisciplinaController implements IDisciplinaController {
 
         // 2. Verifica se a lista está vazia para fornecer feedback ao usuário
         if (lista.isEmpty()) {
-            this.disciplinaView.print("\nNenhuma disciplina cadastrada.\n");
+            this.disciplinaView.print("\n⚠️ Nenhuma disciplina cadastrada.\n");
             return lista;
         }
 
@@ -362,7 +358,6 @@ public class DisciplinaController implements IDisciplinaController {
     @Override
     public Disciplina atualizarProfessorResponsavel(int id, String matriculaProfessor) throws Exception {
         Disciplina disciplina = validarExistenciaDisciplina(id);
-
         Professor professor = this.professorController.encontrarProfessor(matriculaProfessor);
 
         if (professor == null) {
@@ -372,16 +367,6 @@ public class DisciplinaController implements IDisciplinaController {
         disciplina.setProfessorResponsavel(professor);
         this.disciplinaRepository.atualizarDisciplina(disciplina);
         return disciplina;
-    }
-
-    public void removerProfessorResponsavel(int idDisciplina) throws Exception {
-        Disciplina disciplina = buscarDisciplinaPorId(idDisciplina);
-
-        if(disciplina == null) { throw new Exception("Erro: Disciplina nao encontrado."); }
-        disciplina.setProfessorResponsavel(null);
-
-        disciplinaRepository.atualizarDisciplina(disciplina);
-
     }
 
     @Override
@@ -431,10 +416,10 @@ public class DisciplinaController implements IDisciplinaController {
             throw new Exception("Aluno ja esta matriculado nesta disciplina.");
         }
 
-        // Atualizar disciplina
         alunosMatriculados.add(matricula);
         disciplina.setAlunos(alunosMatriculados);
         this.disciplinaRepository.atualizarDisciplina(disciplina);
+
         return disciplina;
     }
 

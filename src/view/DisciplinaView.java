@@ -25,15 +25,12 @@ public class DisciplinaView implements IDisciplinaView {
         ProfessorController professorController = new ProfessorController();
         AlunoView alunoView = new AlunoView();
         AlunoController alunoController = new AlunoController(alunoRepository, alunoView);
-        AlunoRepository alunoRepository1 = AlunoRepository.getInstance();
 
         this.disciplinaController = new DisciplinaController(
                 disciplinaRepository,
                 this,
                 professorController,
-                alunoController,
-                alunoRepository
-        );
+                alunoController);
     }
 
     public static DisciplinaView getInstance() {
@@ -112,7 +109,7 @@ public class DisciplinaView implements IDisciplinaView {
 
         // Exemplo de cálculo de popularidade
         String statusPopularidade = qtdeAlunos >= 5 ? "ALTA" : "BAIXA";
-        String iconePopularidade = qtdeAlunos >= 5 ? "📈" : "";
+        String iconePopularidade = qtdeAlunos >= 5 ? "📈" : "📉";
         double percentualInteresse = (double) qtdeAlunos / 20 * 100; // Exemplo: 20 alunos e o máximo
 
         print("╔════════════════════════════════════════════════════════════════╗");
