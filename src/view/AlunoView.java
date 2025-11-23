@@ -4,12 +4,10 @@ import model.Alunos;
 import repository.AlunoRepository;
 
 import java.util.List;
-import java.util.Scanner;
 
 import controller.AlunoController;
 
-public class AlunoView {
-    private final Scanner scanner = new Scanner(System.in);
+public class AlunoView extends BaseView {
     private final AlunoController alunoController = new AlunoController(AlunoRepository.getInstance(), this);
 
     public void menuAlunos () {
@@ -21,7 +19,7 @@ public class AlunoView {
             System.out.println("c) Matricular aluno em disciplina");
             System.out.println("d) Desmatricular aluno de disciplina");
             System.out.println("0) Voltar");
-            System.out.print("→ Opção: ");
+            System.out.print("-> Opção: ");
             escolha = scanner.nextLine().trim().toLowerCase();
 
             switch (escolha) {
@@ -43,12 +41,6 @@ public class AlunoView {
 
     public void listarAlunos() {
         this.alunoController.listarAlunos();
-    }
-
-    public void exibirTitulo(String titulo) {
-        System.out.println("\n" + "=".repeat(60));
-        System.out.println(" ".repeat((60 - titulo.length()) / 2) + titulo);
-        System.out.println("=".repeat(60));
     }
 
     public void exibirListaAlunos(List<Alunos> alunos) {
@@ -83,22 +75,5 @@ public class AlunoView {
     public String lerString(String mensagem) {
         System.out.print(mensagem);
         return scanner.nextLine().trim();
-    }
-
-    public void sucesso(String mensagem) {
-        System.out.println("SUCESSO: " + mensagem);
-    }
-
-    public void erro(String mensagem) {
-        System.out.println("ERRO: " + mensagem);
-    }
-
-    public void info(String mensagem) {
-        System.out.println("INFO: " + mensagem);
-    }
-
-    public void pausar() {
-        System.out.print("\nPressione ENTER para continuar...");
-        scanner.nextLine();
     }
 }

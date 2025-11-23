@@ -7,12 +7,10 @@ import repository.ProjetoPesquisaRepository;
 import model.Alunos;
 
 import java.util.List;
-import java.util.Scanner;
 
 import controller.ProjetoPesquisaController;
 
-public class ProjetoPesquisaView {
-    private final Scanner scanner = new Scanner(System.in);
+public class ProjetoPesquisaView extends BaseView {
     private final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(
             ProjetoPesquisaRepository.getInstance(),
             ProfessorRepository.getInstance(),
@@ -39,12 +37,12 @@ public class ProjetoPesquisaView {
 
     }
 
-    // ====================== EXIBIÇÃO DE TÍTULOS ======================
-    public void exibirTitulo(String titulo) {
-        System.out.println("\n" + "=".repeat(70));
-        System.out.println(" ".repeat((70 - titulo.length()) / 2) + titulo);
-        System.out.println("=".repeat(70));
-    }
+    // // ====================== EXIBIÇÃO DE TÍTULOS ======================
+    // public void exibirTitulo(String titulo) {
+    //     System.out.println("\n" + "=".repeat(70));
+    //     System.out.println(" ".repeat((70 - titulo.length()) / 2) + titulo);
+    //     System.out.println("=".repeat(70));
+    // }
 
     // ====================== LEITURA DE DADOS ======================
     public String lerTituloProjeto() {
@@ -108,29 +106,29 @@ public class ProjetoPesquisaView {
         System.out.println("Total de projetos: " + projetos.size());
     }
 
-    // ====================== MENSAGENS ======================
-    public void sucesso(String mensagem) {
-        System.out.println("SUCESSO: " + mensagem);
-    }
+    // // ====================== MENSAGENS ======================
+    // public void sucesso(String mensagem) {
+    //     System.out.println("SUCESSO: " + mensagem);
+    // }
 
-    public void erro(String mensagem) {
-        System.out.println("ERRO: " + mensagem);
-    }
+    // public void erro(String mensagem) {
+    //     System.out.println("ERRO: " + mensagem);
+    // }
 
-    public void info(String mensagem) {
-        System.out.println("INFO: " + mensagem);
-    }
+    // public void info(String mensagem) {
+    //     System.out.println("INFO: " + mensagem);
+    // }
 
-    // ====================== PAUSA ======================
-    public void pausar() {
-        System.out.print("\nPressione ENTER para continuar...");
-        scanner.nextLine();
-    }
+    // // ====================== PAUSA ======================
+    // public void pausar() {
+    //     System.out.print("\nPressione ENTER para continuar...");
+    //     scanner.nextLine();
+    // }
 
     // Utilitário para não quebrar a tabela
-    private String truncar(String texto, int max) {
-        if (texto == null)
-            return "";
-        return texto.length() > max ? texto.substring(0, max - 3) + "..." : texto;
-    }
+    // private String truncar(String texto, int max) {
+    //     if (texto == null)
+    //         return "";
+    //     return texto.length() > max ? texto.substring(0, max - 3) + "..." : texto;
+    // }
 }

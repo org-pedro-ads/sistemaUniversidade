@@ -101,8 +101,10 @@ public class DisciplinaController implements IDisciplinaController {
 
             } catch (NumberFormatException e) {
                 this.disciplinaView.print("\nERRO DE FORMATO: Digite apenas numeros inteiros onde solicitado.\n");
+                return null;
             } catch (Exception e) {
                 this.disciplinaView.print("\nERRO AO CADASTRAR: " + e.getMessage() + "\n");
+                return null;
             }
         }
     }
