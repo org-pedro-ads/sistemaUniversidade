@@ -25,34 +25,38 @@ public class Main {
     private static final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
     private static final DisciplinaView disciplinaView = DisciplinaView.getInstance();
 
-    static void main(String[] args) throws Exception {
-        System.out.println("""
+    public static void main(String[] args) throws Exception {
+        try{
+            System.out.println("""
             ╔══════════════════════════════════════════════════╗
             ║    SISTEMA DE GESTÃO ACADÊMICA - IFSP 2025       ║
             ║        Programação Orientada a Objetos           ║
             ╚══════════════════════════════════════════════════╝
             """);
 
-        int opcao;
-        do {
-            exibirMenuPrincipal();
-            opcao = lerInteiro("→ Digite a opção desejada: ");
+            int opcao;
+            do {
+                exibirMenuPrincipal();
+                opcao = lerInteiro("→ Digite a opção desejada: ");
 
-            switch (opcao) {
-                case 1 -> menuProfessores();
-                case 2 -> disciplinaView.menuDisciplinas();
-                case 3 -> menuAlunos();
-                case 4 -> menuVinculosEProjetos();
-                case 5 -> menuEletivasInteresse();
-                case 6 -> menuRelatorios();
-                case 7 -> menuAjudaSobre();
-                case 8 -> {
-                    System.out.println("Saindo do sistema... Até logo!");
-                    return;
+                switch (opcao) {
+                    case 1 -> menuProfessores();
+                    case 2 -> disciplinaView.menuDisciplinas();
+                    case 3 -> menuAlunos();
+                    case 4 -> menuVinculosEProjetos();
+                    case 5 -> menuEletivasInteresse();
+                    case 6 -> menuRelatorios();
+                    case 7 -> menuAjudaSobre();
+                    case 8 -> {
+                        System.out.println("Saindo do sistema... Até logo!");
+                        return;
+                    }
+                    default -> System.out.println("Opção inválida! Tente novamente.");
                 }
-                default -> System.out.println("Opção inválida! Tente novamente.");
-            }
-        } while (true);
+            } while (true);
+        }catch(Exception e){
+            System.out.println("Ocorreu um erro inesperado: " + e.getMessage());
+        }
     }
 
     private static void exibirMenuPrincipal() {
