@@ -7,6 +7,14 @@ import java.util.List;
 public class AlunoRepository {
     private List<Alunos> alunos = new ArrayList<>();
     private int sequenceId = 1;
+    private static AlunoRepository instance;
+
+    public static AlunoRepository getInstance() {
+        if (instance == null) {
+            instance = new AlunoRepository();
+        }
+        return instance;
+    }
 
     public void cadastrarAluno(Alunos aluno) {
         if (aluno != null && buscarPorMatricula(aluno.getMatricula()) == null) {

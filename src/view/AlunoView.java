@@ -1,12 +1,27 @@
 package view;
 
 import model.Alunos;
+import repository.AlunoRepository;
 
 import java.util.List;
 import java.util.Scanner;
 
+import controller.AlunoController;
+
 public class AlunoView {
     private final Scanner scanner = new Scanner(System.in);
+    private final AlunoController alunoController = new AlunoController(AlunoRepository.getInstance(), this);
+
+    public void cadastrarAluno() {
+        this.exibirTitulo("CADASTRAR ALUNO");
+        String nome = this.lerNome();
+
+        this.alunoController.cadastrarAluno(nome);
+    }
+
+    public void listarAlunos() {
+        this.alunoController.listarAlunos();
+    }
 
     public void exibirTitulo(String titulo) {
         System.out.println("\n" + "=".repeat(60));

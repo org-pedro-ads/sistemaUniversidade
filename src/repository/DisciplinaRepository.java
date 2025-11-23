@@ -3,7 +3,6 @@ package repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Alunos; // Mantido para referência, mas não usado diretamente na lista
 import model.Disciplina;
 import model.DisciplinaEletiva;
 

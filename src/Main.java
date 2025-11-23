@@ -1,10 +1,14 @@
 import java.util.Scanner;
 import controller.AlunoController;
+import controller.DisciplinaController;
+import controller.ProfessorController;
 import controller.ProjetoPesquisaController;
 import repository.AlunoRepository;
+import repository.DisciplinaRepository;
 import repository.ProfessorRepository;
 import repository.ProjetoPesquisaRepository;
 import view.AlunoView;
+import view.ProfessorView;
 import view.DisciplinaView;
 import view.ProjetoPesquisaView;
 
@@ -14,9 +18,10 @@ public class Main {
     private static final AlunoRepository alunoRepository = new AlunoRepository();
     private static final ProjetoPesquisaRepository projetoPesquisaRepository = new ProjetoPesquisaRepository();
     private static final AlunoView alunoView = new AlunoView();
+    private static final ProfessorView professorView = new ProfessorView();
     private static final AlunoController alunoController = new AlunoController(alunoRepository, alunoView);
     private static final ProjetoPesquisaView projetoPesquisaView = new ProjetoPesquisaView();
-    private static final ProfessorRepository professorRepository = new ProfessorRepository();
+    private static final ProfessorRepository professorRepository = ProfessorRepository.getInstance();
     private static final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
     private static final DisciplinaView disciplinaView = new DisciplinaView();
 
@@ -66,7 +71,7 @@ public class Main {
     }
 
     // ====================== MENU PROFESSORES ======================
-    private static void menuProfessores() {
+    private static void menuProfessores() throws Exception {
         String escolha;
         do {
             System.out.println("\n>>> PROFESSORES");
@@ -80,12 +85,30 @@ public class Main {
             escolha = scanner.nextLine().trim().toLowerCase();
 
             switch (escolha) {
-                case "a" -> System.out.println("[Implementar] Cadastrar professor...");
-                case "b" -> System.out.println("[Implementar] Listar professores...");
-                case "c" -> System.out.println("[Implementar] Editar professor...");
-                case "d" -> System.out.println("[Implementar] Remover professor...");
-                case "e" -> System.out.println("[Implementar] Calcular salário...");
-                case "0" -> System.out.println("Voltando ao menu principal...\n");
+                case "a" -> {
+                    System.out.println("Cadastrar professor...");
+                    professorView.cadastrarProfessor();
+                }
+                case "b" -> {
+                    System.out.println("Listar professores...");
+                    professorView.listarProfessores();
+                }
+                case "c" -> {
+                    System.out.println("Editar professor...");
+                    professorView.editarProfessor();
+                }
+                case "d" -> {
+                    System.out.println("Remover professor...");
+                    professorView.removerProfessor();
+                }
+                case "e" -> {
+                    System.out.println("Calcular salário...");
+                    professorView.calcularSalarioProfessor();
+                }
+                case "0" -> {
+                    System.out.println("Voltando ao menu principal...\n");
+                    return;
+                }
                 default ->  System.out.println("Opção inválida!");
             }
         } while (!escolha.equals("0"));
@@ -112,7 +135,6 @@ public class Main {
                 case "c" -> disciplinaView.editarDisciplina();
                 case "d" -> disciplinaView.removerDisciplina();
                 case "e" -> disciplinaView.listarAlunosMatriculados();
-
                 case "0" -> System.out.println("Voltando...\n");
                 default -> System.out.println("Opção inválida!");
             }
@@ -133,8 +155,8 @@ public class Main {
             escolha = scanner.nextLine().trim().toLowerCase();
 
             switch (escolha) {
-                case "a" -> alunoController.cadastrarAluno();
-                case "b" -> alunoController.listarAlunos();
+                case "a" -> alunoView.cadastrarAluno();
+                case "b" -> alunoView.listarAlunos();
                 case "c", "d" -> System.out.println("[Implementar] Funcionalidade em desenvolvimento...");
                 case "0" -> System.out.println("Voltando...\n");
                 default -> System.out.println("Opção inválida!");
