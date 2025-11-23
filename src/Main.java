@@ -18,11 +18,11 @@ public class Main {
     private static final ProfessorView professorView = new ProfessorView();
     private static final AlunoController alunoController = new AlunoController(alunoRepository, alunoView);
     private static final ProjetoPesquisaView projetoPesquisaView = new ProjetoPesquisaView();
-    private static final ProfessorRepository professorRepository = new ProfessorRepository();
+    private static final ProfessorRepository professorRepository = ProfessorRepository.getInstance();
     private static final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
     private static final DisciplinaView disciplinaView = new DisciplinaView();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         System.out.println("""
             ╔══════════════════════════════════════════════════╗
             ║    SISTEMA DE GESTÃO ACADÊMICA - IFSP 2025       ║
@@ -68,7 +68,7 @@ public class Main {
     }
 
     // ====================== MENU PROFESSORES ======================
-    private static void menuProfessores() {
+    private static void menuProfessores() throws Exception {
         String escolha;
         do {
             System.out.println("\n>>> PROFESSORES");
@@ -83,24 +83,24 @@ public class Main {
 
             switch (escolha) {
                 case "a" -> {
-                    professorView.cadastrarProfessor();
                     System.out.println("Cadastrar professor...");
+                    professorView.cadastrarProfessor();
                 }
                 case "b" -> {
-                    professorView.listarProfessores();
                     System.out.println("Listar professores...");
+                    professorView.listarProfessores();
                 }
                 case "c" -> {
-                    professorView.editarProfessor();
                     System.out.println("Editar professor...");
+                    professorView.editarProfessor();
                 }
                 case "d" -> {
-                    professorView.removerProfessor();
                     System.out.println("Remover professor...");
+                    professorView.removerProfessor();
                 }
                 case "e" -> {
-                    professorView.calcularSalarioProfessor();
                     System.out.println("Calcular salário...");
+                    professorView.calcularSalarioProfessor();
                 }
                 case "0" -> {
                     System.out.println("Voltando ao menu principal...\n");
@@ -132,7 +132,6 @@ public class Main {
                 case "c" -> disciplinaView.editarDisciplina();
                 case "d" -> disciplinaView.removerDisciplina();
                 case "e" -> disciplinaView.listarAlunosMatriculados();
-
                 case "0" -> System.out.println("Voltando...\n");
                 default -> System.out.println("Opção inválida!");
             }
