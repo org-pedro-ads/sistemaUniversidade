@@ -20,11 +20,13 @@ public class ProfessorController {
             TipoProfessor tipo, int quantDisciplinas, List<String> nomeDisciplinas,
             List<String> projetoPesquisa, Double salarioBase) throws Exception {
         try {
+            if(nome.isBlank()){
+                throw new Exception("Nome nao pode ser vazio");
+            }
             //add validacao de disciplina
             if(quantDisciplinas > 3){
                 throw new Exception("Professor vitalicio nao pode ter mais de 3 disciplinas");
             }
-
             List<Disciplina> disciplinas = new ArrayList<>();
             for(String nomeDisciplina : nomeDisciplinas){
                 Disciplina consultarDisciplina = disciplinaRepository.buscarDisciplinaPorNome(nomeDisciplina);
@@ -36,7 +38,6 @@ public class ProfessorController {
                 }
                 disciplinas.add(consultarDisciplina);
             }
-
             List<ProjetoPesquisa> projetos = new ArrayList<>();
             for (String nomeProjeto : projetoPesquisa) {
                 ProjetoPesquisa projeto = projetoPesquisaRepository.buscarPorTitulo(nomeProjeto);
@@ -45,20 +46,18 @@ public class ProfessorController {
                 }
                 projetos.add(projeto);
             }
-
             Professor professorVitalicio = new ProfessorVitalicio(nome, matricula, titulo, tipo, disciplinas, projetos, salarioBase);
             for (ProjetoPesquisa p : projetos) {
                 p.setOrientador(professorVitalicio);
                 projetoPesquisaRepository.atualizarProjeto(p);
             }
-
             for(Disciplina d : disciplinas){
                 d.setProfessorResponsavel(professorVitalicio);
                 disciplinaRepository.atualizarDisciplina(d);
             }
             professorRepository.save(professorVitalicio);
         } catch (Exception e){
-            throw new Exception("Erro ao cadastrar professor: " +  e.getMessage());
+            throw new Exception("Erro ao cadastrar professor - " + e.getMessage());
         }
     }
 
@@ -89,7 +88,7 @@ public class ProfessorController {
             }
             return;
         } catch (Exception e){
-            throw new Exception("Erro ao cadastrar professor");
+            throw new Exception("Erro ao cadastrar professor - " + e.getMessage());
         }
 
     }
@@ -154,7 +153,7 @@ public class ProfessorController {
                 disciplinaRepository.atualizarDisciplina(d);
             }
         } catch (Exception e){
-            throw new Exception("Erro ao atualizar professor");
+            throw new Exception("Erro ao atualizar professor - " + e.getMessage());
         }
     }
 
@@ -188,7 +187,7 @@ public class ProfessorController {
             }
             return salarioProfessor;
         } catch (Exception e){
-            throw new Exception("Erro ao calcular salario do professor");
+            throw new Exception("Erro ao calcular salario do professor - " + e.getMessage());
         }
     }
 

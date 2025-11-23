@@ -2,6 +2,7 @@ package view;
 
 import controller.ProfessorController;
 import model.*;
+import util.MatriculaGenerator;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,15 +14,13 @@ import java.util.stream.Collectors;
 public class ProfessorView {
     private Scanner sc = new Scanner(System.in);
     private static final ProfessorController controller = new ProfessorController();
-
     public void cadastrarProfessor() throws Exception {
         System.out.println("===== Cadastro de Professor =====");
 
         System.out.print("Nome: ");
         String nome = sc.nextLine();
 
-        System.out.print("Matrícula: ");
-        String matricula = sc.nextLine();
+        String matricula = MatriculaGenerator.gerarParaProfessor();
 
         System.out.println("Informe o título do professor:");
         System.out.println("1 - Graduado");
@@ -80,7 +79,7 @@ public class ProfessorView {
 
             controller.cadastroProfessorSubstituto(nome, matricula, titulo, tipo, qtd, nomeDisciplinas, horas, data);
         } else if (tipo == TipoProfessor.VITALICIO) {
-            System.out.println("Quantos projetos de pesqeuisa ele orienta?");
+            System.out.println("Quantos projetos de pesquisa ele orienta?");
             qtd = sc.nextInt();
             sc.nextLine();
 
@@ -274,7 +273,7 @@ public class ProfessorView {
         }
         else if (professor instanceof ProfessorVitalicio vit) {
             System.out.println("== EDITAR PROFESSOR VITALÍCIO ==");
-            System.out.println("Quantos projetos de pesqeuisa ele orienta?");
+            System.out.println("Quantos projetos de pesquisa ele orienta?");
             int qtd = sc.nextInt();
             sc.nextLine();
 

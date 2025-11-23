@@ -4,7 +4,7 @@ public class MatriculaGenerator {
     private static int seqAluno = 0;
     private static int seqProfessor = 0;
 
-    private MatriculaGenerator() {}
+    public MatriculaGenerator() {}
 
     public static String gerarParaAluno() {
         seqAluno++;

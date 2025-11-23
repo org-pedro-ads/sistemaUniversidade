@@ -26,14 +26,14 @@ public class Main {
             projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
     private static final DisciplinaView disciplinaView = DisciplinaView.getInstance();
 
-    static void main(String[] args) throws Exception {
-        try {
+    public static void main(String[] args) throws Exception {
+        try{
             System.out.println("""
-                    ╔══════════════════════════════════════════════════╗
-                    ║    SISTEMA DE GESTÃO ACADÊMICA - IFSP 2025       ║
-                    ║        Programação Orientada a Objetos           ║
-                    ╚══════════════════════════════════════════════════╝
-                    """);
+            ╔══════════════════════════════════════════════════╗
+            ║    SISTEMA DE GESTÃO ACADÊMICA - IFSP 2025       ║
+            ║        Programação Orientada a Objetos           ║
+            ╚══════════════════════════════════════════════════╝
+            """);
 
             int opcao;
             do {
@@ -55,8 +55,8 @@ public class Main {
                     default -> System.out.println("Opção inválida! Tente novamente.");
                 }
             } while (true);
-        } catch (Exception e) {
-            System.out.println("Erro inesperado: " + e.getMessage());
+        }catch(Exception e){
+            System.out.println("Ocorreu um erro inesperado: " + e.getMessage());
         }
     }
 
