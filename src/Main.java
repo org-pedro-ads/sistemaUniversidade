@@ -1,10 +1,14 @@
 import java.util.Scanner;
 import controller.AlunoController;
+import controller.DisciplinaController;
+import controller.ProfessorController;
 import controller.ProjetoPesquisaController;
 import repository.AlunoRepository;
+import repository.DisciplinaRepository;
 import repository.ProfessorRepository;
 import repository.ProjetoPesquisaRepository;
 import view.AlunoView;
+import view.DisciplinaView;
 import view.ProjetoPesquisaView;
 
 public class Main {
@@ -17,6 +21,8 @@ public class Main {
     private static final ProjetoPesquisaView projetoPesquisaView = new ProjetoPesquisaView();
     private static final ProfessorRepository professorRepository = new ProfessorRepository();
     private static final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
+    private static final ProfessorController professorController = new ProfessorController();
+    private static final DisciplinaView disciplinaView = new DisciplinaView();
 
     public static void main(String[] args) {
         System.out.println("""
@@ -104,7 +110,13 @@ public class Main {
             escolha = scanner.nextLine().trim().toLowerCase();
 
             switch (escolha) {
-                case "a", "b", "c", "d", "e" -> System.out.println("[Implementar] Funcionalidade em desenvolvimento...");
+
+                case "a" -> disciplinaView.adicionarDisciplina();
+                case "b" -> disciplinaView.listarDisciplinas();
+                case "c" -> disciplinaView.editarDisciplina();
+                case "d" -> disciplinaView.removerDisciplina();
+                case "e" -> disciplinaView.listarAlunosMatriculados();
+
                 case "0" -> System.out.println("Voltando...\n");
                 default -> System.out.println("Opção inválida!");
             }
