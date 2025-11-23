@@ -3,21 +3,21 @@ package model;
 import java.util.List;
 
 public class ProfessorVitalicio extends Professor{
-    private List<ProjetoPesquisa> projetos;
+    private ProjetoPesquisa projetos;
     private Double salarioBase;
 
     public ProfessorVitalicio(String nome, String matricula, TituloProfessor titulo, TipoProfessor tipo,
-                               List<Disciplina> disciplinas, List<ProjetoPesquisa> projetos, Double salarioBase){
+                               List<Disciplina> disciplinas, ProjetoPesquisa projetos, Double salarioBase){
         super(nome, matricula, titulo, tipo, disciplinas);
         this.projetos = projetos;
         this.salarioBase = salarioBase;
     }
 
-    public List<ProjetoPesquisa> getProjetos() {
+    public ProjetoPesquisa getProjetos() {
         return projetos;
     }
 
-    public void setProjetos(List<ProjetoPesquisa> projetos) {
+    public void setProjetos(ProjetoPesquisa projetos) {
         this.projetos = projetos;
     }
 
