@@ -27,7 +27,7 @@ public class DisciplinaController implements IDisciplinaController {
     }
 
     // ==================================================================================
-    // METODOS AUXILIARES (Private)
+    // METODOS AUXILIARES (Private) - Para evitar repeticao de codigo
     // ==================================================================================
 
     /**
@@ -41,84 +41,102 @@ public class DisciplinaController implements IDisciplinaController {
 
     /**
      * Auxiliar: Busca disciplina e lanca erro se nao existir.
+     * Usado pelos metodos logicos.
      */
-    public boolean validarExistenciaDisciplina(int id) {
+    public Disciplina validarExistenciaDisciplina(int id) throws Exception {
         Disciplina disciplina = this.disciplinaRepository.buscarDisciplinaPorId(id);
-        return disciplina != null;
+        if (disciplina == null) {
+            throw new Exception("Disciplina com ID " + id + " nao encontrada.");
+        }
+        return disciplina;
     }
 
     // ==================================================================================
-    // CRIACAO (Create) - Loop e try-catch removidos
+    // CRIACAO (Create)
     // ==================================================================================
 
     @Override
-    public Disciplina adicionarDisciplina() throws Exception {
-        this.disciplinaView.print(" ================= Cadastro Disciplina ================ \n");
+    public Disciplina adicionarDisciplina() {
+        while (true) {
+            try {
+                this.disciplinaView.print(" ================= Cadastro Disciplina ================ \n");
 
-        // Coleta de dados - Exceções de NumberFormatException agora são lançadas por lerIdInteiro
-        String nome = this.disciplinaView.getInfo("\nDigite o nome da disciplina: ");
-        int cargaHoraria = lerIdInteiro("\nDigite a carga-horaria da disciplina: ");
-        String matriculaProf = this.disciplinaView.getInfo("\nDigite a matricula do professor responsavel: ");
-        int tipo = lerIdInteiro("\nDigite o tipo (1 - Obrigatoria, 2 - Eletiva): ");
+                // Coleta de dados
+                String nome = this.disciplinaView.getInfo("\nDigite o nome da disciplina: ");
+                int cargaHoraria = lerIdInteiro("\nDigite a carga-horaria da disciplina: ");
+                String matriculaProf = this.disciplinaView.getInfo("\nDigite a matricula do professor responsavel: ");
+                int tipo = lerIdInteiro("\nDigite o tipo (1 - Obrigatoria, 2 - Eletiva): ");
 
-        // Validacoes de Negócio
-        Professor professor = this.professorController.encontrarProfessor(matriculaProf);
-        if (professor == null) {
-            throw new Exception("Professor com matricula " + matriculaProf + " nao encontrado.");
+                // Validacoes de Negocio
+                Professor professor = this.professorController.encontrarProfessor(matriculaProf);
+                if (professor == null) {
+                    throw new Exception("Professor com matricula " + matriculaProf + " nao encontrado.");
+                }
+
+                if (tipo != 1 && tipo != 2) {
+                    throw new Exception("Tipo invalido. Use 1 (Obrigatoria) ou 2 (Eletiva).");
+                }
+                if (nome.length() < 5) {
+                    throw new Exception("Nome deve conter ao menos 5 caracteres.");
+                }
+                if (cargaHoraria < 10) {
+                    throw new Exception("Carga horaria deve ser no minimo 10 horas.");
+                }
+
+                // Instanciacao
+                Disciplina novaDisciplina;
+                List<String> listaVazia = new ArrayList<>();
+
+                if (tipo == 1) {
+                    novaDisciplina = new DisciplinaObrigatoria(0, nome, cargaHoraria, professor, listaVazia);
+                } else {
+                    novaDisciplina = new DisciplinaEletiva(0, nome, cargaHoraria, professor, listaVazia, new ArrayList<>());
+                }
+
+                // Persistencia
+                novaDisciplina = this.disciplinaRepository.adicionarDisciplina(novaDisciplina);
+
+                this.disciplinaView.print("\nDisciplina '" + nome + "' adicionada com sucesso! (ID: " + novaDisciplina.getId() + ")\n");
+                return novaDisciplina;
+
+            } catch (NumberFormatException e) {
+                this.disciplinaView.print("\nERRO DE FORMATO: Digite apenas numeros inteiros onde solicitado.\n");
+                return null;
+            } catch (Exception e) {
+                this.disciplinaView.print("\nERRO AO CADASTRAR: " + e.getMessage() + "\n");
+                return null;
+            }
         }
-
-        if (tipo != 1 && tipo != 2) {
-            throw new Exception("Tipo invalido. Use 1 (Obrigatoria) ou 2 (Eletiva).");
-        }
-        if (nome.length() < 5) {
-            throw new Exception("Nome deve conter ao menos 5 caracteres.");
-        }
-        if (cargaHoraria < 10) {
-            throw new Exception("Carga horaria deve ser no minimo 10 horas.");
-        }
-
-        // Instanciacao
-        Disciplina novaDisciplina;
-        List<String> listaVazia = new ArrayList<>();
-
-        if (tipo == 1) {
-            novaDisciplina = new DisciplinaObrigatoria(0, nome, cargaHoraria, professor, listaVazia);
-        } else {
-            novaDisciplina = new DisciplinaEletiva(0, nome, cargaHoraria, professor, listaVazia, new ArrayList<>());
-        }
-
-        // Persistencia
-        novaDisciplina = this.disciplinaRepository.adicionarDisciplina(novaDisciplina);
-
-        this.disciplinaView.print("\nDisciplina '" + nome + "' adicionada com sucesso! (ID: " + novaDisciplina.getId() + ")\n");
-        return novaDisciplina;
     }
 
     // ==================================================================================
-    // REMOCAO (Delete) - Loop e try-catch removidos
+    // REMOCAO (Delete)
     // ==================================================================================
 
     @Override
     public void removerDisciplina(int id) throws Exception {
-        try {
-            if(validarExistenciaDisciplina(id)) {
-                this.disciplinaRepository.removerDisciplina(id);
-            }
-        } catch (Exception ex) {
-            throw new Exception("Erro ao tentar remover Disciplina: " + ex.getMessage());
-        }
-
+        validarExistenciaDisciplina(id); // Valida se existe antes de tentar remover
+        this.disciplinaRepository.removerDisciplina(id);
     }
 
     @Override
     public void removerDisciplina() throws Exception {
-        this.disciplinaView.print(" ================= Remover Disciplina ================ \n");
-        // Lança NumberFormatException se o input não for número
-        int id = lerIdInteiro("\nDigite o ID da disciplina a ser removida: ");
+        boolean sucesso = false;
+        while (!sucesso) {
+            try {
+                this.disciplinaView.print(" ================= Remover Disciplina ================ \n");
+                int id = lerIdInteiro("\nDigite o ID da disciplina a ser removida: ");
 
-        this.removerDisciplina(id); // Lança Exception se não existir
+                this.removerDisciplina(id); // Chama metodo logico
 
-        this.disciplinaView.print("\nDisciplina " + id + " removida com sucesso.\n");
+                this.disciplinaView.print("\nDisciplina " + id + " removida com sucesso.\n");
+                sucesso = true;
+            } catch (NumberFormatException e) {
+                this.disciplinaView.print("\nERRO: ID deve ser um numero inteiro.\n");
+            } catch (Exception e) {
+                this.disciplinaView.print("\nERRO: " + e.getMessage() + " Tente novamente.\n");
+            }
+        }
     }
 
     // ==================================================================================
@@ -126,37 +144,45 @@ public class DisciplinaController implements IDisciplinaController {
     // ==================================================================================
 
     @Override
-    public Disciplina buscarDisciplinaPorId(int id) {
+    public Disciplina buscarDisciplinaPorId(int id) throws Exception {
         return this.disciplinaRepository.buscarDisciplinaPorId(id);
     }
 
     @Override
-    public Disciplina buscarDisciplinaPorNome(String nome) {
+    public Disciplina buscarDisciplinaPorNome(String nome) throws Exception {
         return this.disciplinaRepository.buscarDisciplinaPorNome(nome);
     }
 
     @Override
-    public List<Disciplina> listarDisciplinas() {
+    public List<Disciplina> listarDisciplinas() throws Exception {
+
+        // 1. Busca a lista de disciplinas no Repository
         List<Disciplina> lista = this.disciplinaRepository.listarDisciplinas();
 
+        // Verifica se a lista não é nula, usando ArrayList vazia como fallback
         if (lista == null) {
             lista = new ArrayList<>();
         }
 
+        // 2. Verifica se a lista está vazia para fornecer feedback ao usuário
         if (lista.isEmpty()) {
-            this.disciplinaView.print("\nNenhuma disciplina cadastrada.\n");
+            this.disciplinaView.print("\n⚠️ Nenhuma disciplina cadastrada.\n");
             return lista;
         }
 
+        // 3. Envia a lista para a View para exibição formatada (Relatório)
+        // O metodo printRelatorios da View deve se encarregar de exibir a lista.
         this.disciplinaView.printRelatorios(lista);
+
+        // 4. Retorna a lista (útil para testes ou outros Controllers)
         return lista;
     }
 
     // --- Listar Alunos Matriculados ---
 
     @Override
-    public List<Alunos> listarAlunosMatriculados(int id) {
-        Disciplina disciplina = buscarDisciplinaPorId(id);
+    public List<Alunos> listarAlunosMatriculados(int id) throws Exception {
+        Disciplina disciplina = validarExistenciaDisciplina(id);
         List<Alunos> alunosObj = new ArrayList<>();
 
         if (disciplina.getAlunos() != null) {
@@ -169,25 +195,37 @@ public class DisciplinaController implements IDisciplinaController {
     }
 
     @Override
-    public List<Alunos> listarAlunosMatriculados() { // Alterado para lançar exceção
+    public List<Alunos> listarAlunosMatriculados() {
+        boolean sucesso = false;
+        List<Alunos> lista = null;
+
         this.disciplinaView.print(" ================= Listar alunos matriculados ================ \n");
 
-        int id = lerIdInteiro("\nDigite o ID da disciplina: ");
-        return this.listarAlunosMatriculados(id);
+        while (!sucesso) {
+            try {
+                int id = lerIdInteiro("\nDigite o ID da disciplina: ");
+                lista = this.listarAlunosMatriculados(id); // Chama logico
+                sucesso = true;
+            } catch (NumberFormatException e) {
+                this.disciplinaView.print("\nERRO: ID invalido.\n");
+            } catch (Exception e) {
+                this.disciplinaView.print("\nERRO: " + e.getMessage() + "\n");
+            }
+        }
+        return lista;
     }
 
     // --- Listar Alunos Interessados (Eletiva) ---
 
     @Override
     public List<Alunos> listarAlunosInteressados(int id) throws Exception {
-        Disciplina disciplina = buscarDisciplinaPorId(id);
+        Disciplina disciplina = validarExistenciaDisciplina(id);
 
         if (!(disciplina instanceof DisciplinaEletiva)) {
             throw new Exception("Apenas disciplinas Eletivas possuem lista de interesse.");
         }
 
         List<Alunos> alunosObj = new ArrayList<>();
-        // Correção na chamada (mantendo o código original, que usa o repository com o ID)
         List<String> matriculas = this.disciplinaRepository.listarMatriculasAlunosInteressados(id);
 
         if (matriculas != null) {
@@ -200,11 +238,24 @@ public class DisciplinaController implements IDisciplinaController {
     }
 
     @Override
-    public List<Alunos> listarAlunosInteressados() throws Exception { // Alterado para lançar exceção
+    public List<Alunos> listarAlunosInteressados() throws Exception {
+        boolean sucesso = false;
+        List<Alunos> lista = null;
+
         this.disciplinaView.print(" ================= Listar alunos interessados ================ \n");
 
-        int id = lerIdInteiro("\nDigite o ID da disciplina: ");
-        return this.listarAlunosInteressados(id);
+        while (!sucesso) {
+            try {
+                int id = lerIdInteiro("\nDigite o ID da disciplina: ");
+                lista = this.listarAlunosInteressados(id);
+                sucesso = true;
+            } catch (NumberFormatException e) {
+                this.disciplinaView.print("\nERRO: ID invalido.\n");
+            } catch (Exception e) {
+                this.disciplinaView.print("\nERRO: " + e.getMessage() + "\n");
+            }
+        }
+        return lista;
     }
 
     // ==================================================================================
@@ -212,38 +263,58 @@ public class DisciplinaController implements IDisciplinaController {
     // ==================================================================================
 
     @Override
-    public Disciplina alterarDisciplina(Disciplina disciplina) {
-        this.validarExistenciaDisciplina(disciplina.getId());
-        this.disciplinaRepository.atualizarDisciplina(disciplina);
-        return disciplina;
+    public Disciplina alterarDisciplina(Disciplina disciplina) throws Exception {
+        try {
+            this.validarExistenciaDisciplina(disciplina.getId());
+            this.disciplinaRepository.atualizarDisciplina(disciplina);
+            return disciplina;
+        } catch (Exception e) {
+            this.disciplinaView.print("\nERRO: " + e.getMessage() + " Tente novamente.\n");
+            return null;
+        }
     }
 
     @Override
     public Disciplina atualizarNome(int id, String nome) throws Exception {
-        Disciplina disciplina = buscarDisciplinaPorId(id);
-
-        if (nome.length() < 3) throw new Exception("Nome muito curto (min 3 chars).");
-
+        Disciplina disciplina = validarExistenciaDisciplina(id);
         disciplina.setNome(nome);
         this.disciplinaRepository.atualizarDisciplina(disciplina);
         return disciplina;
     }
 
     @Override
-    public Disciplina atualizarNome() throws Exception { // Alterado para lançar exceção
+    public Disciplina atualizarNome() {
+        boolean sucesso = false;
+        Disciplina d = null;
+
         this.disciplinaView.print(" ================= Alterar nome de disciplina ================ \n");
 
-        int id = lerIdInteiro("\nDigite o ID da disciplina: ");
-        if(!validarExistenciaDisciplina(id)) { throw new Exception("Erro: Disciplina com id " + id + " nao encontrada"); }
+        while (!sucesso) {
+            try {
+                int id = lerIdInteiro("\nDigite o ID da disciplina: ");
 
-        String novoNome = this.disciplinaView.getInfo("Digite o novo nome: ");
+                // Validacao rapida para UX
+                if (buscarDisciplinaPorId(id) == null) throw new Exception("ID nao encontrado.");
 
-        return this.atualizarNome(id, novoNome);
+                String novoNome = this.disciplinaView.getInfo("Digite o novo nome: ");
+                if (novoNome.length() < 3) throw new Exception("Nome muito curto (min 3 chars).");
+
+                d = this.atualizarNome(id, novoNome);
+
+                this.disciplinaView.print("\nNome atualizado com sucesso!\n");
+                sucesso = true;
+            } catch (NumberFormatException e) {
+                this.disciplinaView.print("\nERRO: ID invalido.\n");
+            } catch (Exception e) {
+                this.disciplinaView.print("\nERRO: " + e.getMessage() + " Tente novamente.\n");
+            }
+        }
+        return d;
     }
 
     @Override
     public Disciplina atualizarCargaHoraria(int id, int cargaHoraria) throws Exception {
-        Disciplina disciplina = buscarDisciplinaPorId(id);
+        Disciplina disciplina = validarExistenciaDisciplina(id);
         if (cargaHoraria < 10) throw new Exception("Carga horaria deve ser ao menos 10 horas.");
 
         disciplina.setCargaHoraria(cargaHoraria);
@@ -252,23 +323,41 @@ public class DisciplinaController implements IDisciplinaController {
     }
 
     @Override
-    public Disciplina atualizarCargaHoraria() throws Exception { // Alterado para lançar exceção
+    public Disciplina atualizarCargaHoraria() throws Exception {
+        boolean sucesso = false;
+        Disciplina d = null;
+
         this.disciplinaView.print(" ================= Alterar carga horaria ================ \n");
 
-        int id = lerIdInteiro("\nDigite o ID da disciplina: ");
+        while (!sucesso) {
+            try {
+                int id = lerIdInteiro("\nDigite o ID da disciplina: ");
 
-        int carga = lerIdInteiro("Digite a nova carga horaria: ");
+                // Validacao rapida para UX
+                if (buscarDisciplinaPorId(id) == null) throw new Exception("ID nao encontrado.");
 
-        return this.atualizarCargaHoraria(id, carga); // Lança exceção se ID ou carga for inválida
+                int carga = lerIdInteiro("Digite a nova carga horaria: ");
+
+                d = this.atualizarCargaHoraria(id, carga);
+
+                this.disciplinaView.print("\nCarga horaria atualizada com sucesso!\n");
+                sucesso = true;
+            } catch (NumberFormatException e) {
+                this.disciplinaView.print("\nERRO: Digite apenas numeros.\n");
+            } catch (Exception e) {
+                this.disciplinaView.print("\nERRO: " + e.getMessage() + " Tente novamente.\n");
+            }
+        }
+        return d;
     }
 
     // ==================================================================================
-    // ATUALIZACAO - PROFESSOR - Loop e try-catch removidos
+    // ATUALIZACAO - PROFESSOR
     // ==================================================================================
 
     @Override
     public Disciplina atualizarProfessorResponsavel(int id, String matriculaProfessor) throws Exception {
-        Disciplina disciplina = buscarDisciplinaPorId(id);
+        Disciplina disciplina = validarExistenciaDisciplina(id);
         Professor professor = this.professorController.encontrarProfessor(matriculaProfessor);
 
         if (professor == null) {
@@ -281,26 +370,41 @@ public class DisciplinaController implements IDisciplinaController {
     }
 
     @Override
-    public Disciplina atualizarProfessorResponsavel() throws Exception { // Alterado para lançar exceção
+    public Disciplina atualizarProfessorResponsavel() {
+        boolean sucesso = false;
+        Disciplina d = null;
+
         this.disciplinaView.print(" ================= Alterar Professor ================ \n");
 
-        int id = lerIdInteiro("\nDigite o ID da disciplina: ");
+        while (!sucesso) {
+            try {
+                int id = lerIdInteiro("\nDigite o ID da disciplina: ");
 
-        String mat = this.disciplinaView.getInfo("Digite a matricula do novo professor: ");
+                // Validacao rapida
+                if (buscarDisciplinaPorId(id) == null) throw new Exception("ID nao encontrado.");
 
-        Disciplina d = this.atualizarProfessorResponsavel(id, mat);
+                String mat = this.disciplinaView.getInfo("Digite a matricula do novo professor: ");
 
-        this.disciplinaView.print("\nProfessor atualizado: " + d.getProfessorResponsavel().getNome() + "\n");
+                d = this.atualizarProfessorResponsavel(id, mat);
+
+                this.disciplinaView.print("\nProfessor atualizado: " + d.getProfessorResponsavel().getNome() + "\n");
+                sucesso = true;
+            } catch (NumberFormatException e) {
+                this.disciplinaView.print("\nERRO: ID invalido.\n");
+            } catch (Exception e) {
+                this.disciplinaView.print("\nERRO: " + e.getMessage() + "\n");
+            }
+        }
         return d;
     }
 
     // ==================================================================================
-    // GERENCIAMENTO DE ALUNOS (Matricula) - Loop e try-catch removidos
+    // GERENCIAMENTO DE ALUNOS (Matricula)
     // ==================================================================================
 
     @Override
-    public Disciplina matricularAlunoDisciplina(int id, String matricula) throws Exception {
-        Disciplina disciplina = buscarDisciplinaPorId(id);
+    public Disciplina matricularAlunoDisciplina(int idDisciplina, String matricula) throws Exception {
+        Disciplina disciplina = validarExistenciaDisciplina(idDisciplina);
         Alunos aluno = this.alunoController.encontrarAluno(matricula);
 
         if (aluno == null) throw new Exception("Aluno com matricula " + matricula + " nao encontrado.");
@@ -320,21 +424,33 @@ public class DisciplinaController implements IDisciplinaController {
     }
 
     @Override
-    public Disciplina matricularAlunoDisciplina() throws Exception { // Alterado para lançar exceção
+    public Disciplina matricularAlunoDisciplina() throws Exception {
+        boolean sucesso = false;
+        Disciplina d = null;
+
         this.disciplinaView.print(" ================= Matricular Aluno ================ \n");
 
-        int id = lerIdInteiro("\nDigite o ID da disciplina: ");
-        String mat = this.disciplinaView.getInfo("Digite a matricula do aluno: ");
+        while (!sucesso) {
+            try {
+                int id = lerIdInteiro("\nDigite o ID da disciplina: ");
+                String mat = this.disciplinaView.getInfo("Digite a matricula do aluno: ");
 
-        Disciplina d = this.matricularAlunoDisciplina(id, mat);
+                d = this.matricularAlunoDisciplina(id, mat);
 
-        this.disciplinaView.print("\nMatricula realizada com sucesso em " + d.getNome() + "\n");
+                this.disciplinaView.print("\nMatricula realizada com sucesso em " + d.getNome() + "\n");
+                sucesso = true;
+            } catch (NumberFormatException e) {
+                this.disciplinaView.print("\nERRO: ID invalido.\n");
+            } catch (Exception e) {
+                this.disciplinaView.print("\nERRO: " + e.getMessage() + "\n");
+            }
+        }
         return d;
     }
 
     @Override
     public Disciplina desmatricularAlunoDisciplina(int id, String matricula) throws Exception {
-        Disciplina disciplina = buscarDisciplinaPorId(id);
+        Disciplina disciplina = validarExistenciaDisciplina(id);
         Alunos aluno = this.alunoController.encontrarAluno(matricula);
 
         if (aluno == null) throw new Exception("Aluno nao encontrado.");
@@ -353,25 +469,37 @@ public class DisciplinaController implements IDisciplinaController {
     }
 
     @Override
-    public Disciplina desmatricularAlunoDisciplina() throws Exception { // Alterado para lançar exceção
+    public Disciplina desmatricularAlunoDisciplina() throws Exception {
+        boolean sucesso = false;
+        Disciplina d = null;
+
         this.disciplinaView.print(" ================= Desmatricular Aluno ================ \n");
 
-        int id = lerIdInteiro("\nDigite o ID da disciplina: ");
-        String mat = this.disciplinaView.getInfo("Digite a matricula do aluno: ");
+        while (!sucesso) {
+            try {
+                int id = lerIdInteiro("\nDigite o ID da disciplina: ");
+                String mat = this.disciplinaView.getInfo("Digite a matricula do aluno: ");
 
-        Disciplina d = this.desmatricularAlunoDisciplina(id, mat);
+                d = this.desmatricularAlunoDisciplina(id, mat);
 
-        this.disciplinaView.print("\nAluno removido da disciplina com sucesso.\n");
+                this.disciplinaView.print("\nAluno removido da disciplina com sucesso.\n");
+                sucesso = true;
+            } catch (NumberFormatException e) {
+                this.disciplinaView.print("\nERRO: ID invalido.\n");
+            } catch (Exception e) {
+                this.disciplinaView.print("\nERRO: " + e.getMessage() + "\n");
+            }
+        }
         return d;
     }
 
     // ==================================================================================
-    // GERENCIAMENTO DE INTERESSE (Eletivas) - Loop e try-catch removidos
+    // GERENCIAMENTO DE INTERESSE (Eletivas)
     // ==================================================================================
 
     @Override
     public Disciplina declararInteresseDisciplina(int id, String matricula) throws Exception {
-        Disciplina disciplina = buscarDisciplinaPorId(id);
+        Disciplina disciplina = validarExistenciaDisciplina(id);
         Alunos aluno = this.alunoController.encontrarAluno(matricula);
 
         if (aluno == null) throw new Exception("Aluno nao encontrado.");
@@ -396,21 +524,33 @@ public class DisciplinaController implements IDisciplinaController {
     }
 
     @Override
-    public Disciplina declararInteresseDisciplina() throws Exception { // Alterado para lançar exceção
+    public Disciplina declararInteresseDisciplina() {
+        boolean sucesso = false;
+        Disciplina d = null;
+
         this.disciplinaView.print(" ================= Declarar Interesse ================ \n");
 
-        int id = lerIdInteiro("\nDigite o ID da disciplina eletiva: ");
-        String mat = this.disciplinaView.getInfo("Digite a matricula do aluno: ");
+        while (!sucesso) {
+            try {
+                int id = lerIdInteiro("\nDigite o ID da disciplina eletiva: ");
+                String mat = this.disciplinaView.getInfo("Digite a matricula do aluno: ");
 
-        Disciplina d = this.declararInteresseDisciplina(id, mat);
+                d = this.declararInteresseDisciplina(id, mat);
 
-        this.disciplinaView.print("\nInteresse registrado com sucesso!\n");
+                this.disciplinaView.print("\nInteresse registrado com sucesso!\n");
+                sucesso = true;
+            } catch (NumberFormatException e) {
+                this.disciplinaView.print("\nERRO: ID invalido.\n");
+            } catch (Exception e) {
+                this.disciplinaView.print("\nERRO: " + e.getMessage() + "\n");
+            }
+        }
         return d;
     }
 
     @Override
     public Disciplina removerInteresseDisciplina(int id, String matricula) throws Exception {
-        Disciplina disciplina = buscarDisciplinaPorId(id);
+        Disciplina disciplina = validarExistenciaDisciplina(id);
         Alunos aluno = this.alunoController.encontrarAluno(matricula);
 
         if (aluno == null) throw new Exception("Aluno nao encontrado.");
@@ -433,27 +573,39 @@ public class DisciplinaController implements IDisciplinaController {
     }
 
     @Override
-    public Disciplina removerInteresseDisciplina() throws Exception { // Alterado para lançar exceção
+    public Disciplina removerInteresseDisciplina() {
+        boolean sucesso = false;
+        Disciplina d = null;
+
         this.disciplinaView.print(" ================= Remover Interesse ================ \n");
 
-        int id = lerIdInteiro("\nDigite o ID da disciplina eletiva: ");
-        String mat = this.disciplinaView.getInfo("Digite a matricula do aluno: ");
+        while (!sucesso) {
+            try {
+                int id = lerIdInteiro("\nDigite o ID da disciplina eletiva: ");
+                String mat = this.disciplinaView.getInfo("Digite a matricula do aluno: ");
 
-        Disciplina d = this.removerInteresseDisciplina(id, mat);
+                d = this.removerInteresseDisciplina(id, mat);
 
-        this.disciplinaView.print("\nInteresse removido com sucesso!\n");
+                this.disciplinaView.print("\nInteresse removido com sucesso!\n");
+                sucesso = true;
+            } catch (NumberFormatException e) {
+                this.disciplinaView.print("\nERRO: ID invalido.\n");
+            } catch (Exception e) {
+                this.disciplinaView.print("\nERRO: " + e.getMessage() + "\n");
+            }
+        }
         return d;
     }
 
     // ==================================================================================
-    // RELATORIOS (Mantido)
+    // RELATORIOS
     // ==================================================================================
 
     @Override
     public void gerarRelatorioDisciplinas() {
         try {
             this.disciplinaView.print(" ================= Relatorio Geral ================ \n");
-            // ... (lógica mantida)
+
             List<Disciplina> disciplinas = this.disciplinaRepository.listarDisciplinas();
 
             if (disciplinas == null || disciplinas.isEmpty()) {

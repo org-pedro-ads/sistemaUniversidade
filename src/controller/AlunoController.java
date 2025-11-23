@@ -55,4 +55,8 @@ public class AlunoController {
     public Alunos encontrarAluno(String matricula) {
         return repository.buscarPorMatricula(matricula);
     }
+
+    // public void matricularAlunoEmDisciplina(Alunos aluno, String codigoDisciplina) {
+    //     // Lógica para matricular o aluno na disciplina
+    // }
 }
