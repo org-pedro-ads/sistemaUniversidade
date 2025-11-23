@@ -204,7 +204,7 @@ public class DisciplinaView implements IDisciplinaView {
             int id = this.getIntInfo("\nDigite o ID da disciplina: ");
 
             // Valida a existência e busca a disciplina no Controller
-            Disciplina disciplina = this.disciplinaController.validarExistenciaDisciplina(id);
+            Disciplina disciplina = this.disciplinaController.buscarDisciplinaPorId(id);
             this.printDisciplina(disciplina);
 
             String escolha;
@@ -240,13 +240,13 @@ public class DisciplinaView implements IDisciplinaView {
             if (disciplinaAtualizada != null) {
                 // Chama o metodo que persiste a alteração
                 this.disciplinaController.alterarDisciplina(disciplinaAtualizada);
-                this.print("\n\n✅ Disciplina alterada com sucesso!\n");
+                this.print("\nDisciplina alterada com sucesso!\n");
                 this.printDisciplina(disciplinaAtualizada);
             }
 
         } catch(Exception e) {
             // Captura NumberFormatException (se usar getInfo direto) ou exceções de negócio do Controller
-            this.print("❌ Erro ao editar disciplina: " + e.getMessage());
+            this.print("Erro ao editar disciplina: " + e.getMessage());
         }
     }
 
