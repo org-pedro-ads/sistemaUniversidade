@@ -82,7 +82,7 @@ public class DisciplinaView implements IDisciplinaView {
     public void menuDisciplinas() throws Exception {
         String escolha;
         do {
-            System.out.println("\n>>> 🏫 DISCIPLINAS");
+            System.out.println("\n>>> DISCIPLINAS");
             System.out.println("a) Cadastrar disciplina (obrigatória / eletiva)");
             System.out.println("b) Listar disciplinas");
             System.out.println("c) Editar disciplina");
