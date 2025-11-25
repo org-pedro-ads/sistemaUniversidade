@@ -26,7 +26,7 @@ public class Main {
     private static final ProfessorRepository professorRepository = ProfessorRepository.getInstance();
     private static final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(
             projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
-    private static final DisciplinaView disciplinaView = DisciplinaView.getInstance();
+    private static final DisciplinaView disciplinaView = new DisciplinaView();
 
     public static void main(String[] args) throws Exception {
         try {
@@ -46,7 +46,7 @@ public class Main {
 
                 switch (opcao) {
                     case 1 -> menuProfessores();
-                    case 2 -> disciplinaView.menuDisciplinas();
+                    case 2 -> menuDisciplinas();
                     case 3 -> menuAlunos();
                     case 4 -> menuVinculosEProjetos();
                     case 5 -> menuEletivasInteresse();
@@ -119,6 +119,36 @@ public class Main {
                     return;
                 }
                 default -> System.out.println("Opção inválida!");
+            }
+        } while (!escolha.equals("0"));
+    }
+
+    // ====================== MENU DISCIPLINAS ======================
+    private static void menuDisciplinas() {
+        String escolha;
+        do {
+            System.out.println("\n>>>DISCIPLINAS");
+            System.out.println("a) Cadastrar disciplina (obrigatória / eletiva)");
+            System.out.println("b) Listar disciplinas");
+            System.out.println("c) Editar disciplina");
+            System.out.println("d) Remover disciplina");
+            System.out.println("e) Visualizar alunos matriculados em uma disciplina");
+            System.out.println("0) Voltar");
+            System.out.print("→ Opção: ");
+            escolha = scanner.nextLine().trim().toLowerCase();
+
+            try {
+                switch (escolha) {
+                    case "a" -> disciplinaView.cadastrarDisciplina();
+                    case "b" -> disciplinaView.listarDisciplinas();
+                    case "c" -> disciplinaView.editarDisciplina();
+                    case "d" -> disciplinaView.removerDisciplina();
+                    case "e" -> disciplinaView.listarAlunosMatriculados();
+                    case "0" -> System.out.println("Voltando ao menu principal...\n");
+                    default -> System.out.println("Opção inválida!");
+                }
+            } catch (Exception e) {
+                System.out.println("Ocorreu um erro: " + e.getMessage());
             }
         } while (!escolha.equals("0"));
     }

@@ -6,7 +6,7 @@ import java.util.List;
 import model.Disciplina;
 import model.DisciplinaEletiva;
 
-public class DisciplinaRepository implements IDisciplinaRepository {
+public class DisciplinaRepository {
 
     private static DisciplinaRepository instance;
     private List<Disciplina> disciplinas;
@@ -24,7 +24,6 @@ public class DisciplinaRepository implements IDisciplinaRepository {
         return instance;
     }
 
-    @Override
     public Disciplina adicionarDisciplina(Disciplina disciplina) {
         disciplina.setId(this.sequenceId);
         this.disciplinas.add(disciplina);
@@ -32,12 +31,10 @@ public class DisciplinaRepository implements IDisciplinaRepository {
         return disciplina;
     }
 
-    @Override
     public List<Disciplina> listarDisciplinas() {
         return this.disciplinas;
     }
 
-    @Override
     public Disciplina buscarDisciplinaPorId(int id) {
         for (Disciplina d : this.disciplinas) {
             if (d.getId() == id) {
@@ -47,7 +44,6 @@ public class DisciplinaRepository implements IDisciplinaRepository {
         return null;
     }
 
-    @Override
     public Disciplina buscarDisciplinaPorNome(String nome) {
         for (Disciplina d : this.disciplinas) {
             if (d.getNome().equals(nome)) {
@@ -57,7 +53,6 @@ public class DisciplinaRepository implements IDisciplinaRepository {
         return null;
     }
 
-    @Override
     public boolean removerDisciplina(int id) {
         Disciplina disciplina = this.buscarDisciplinaPorId(id);
 
@@ -66,7 +61,6 @@ public class DisciplinaRepository implements IDisciplinaRepository {
         return true;
     }
 
-    @Override
     public void atualizarDisciplina(Disciplina disciplina) {
         Disciplina disciplinaExistente = buscarDisciplinaPorId(disciplina.getId());
 
@@ -78,7 +72,6 @@ public class DisciplinaRepository implements IDisciplinaRepository {
         }
     }
 
-    @Override
     public Disciplina matricularAluno(int idDisciplina, String matriculaAluno) {
         Disciplina disciplina = this.buscarDisciplinaPorId(idDisciplina);
 
@@ -91,7 +84,6 @@ public class DisciplinaRepository implements IDisciplinaRepository {
         return disciplina;
     }
 
-    @Override
     public Disciplina removerAluno(int idDisciplina, String matriculaAluno) {
         Disciplina disciplina = this.buscarDisciplinaPorId(idDisciplina);
 
@@ -101,7 +93,6 @@ public class DisciplinaRepository implements IDisciplinaRepository {
         return disciplina;
     }
 
-    @Override
     public List<String> listarMatriculasAlunosPorDisciplina(int idDisciplina) {
         Disciplina disciplina = this.buscarDisciplinaPorId(idDisciplina);
 
@@ -111,7 +102,6 @@ public class DisciplinaRepository implements IDisciplinaRepository {
         return new ArrayList<>();
     }
 
-    @Override
     public List<String> listarMatriculasAlunosInteressados(int idDisciplina) throws Exception {
 
         // 1. Busca Genérica
