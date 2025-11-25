@@ -6,7 +6,6 @@ import controller.ProfessorController;
 import controller.ProjetoPesquisaController;
 import model.Alunos;
 import repository.AlunoRepository;
-import repository.DisciplinaRepository;
 import repository.ProfessorRepository;
 import repository.ProjetoPesquisaRepository;
 import view.AlunoView;
@@ -18,6 +17,8 @@ public class Main {
     private static final Scanner scanner = new Scanner(System.in);
 
     private static final AlunoRepository alunoRepository = AlunoRepository.getInstance();
+    private static final DisciplinaController disciplinaController = new DisciplinaController();
+    private static final ProfessorController professorController = new ProfessorController();
     private static final ProjetoPesquisaRepository projetoPesquisaRepository = new ProjetoPesquisaRepository();
     private static final AlunoView alunoView = new AlunoView();
     private static final ProfessorView professorView = new ProfessorView();
@@ -31,6 +32,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
         try {
             alunoRepository.criarMockAlunos();
+            professorController.criarMockProfessor();
+            disciplinaController.criarMockDiscipliba();
 
             System.out.println("""
                     ╔══════════════════════════════════════════════════╗

@@ -3,6 +3,7 @@ package controller;
 import model.*;
 import repository.AlunoRepository;
 import repository.DisciplinaRepository;
+import repository.ProfessorRepository;
 import view.AlunoView;
 import view.DisciplinaView;
 
@@ -208,7 +209,7 @@ public class DisciplinaController {
         if (alunosMatriculados == null) alunosMatriculados = new ArrayList<>();
 
         if (alunosMatriculados.contains(matricula)) {
-            throw new Exception("Aluno ja esta matriculado nesta disciplina.");
+            throw new Exception("Aluno ja esta matriculado nesta disciplina." + aluno.getMatricula() + disciplina.getId());
         }
 
         aluno.adicionarDisciplina(idDisciplina);
@@ -304,5 +305,64 @@ public class DisciplinaController {
             return 0;
         }
 
+    }
+
+    public void criarMockDiscipliba() throws Exception {
+
+        // Apenas a lista de alunos (opcional, pode ser removida)
+        // List<Disciplina> mock = new ArrayList<>();
+
+        Professor professor = ProfessorRepository.getInstance().findByMatricula("XX0001");
+
+        // 1. Disciplina Obrigatória 1
+        DisciplinaObrigatoria disciplinaObrigatoria1 = new DisciplinaObrigatoria(
+                0,
+                "Programacao orientada a objetos",
+                600,
+                professor,
+                new ArrayList<>() // NOVA LISTA
+        );
+
+        // 2. Disciplina Obrigatória 2
+        DisciplinaObrigatoria disciplinaObrigatoria2 = new DisciplinaObrigatoria(
+                0,
+                "Tecnicas de programacao 1",
+                600,
+                professor,
+                new ArrayList<>() // NOVA LISTA
+        );
+
+        // 3. Disciplina Eletiva (usa duas listas, ambas devem ser novas)
+        DisciplinaEletiva disciplinaEletiva = new DisciplinaEletiva(
+                0,
+                "Desenvolvimento mobile",
+                200,
+                professor,
+                new ArrayList<>(), // Lista de matriculados (NOVA LISTA)
+                new ArrayList<>()  // Lista de interessados (NOVA LISTA)
+        );
+
+        // Adiciona ao repositório para persistir e atribuir IDs
+        disciplinaRepository.adicionarDisciplina(disciplinaObrigatoria1);
+        disciplinaRepository.adicionarDisciplina(disciplinaObrigatoria2);
+        disciplinaRepository.adicionarDisciplina(disciplinaEletiva);
+
+        List<Alunos> alunos = AlunoRepository.getInstance().getTodos();
+
+        // Matrícula na Obrigatória 1 (usando o ID gerado pelo repositório)
+        for (Alunos aluno : alunos) {
+            matricularAlunoDisciplina(disciplinaObrigatoria1.getId(), aluno.getMatricula());
+        }
+
+        // Matrícula na Obrigatória 2
+        for (Alunos aluno : alunos) {
+            matricularAlunoDisciplina(disciplinaObrigatoria2.getId(), aluno.getMatricula());
+        }
+
+        // Matrícula e Declaração de Interesse na Eletiva
+        for (Alunos aluno : alunos) {
+            matricularAlunoDisciplina(disciplinaEletiva.getId(), aluno.getMatricula());
+            declararInteresseDisciplina(disciplinaEletiva.getId(), aluno.getMatricula());
+        }
     }
 }

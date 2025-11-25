@@ -12,6 +12,7 @@ public class AlunoController {
     public AlunoController(AlunoRepository repository, AlunoView view) {
         this.repository = repository;
         this.view = view;
+
     }
 
     public void cadastrarAluno(String nome) {

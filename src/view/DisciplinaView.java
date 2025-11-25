@@ -4,6 +4,7 @@ import controller.DisciplinaController;
 import model.Alunos;
 import model.Disciplina;
 import model.DisciplinaEletiva;
+import model.DisciplinaObrigatoria;
 
 import java.util.List;
 import java.util.Scanner;
@@ -37,22 +38,23 @@ public class DisciplinaView extends BaseView {
         }
     }
 
-    /* Dados gerais de cada disciplina, com lista de alunos */
-    public void printDisciplina(Disciplina disciplina) throws Exception {
+    /* Dados gerais de cada disciplina */
+    public void exibirDetalhesDisciplina(Disciplina disciplina) {
+        if (disciplina == null) {
+            System.out.println("Disciplina não encontrada.");
+            return;
+        }
 
-        print("\n--------------------------------------------------------------------");
-        print("\nDisciplina: " + disciplina.getId() + " - " + disciplina.getNome());
-        print("\n-----------------------------------------------------------------");
-        print("\nTipo de disciplina: " + disciplina.getTipo());
-        print("\nProfessor responsavel: " + disciplina.getProfessorResponsavel().getNome());
-        print("\n-----------------------------------------------------------------");
-        listarAlunosMatriculados(disciplina.getId());
+        String separador = "--------------------------------------------------------------------";
+        String tipoDisciplina = disciplina instanceof DisciplinaObrigatoria ? "Obrigatória" : "Eletiva";
+        String nomeProfessor = disciplina.getProfessorResponsavel() != null ? disciplina.getProfessorResponsavel().getNome() : "Não Atribuído";
 
-    }
-
-    /* Relatorio geral para listar todas disciplinas */
-    public void printRelatorios(List<Disciplina> disciplina) {
-        // TODO: Implementar relatorio
+        System.out.println("\n" + separador);
+        System.out.println("Disciplina: " + disciplina.getId() + " - " + disciplina.getNome());
+        System.out.println(separador.replace('-', '=')); // Usando um separador diferente para o subtítulo
+        System.out.println("Tipo de disciplina: " + tipoDisciplina);
+        System.out.println("Professor responsável: " + nomeProfessor);
+        System.out.println(separador);
     }
 
     public void cadastrarDisciplina() throws Exception {
@@ -64,12 +66,38 @@ public class DisciplinaView extends BaseView {
 
         Disciplina disciplina = this.disciplinaController.adicionarDisciplina(nome, cargaHoraria, matriculaProfessor, tipoDisciplina);
         print("\nDisciplina cadastrada com sucesso!");
-        printDisciplina(disciplina);
 
     }
 
     public void listarDisciplinas() {
-        this.disciplinaController.listarDisciplinas();
+        List<Disciplina> disciplinas = this.disciplinaController.listarDisciplinas();
+
+        String formato = "| %-5s | %-40s | %-20s | %-12s | %5s |%n";
+        String separador = "+-------+------------------------------------------+----------------------+--------------+-------+%n";
+
+        System.out.printf(separador);
+        System.out.printf(formato, "ID", "NOME", "PROFESSOR", "TIPO", "ALUNOS");
+        System.out.printf(separador);
+
+        for (Disciplina disciplina : disciplinas) {
+
+            String tipoDisciplina = disciplina instanceof DisciplinaObrigatoria ? "Obrigatória" : "Eletiva";
+
+            int qtdeAlunos = disciplina.getAlunos().size();
+
+            String nomeProfessor = disciplina.getProfessorResponsavel() != null ? disciplina.getProfessorResponsavel().getNome() : "N/A";
+
+            System.out.printf(
+                    formato,
+                    disciplina.getId(),
+                    disciplina.getNome(),
+                    nomeProfessor,
+                    tipoDisciplina,
+                    qtdeAlunos
+            );
+        }
+
+        System.out.printf(separador);
     }
 
     public void editarDisciplina() throws Exception{
@@ -78,7 +106,7 @@ public class DisciplinaView extends BaseView {
 
         int id = this.getIntInfo("\nDigite o ID da disciplina: ");
         Disciplina disciplina = this.disciplinaController.buscarDisciplinaPorId(id);
-        this.printDisciplina(disciplina);
+        this.exibirDetalhesDisciplina(disciplina);
 
         String escolha;
         Disciplina disciplinaAtualizada = null;
@@ -112,7 +140,7 @@ public class DisciplinaView extends BaseView {
         if (disciplinaAtualizada != null) {
             disciplinaController.alterarDisciplina(disciplinaAtualizada);
             this.print("\n\nDisciplina alterada com sucesso!\n");
-            this.printDisciplina(disciplinaAtualizada);
+            this.exibirDetalhesDisciplina(disciplinaAtualizada);
         }
     }
 
@@ -124,10 +152,12 @@ public class DisciplinaView extends BaseView {
     public void listarAlunosMatriculados() throws Exception{
         print(" ================= Listar alunos ================ \n");
         int idDisciplina = getIntInfo("Digite o ID da disciplina: ");
+        Disciplina disciplina = this.disciplinaController.buscarDisciplinaPorId(idDisciplina);
         List<Alunos> alunos = disciplinaController.listarAlunosMatriculados(idDisciplina);
 
         if(alunos.isEmpty()){ print("Nenhum aluno encontrado!"); return; }
 
+        print("Disciplina: " + disciplina.getNome());
         AlunoView alunoView = new AlunoView();
         alunoView.exibirListaAlunos(alunos);
     }
@@ -135,7 +165,9 @@ public class DisciplinaView extends BaseView {
     public void listarAlunosMatriculados(int idDisciplina) throws Exception{
         print(" ================= Listar alunos ================ \n");
         List<Alunos> alunos = disciplinaController.listarAlunosMatriculados(idDisciplina);
+        Disciplina disciplina = this.disciplinaController.buscarDisciplinaPorId(idDisciplina);
 
+        print("Disciplina: " + disciplina.getNome());
         AlunoView alunoView = new AlunoView();
         alunoView.exibirListaAlunos(alunos);
     }

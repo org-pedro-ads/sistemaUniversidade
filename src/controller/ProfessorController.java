@@ -9,10 +9,38 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static model.TipoProfessor.VITALICIO;
+import static model.TituloProfessor.DOUTORADO;
+
 public class ProfessorController {
     private static final ProfessorRepository professorRepository = ProfessorRepository.getInstance();
     private static final DisciplinaRepository disciplinaRepository = DisciplinaRepository.getInstance();
     private static final ProjetoPesquisaRepository projetoPesquisaRepository = new ProjetoPesquisaRepository();
+
+    public void criarMockProfessor() throws Exception {
+        List<Disciplina> disciplinas =  disciplinaRepository.listarDisciplinas();
+        List<String> nomeDisciplina = new ArrayList<>();
+        List<String> projetoPesquisas = new ArrayList<>();
+
+        for (Disciplina disciplina : disciplinas) {
+            nomeDisciplina.add(disciplina.getNome());
+        }
+
+
+
+        this.cadastrarProfessorVitalicio(
+                "Anisio Santos",
+                "XX0001",
+                DOUTORADO,
+                VITALICIO,
+                3,
+                nomeDisciplina,
+                projetoPesquisas,
+                25000.00
+        );
+    }
+
+
     public void cadastrarProfessorVitalicio(
             String nome,
             String matricula,
@@ -126,7 +154,7 @@ public class ProfessorController {
     public void atualizarDisciplinas(int qunatDisciplinas, List<String> nomeDisciplinas, Professor professor) throws Exception{
         try{
             int quantidadeDisciplinasAtual = professor.getDisciplinas().size() + qunatDisciplinas;
-            if(professor.getTipo() == TipoProfessor.VITALICIO) {
+            if(professor.getTipo() == VITALICIO) {
                 if (quantidadeDisciplinasAtual > 3) {
                     throw new Exception("Professor vitalicio nao pode ter menos de 3 disciplinas");
                 }
@@ -179,7 +207,7 @@ public class ProfessorController {
                 throw new Exception("Professor nao encontrado");
             }
             Double salarioProfessor;
-            if(professor.getTipo() == TipoProfessor.VITALICIO){
+            if(professor.getTipo() == VITALICIO){
                 salarioProfessor = calcularSalarioProfessorVitalicio(professor.getTitulo(), professor);
             } else{
                 ProfessorSubstituto professorSubstituto = (ProfessorSubstituto) professor;
@@ -194,7 +222,7 @@ public class ProfessorController {
     private Double calcularSalarioProfessorVitalicio(TituloProfessor titulo, Professor professor) {
         ProfessorVitalicio professorVitalicio = (ProfessorVitalicio) professor;
         Double salarioProfessor = professorVitalicio.calcularSalario(0.0);
-        if(titulo == TituloProfessor.DOUTORADO){
+        if(titulo == DOUTORADO){
             salarioProfessor = salarioProfessor + (salarioProfessor*0.2);
         }
         return salarioProfessor;

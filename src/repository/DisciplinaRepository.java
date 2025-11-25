@@ -3,8 +3,7 @@ package repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Disciplina;
-import model.DisciplinaEletiva;
+import model.*;
 
 public class DisciplinaRepository {
 
@@ -56,7 +55,7 @@ public class DisciplinaRepository {
     public boolean removerDisciplina(int id) {
         Disciplina disciplina = this.buscarDisciplinaPorId(id);
 
-        if(disciplina == null) return false;
+        if (disciplina == null) return false;
         this.disciplinas.remove(disciplina);
         return true;
     }
@@ -104,23 +103,17 @@ public class DisciplinaRepository {
 
     public List<String> listarMatriculasAlunosInteressados(int idDisciplina) throws Exception {
 
-        // 1. Busca Genérica
         Disciplina disciplina = this.buscarDisciplinaPorId(idDisciplina);
 
-        // 2. Validação de Existência
-        if (disciplina == null) {
-            throw new Exception("Disciplina com ID " + idDisciplina + " não encontrada.");
-        }
-
-        // 3. Validação de Tipo e Extração de Dados (O Pulo do Gato)
         if (disciplina instanceof DisciplinaEletiva) {
 
             DisciplinaEletiva eletiva = (DisciplinaEletiva) disciplina;
-
             return eletiva.listarInteressados();
 
         } else {
+
             throw new Exception("Apenas disciplinas eletivas possuem lista de interesse.");
+
         }
     }
 }
