@@ -15,11 +15,11 @@ public class DisciplinaView extends BaseView {
   private final Scanner scanner = new Scanner(System.in);
 
   public DisciplinaView() {
-      this.disciplinaController = new DisciplinaController();
+    this.disciplinaController = new DisciplinaController();
   }
 
   public void print(String s) {
-      System.out.println(s);
+    System.out.println(s);
   }
 
   public void exibirDetalhesDisciplina(Disciplina disciplina) {
@@ -30,7 +30,8 @@ public class DisciplinaView extends BaseView {
 
     String separador = "====================================================================";
     String tipoDisciplina = disciplina.getTipo();
-    String nomeProfessor = disciplina.getProfessorResponsavel() != null ? disciplina.getProfessorResponsavel().getNome() : "Não Atribuído";
+    String nomeProfessor = disciplina.getProfessorResponsavel() != null ? disciplina.getProfessorResponsavel().getNome()
+        : "Não Atribuído";
 
     exibirTitulo("Dados de disciplina");
     print("Disciplina: " + disciplina.getId() + " - " + disciplina.getNome());
@@ -49,12 +50,15 @@ public class DisciplinaView extends BaseView {
     String nome = lerString("\nInforme o nome do disciplina: ");
     int cargaHoraria = lerInteiro("\nInforme a carga horaria da disciplina: ");
     String matriculaProfessor = lerString("\nInforme a matricula do professor responsavel: ");
-    int tipoDisciplina = lerInteiro("\nInforme a tipo de disciplina: 1 - Disciplina obrigatoria, 2 - Disciplina eletiva: ");
+    int tipoDisciplina = lerInteiro(
+        "\nInforme a tipo de disciplina: 1 - Disciplina obrigatoria, 2 - Disciplina eletiva: ");
 
-    Disciplina disciplina = this.disciplinaController.adicionarDisciplina(nome, cargaHoraria, matriculaProfessor, tipoDisciplina);
-    
-    if(disciplina == null) throw new Exception("Erro ao cadstrar disciplina");
-    
+    Disciplina disciplina = this.disciplinaController.adicionarDisciplina(nome, cargaHoraria, matriculaProfessor,
+        tipoDisciplina);
+
+    if (disciplina == null)
+      throw new Exception("Erro ao cadstrar disciplina");
+
     limparTela();
     info("\nDisciplina cadastrada com sucesso!");
     exibirDetalhesDisciplina(disciplina);
@@ -80,30 +84,32 @@ public class DisciplinaView extends BaseView {
 
       int qtdeAlunos = disciplina.getAlunos().size();
 
-      String nomeProfessor = disciplina.getProfessorResponsavel() != null ? disciplina.getProfessorResponsavel().getNome() : "N/A";
+      String nomeProfessor = disciplina.getProfessorResponsavel() != null
+          ? disciplina.getProfessorResponsavel().getNome()
+          : "N/A";
 
       System.out.printf(
-        formato,
-        disciplina.getId(),
-        disciplina.getNome(),
-        nomeProfessor,
-        tipoDisciplina,
-        qtdeAlunos
-      );
+          formato,
+          disciplina.getId(),
+          disciplina.getNome(),
+          nomeProfessor,
+          tipoDisciplina,
+          qtdeAlunos);
     }
 
     System.out.printf(separador);
     pausar();
   }
 
-  public void editarDisciplina() throws Exception{
-    
+  public void editarDisciplina() throws Exception {
+
     exibirTitulo("Editar disciplina");
 
     int id = this.lerInteiro("\nDigite o ID da disciplina: ");
     Disciplina disciplina = this.disciplinaController.buscarDisciplinaPorId(id);
 
-    if (disciplina == null ) throw new Exception("ID invalido");
+    if (disciplina == null)
+      throw new Exception("ID invalido");
 
     this.exibirDetalhesDisciplina(disciplina);
 
@@ -122,20 +128,20 @@ public class DisciplinaView extends BaseView {
         String nome = lerString("Digite o nome do disciplina: ");
         disciplinaAtualizada = this.disciplinaController.atualizarNome(id, nome);
         break;
-    
+
       case "2":
         int cargaHoraria = lerInteiro("Digite o carga horaria da disciplina: ");
         disciplinaAtualizada = this.disciplinaController.atualizarCargaHoraria(id, cargaHoraria);
         break;
-      
+
       case "3":
         String matriculaProfessor = lerString("Digite o matricula do professor: ");
         disciplinaAtualizada = this.disciplinaController.atualizarProfessorResponsavel(id, matriculaProfessor);
         break;
-      
+
       case "4":
         return;
-      
+
       default:
         erro("\n\nOpção inválida, tente novamente: ");
     }
@@ -156,7 +162,7 @@ public class DisciplinaView extends BaseView {
     pausar();
   }
 
-  public void listarAlunosMatriculados() throws Exception{
+  public void listarAlunosMatriculados() throws Exception {
 
     exibirTitulo("Listar alunos matriculados");
 
@@ -164,7 +170,10 @@ public class DisciplinaView extends BaseView {
     Disciplina disciplina = this.disciplinaController.buscarDisciplinaPorId(idDisciplina);
     List<Alunos> alunos = disciplinaController.listarAlunosMatriculados(idDisciplina);
 
-    if(alunos.isEmpty()){ print("Nenhum aluno encontrado!"); return; }
+    if (alunos.isEmpty()) {
+      print("Nenhum aluno encontrado!");
+      return;
+    }
 
     print("Disciplina: " + disciplina.getNome());
     AlunoView alunoView = new AlunoView();
@@ -172,7 +181,7 @@ public class DisciplinaView extends BaseView {
     pausar();
   }
 
-  public void listarAlunosMatriculados(int idDisciplina) throws Exception{
+  public void listarAlunosMatriculados(int idDisciplina) throws Exception {
 
     exibirTitulo("Listar alunos matriculados");
     List<Alunos> alunos = disciplinaController.listarAlunosMatriculados(idDisciplina);
@@ -193,7 +202,8 @@ public class DisciplinaView extends BaseView {
 
     Disciplina disciplina = disciplinaController.matricularAlunoDisciplina(id, matricula);
 
-    if(disciplina == null) throw new Exception("Erro ao matricular aluno");
+    if (disciplina == null)
+      throw new Exception("Erro ao matricular aluno");
 
     sucesso("Aluno matriculado com sucesso");
     listarAlunosMatriculados(disciplina.getId());
@@ -205,7 +215,7 @@ public class DisciplinaView extends BaseView {
     int id = lerInteiro("Digite o ID da disciplina: ");
     String matricula = lerString("Digite a matricula do aluno: ");
 
-    disciplinaController.desmatricularAlunoDisciplina(id,  matricula);
+    disciplinaController.desmatricularAlunoDisciplina(id, matricula);
   }
 
   public void atribuirDisciplinaAProfessor() throws Exception {
@@ -225,6 +235,10 @@ public class DisciplinaView extends BaseView {
 
     Disciplina disciplina = disciplinaController.removerProfessorResponsavel(idDisciplina);
 
+    if (disciplina != null) {
+      sucesso("Professor removido com sucesso!");
+      exibirDetalhesDisciplina(disciplina);
+    }
   }
 
   public void declararInteresseDisciplina() throws Exception {
@@ -234,7 +248,7 @@ public class DisciplinaView extends BaseView {
       String matrculaAluno = lerString("Digite a matricula da aluno: ");
 
       disciplinaController.declararInteresseDisciplina(idDisciplina, matrculaAluno);
- 
+
     } catch (Exception e) {
       erro("Erro ao declarar interesse na disciplina: " + e.getMessage());
       pausar();
@@ -256,9 +270,9 @@ public class DisciplinaView extends BaseView {
 
     for (Disciplina disciplina : disciplinas) {
       if (disciplina instanceof DisciplinaEletiva) {
-          print("Disciplina: " + disciplina.getNome());
-          print("Professor responsavel: " + disciplina.getProfessorResponsavel().getNome());
-          print("Popularidade: " + disciplinaController.getPopularidadeDisciplina(disciplina.getId()));
+        print("Disciplina: " + disciplina.getNome());
+        print("Professor responsavel: " + disciplina.getProfessorResponsavel().getNome());
+        print("Popularidade: " + disciplinaController.getPopularidadeDisciplina(disciplina.getId()));
       }
     }
 
@@ -272,14 +286,13 @@ public class DisciplinaView extends BaseView {
     for (Disciplina d : disciplinas) {
       List<Alunos> listarInteressados = null;
       if (d instanceof DisciplinaEletiva) {
-          listarInteressados = disciplinaController.listarAlunosInteressados(d.getId());
+        listarInteressados = disciplinaController.listarAlunosInteressados(d.getId());
       }
       System.out.println(
-        "Nome: " + d.getNome() +
-        " | Tipo: " + d.getTipo() +
-        " | Alunos Matriculados: " + d.getAlunos() +
-        " | Popularidade: " + listarInteressados
-      );
+          "Nome: " + d.getNome() +
+              " | Tipo: " + d.getTipo() +
+              " | Alunos Matriculados: " + d.getAlunos() +
+              " | Popularidade: " + listarInteressados);
     }
     System.out.println("=====================================\n");
   }

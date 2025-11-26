@@ -5,7 +5,6 @@ import repository.AlunoRepository;
 import repository.DisciplinaRepository;
 import repository.ProfessorRepository;
 import view.AlunoView;
-import view.DisciplinaView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,37 +12,50 @@ import java.util.List;
 public class DisciplinaController {
 
   private final DisciplinaRepository disciplinaRepository = DisciplinaRepository.getInstance();
-  private final ProfessorController professorController =  new ProfessorController();
+  private final ProfessorController professorController = new ProfessorController();
   private final AlunoController alunoController = new AlunoController(AlunoRepository.getInstance(), new AlunoView());
 
-  public DisciplinaController() {}
+  public DisciplinaController() {
+  }
 
   // ==================================================================================
   // CRIACAO (Create)
   // ==================================================================================
 
-  public Disciplina adicionarDisciplina(String nomeDisciplina, int cargaHoraria, String matriculaProfessor, int tipoDisciplina) throws Exception {
+  public Disciplina adicionarDisciplina(String nomeDisciplina, int cargaHoraria, String matriculaProfessor,
+      int tipoDisciplina) throws Exception {
 
     Professor professor = this.professorController.encontrarProfessor(matriculaProfessor);
 
-    if (professor == null) throw new Exception("Professor com matricula " + matriculaProfessor + " nao encontrado.");
+    if (professor == null)
+      throw new Exception("Professor com matricula " + matriculaProfessor + " nao encontrado.");
 
-    if (tipoDisciplina != 1 && tipoDisciplina != 2) throw new Exception("Tipo invalido. Use 1 (Obrigatoria) ou 2 (Eletiva).");
-    
-    if (nomeDisciplina.length() < 5) throw new Exception("Nome deve conter ao menos 5 caracteres");
-    
-    if (cargaHoraria < 10) throw new Exception("Carga horaria deve ser no minimo 10 horas.");
+    if (tipoDisciplina != 1 && tipoDisciplina != 2)
+      throw new Exception("Tipo invalido. Use 1 (Obrigatoria) ou 2 (Eletiva).");
+
+    if (nomeDisciplina.length() < 5)
+      throw new Exception("Nome deve conter ao menos 5 caracteres");
+
+    if (cargaHoraria < 10)
+      throw new Exception("Carga horaria deve ser no minimo 10 horas.");
 
     Disciplina novaDisciplina;
     List<String> listaVazia = new ArrayList<>();
 
     if (tipoDisciplina == 1) {
-        novaDisciplina = new DisciplinaObrigatoria(0, nomeDisciplina, cargaHoraria, professor, listaVazia);
+      novaDisciplina = new DisciplinaObrigatoria(0, nomeDisciplina, cargaHoraria, professor, listaVazia);
     } else {
-        novaDisciplina = new DisciplinaEletiva(0, nomeDisciplina, cargaHoraria, professor, listaVazia, new ArrayList<>());
+      novaDisciplina = new DisciplinaEletiva(0, nomeDisciplina, cargaHoraria, professor, listaVazia, new ArrayList<>());
     }
 
     novaDisciplina = this.disciplinaRepository.adicionarDisciplina(novaDisciplina);
+
+    List<Disciplina> disciplinasProfessor = professor.getDisciplinas();
+    int qtdeDisciplinaAtual = disciplinasProfessor.size();
+    List<String> disciplinas = new ArrayList<>();
+    disciplinas.add(novaDisciplina.getNome());
+
+    professorController.atualizarDisciplinas(qtdeDisciplinaAtual, disciplinas, professor);
 
     return novaDisciplina;
 
@@ -54,9 +66,11 @@ public class DisciplinaController {
   // ==================================================================================
 
   public void removerDisciplina(int id) throws Exception {
-      Disciplina disciplina = buscarDisciplinaPorId(id);
-      if(disciplina == null){ throw new Exception("Erro: Id invalido"); }
-      this.disciplinaRepository.removerDisciplina(id);
+    Disciplina disciplina = buscarDisciplinaPorId(id);
+    if (disciplina == null) {
+      throw new Exception("Erro: Id invalido");
+    }
+    this.disciplinaRepository.removerDisciplina(id);
   }
 
   // ==================================================================================
@@ -64,11 +78,11 @@ public class DisciplinaController {
   // ==================================================================================
 
   public Disciplina buscarDisciplinaPorId(int id) {
-      return this.disciplinaRepository.buscarDisciplinaPorId(id);
+    return this.disciplinaRepository.buscarDisciplinaPorId(id);
   }
 
   public List<Disciplina> listarDisciplinas() {
-      return this.disciplinaRepository.listarDisciplinas();
+    return this.disciplinaRepository.listarDisciplinas();
   }
 
   // --- Listar Alunos Matriculados ---
@@ -76,14 +90,17 @@ public class DisciplinaController {
   public List<Alunos> listarAlunosMatriculados(int id) throws Exception {
 
     Disciplina disciplina = buscarDisciplinaPorId(id);
-    if(disciplina == null){ throw new Exception("Erro: Id invalido"); }
+    if (disciplina == null) {
+      throw new Exception("Erro: Id invalido");
+    }
 
     List<Alunos> alunos = new ArrayList<>();
 
     if (disciplina.getAlunos() != null) {
       for (String matricula : disciplina.getAlunos()) {
         Alunos a = this.alunoController.encontrarAluno(matricula);
-        if (a != null) alunos.add(a);
+        if (a != null)
+          alunos.add(a);
       }
     }
     return alunos;
@@ -94,10 +111,12 @@ public class DisciplinaController {
   public List<Alunos> listarAlunosInteressados(int id) throws Exception {
 
     Disciplina disciplina = buscarDisciplinaPorId(id);
-    if(disciplina == null){ throw new Exception("Erro: Id invalido"); }
+    if (disciplina == null) {
+      throw new Exception("Erro: Id invalido");
+    }
 
     if (!(disciplina instanceof DisciplinaEletiva)) {
-        throw new Exception("Apenas disciplinas Eletivas possuem lista de interesse.");
+      throw new Exception("Apenas disciplinas Eletivas possuem lista de interesse.");
     }
 
     List<Alunos> alunosObj = new ArrayList<>();
@@ -105,8 +124,9 @@ public class DisciplinaController {
 
     if (matriculas != null) {
       for (String m : matriculas) {
-          Alunos a = this.alunoController.encontrarAluno(m);
-          if (a != null) alunosObj.add(a);
+        Alunos a = this.alunoController.encontrarAluno(m);
+        if (a != null)
+          alunosObj.add(a);
       }
     }
     return alunosObj;
@@ -119,7 +139,9 @@ public class DisciplinaController {
   public void alterarDisciplina(Disciplina disciplina1) throws Exception {
     try {
       Disciplina disciplina = buscarDisciplinaPorId(disciplina1.getId());
-      if(disciplina == null){ throw new Exception("Erro: Id invalido"); }
+      if (disciplina == null) {
+        throw new Exception("Erro: Id invalido");
+      }
 
       this.disciplinaRepository.atualizarDisciplina(disciplina);
 
@@ -130,7 +152,9 @@ public class DisciplinaController {
 
   public Disciplina atualizarNome(int id, String nome) throws Exception {
     Disciplina disciplina = buscarDisciplinaPorId(id);
-    if(disciplina == null){ throw new Exception("Erro: Id invalido"); }
+    if (disciplina == null) {
+      throw new Exception("Erro: Id invalido");
+    }
 
     disciplina.setNome(nome);
     this.disciplinaRepository.atualizarDisciplina(disciplina);
@@ -139,9 +163,12 @@ public class DisciplinaController {
 
   public Disciplina atualizarCargaHoraria(int id, int cargaHoraria) throws Exception {
     Disciplina disciplina = buscarDisciplinaPorId(id);
-    if(disciplina == null){ throw new Exception("Erro: Id invalido"); }
+    if (disciplina == null) {
+      throw new Exception("Erro: Id invalido");
+    }
 
-    if (cargaHoraria < 10) throw new Exception("Carga horaria deve ser ao menos 10 horas.");
+    if (cargaHoraria < 10)
+      throw new Exception("Carga horaria deve ser ao menos 10 horas.");
 
     disciplina.setCargaHoraria(cargaHoraria);
     this.disciplinaRepository.atualizarDisciplina(disciplina);
@@ -154,23 +181,35 @@ public class DisciplinaController {
 
   public Disciplina atualizarProfessorResponsavel(int id, String matriculaProfessor) throws Exception {
     Disciplina disciplina = buscarDisciplinaPorId(id);
-    if(disciplina == null){ throw new Exception("Erro: Id invalido"); }
+    if (disciplina == null) {
+      throw new Exception("Erro: Id invalido");
+    }
 
     Professor professor = this.professorController.encontrarProfessor(matriculaProfessor);
 
     if (professor == null) {
-        throw new Exception("Professor com matricula '" + matriculaProfessor + "' nao encontrado.");
+      throw new Exception("Professor com matricula '" + matriculaProfessor + "' nao encontrado.");
     }
 
     disciplina.setProfessorResponsavel(professor);
     this.disciplinaRepository.atualizarDisciplina(disciplina);
+
+    List<Disciplina> disciplinasProfessor = professor.getDisciplinas();
+    int qtdeDisciplinaAtual = disciplinasProfessor.size();
+    List<String> disciplinas = new ArrayList<>();
+    disciplinas.add(disciplina.getNome());
+
+    professorController.atualizarDisciplinas(qtdeDisciplinaAtual, disciplinas, professor);
+
     return disciplina;
   }
 
   public Disciplina removerProfessorResponsavel(int id) throws Exception {
     try {
       Disciplina disciplina = buscarDisciplinaPorId(id);
-      if(disciplina == null) { throw new Exception("Erro: Id invalido"); }
+      if (disciplina == null) {
+        throw new Exception("Erro: Id invalido");
+      }
 
       disciplina.setProfessorResponsavel(null);
       disciplinaRepository.atualizarDisciplina(disciplina);
@@ -189,14 +228,18 @@ public class DisciplinaController {
   public Disciplina matricularAlunoDisciplina(int idDisciplina, String matricula) throws Exception {
 
     Disciplina disciplina = buscarDisciplinaPorId(idDisciplina);
-    if(disciplina == null){ throw new Exception("Erro: Id invalido"); }
+    if (disciplina == null) {
+      throw new Exception("Erro: Id invalido");
+    }
 
     Alunos aluno = this.alunoController.encontrarAluno(matricula);
 
-    if (aluno == null) throw new Exception("Aluno com matricula " + matricula + " nao encontrado.");
+    if (aluno == null)
+      throw new Exception("Aluno com matricula " + matricula + " nao encontrado.");
 
     List<String> alunosMatriculados = disciplina.getAlunos();
-    if (alunosMatriculados == null) alunosMatriculados = new ArrayList<>();
+    if (alunosMatriculados == null)
+      alunosMatriculados = new ArrayList<>();
 
     if (alunosMatriculados.contains(matricula)) {
       throw new Exception("Aluno ja esta matriculado nesta disciplina." + aluno.getMatricula() + disciplina.getId());
@@ -212,10 +255,13 @@ public class DisciplinaController {
 
   public Disciplina desmatricularAlunoDisciplina(int id, String matricula) throws Exception {
     Disciplina disciplina = buscarDisciplinaPorId(id);
-    if(disciplina == null){ throw new Exception("Erro: Id invalido"); }
+    if (disciplina == null) {
+      throw new Exception("Erro: Id invalido");
+    }
 
     Alunos aluno = this.alunoController.encontrarAluno(matricula);
-    if (aluno == null) throw new Exception("Aluno nao encontrado.");
+    if (aluno == null)
+      throw new Exception("Aluno nao encontrado.");
 
     List<String> alunosMatriculados = disciplina.getAlunos();
     if (alunosMatriculados == null || !alunosMatriculados.contains(matricula)) {
@@ -235,18 +281,22 @@ public class DisciplinaController {
   // ==================================================================================
 
   public Disciplina declararInteresseDisciplina(int id, String matricula) throws Exception {
- 
+
     Disciplina disciplina = buscarDisciplinaPorId(id);
-    if(disciplina == null){ throw new Exception("Erro: Id invalido"); }
+    if (disciplina == null) {
+      throw new Exception("Erro: Id invalido");
+    }
 
     Alunos aluno = this.alunoController.encontrarAluno(matricula);
-    if (aluno == null) throw new Exception("Aluno nao encontrado.");
+    if (aluno == null)
+      throw new Exception("Aluno nao encontrado.");
 
     if (!(disciplina instanceof DisciplinaEletiva disciplinaEletiva)) {
       throw new Exception("Apenas disciplinas Eletivas aceitam interesse.");
     }
     List<String> interessados = disciplinaEletiva.listarInteressados();
-    if (interessados == null) interessados = new ArrayList<>();
+    if (interessados == null)
+      interessados = new ArrayList<>();
 
     if (interessados.contains(matricula)) {
       throw new Exception("Aluno ja registrou interesse.");
@@ -263,10 +313,13 @@ public class DisciplinaController {
   public Disciplina removerInteresseDisciplina(int id, String matricula) throws Exception {
 
     Disciplina disciplina = buscarDisciplinaPorId(id);
-    if(disciplina == null){ throw new Exception("Erro: Id invalido"); }
+    if (disciplina == null) {
+      throw new Exception("Erro: Id invalido");
+    }
 
     Alunos aluno = this.alunoController.encontrarAluno(matricula);
-    if (aluno == null) throw new Exception("Aluno nao encontrado.");
+    if (aluno == null)
+      throw new Exception("Aluno nao encontrado.");
 
     if (!(disciplina instanceof DisciplinaEletiva disciplinaEletiva)) {
       throw new Exception("Apenas disciplinas Eletivas possuem lista de interesse.");
@@ -288,11 +341,12 @@ public class DisciplinaController {
   public int getPopularidadeDisciplina(int idDisciplina) throws Exception {
     Disciplina disciplina = buscarDisciplinaPorId(idDisciplina);
 
-    if(disciplina == null) throw new Exception("ID nao encontrado");
+    if (disciplina == null)
+      throw new Exception("ID nao encontrado");
 
-    if(disciplina instanceof DisciplinaEletiva disciplinaEletiva) {
+    if (disciplina instanceof DisciplinaEletiva disciplinaEletiva) {
       return disciplinaEletiva.listarInteressados().size();
-    }else {
+    } else {
       return 0;
     }
 
@@ -307,31 +361,30 @@ public class DisciplinaController {
 
     // 1. Disciplina Obrigatória 1
     DisciplinaObrigatoria disciplinaObrigatoria1 = new DisciplinaObrigatoria(
-      0,
-      "Programacao orientada a objetos",
-      600,
-      professor,
-      new ArrayList<>() // NOVA LISTA
+        0,
+        "Programacao orientada a objetos",
+        600,
+        professor,
+        new ArrayList<>() // NOVA LISTA
     );
 
     // 2. Disciplina Obrigatória 2
     DisciplinaObrigatoria disciplinaObrigatoria2 = new DisciplinaObrigatoria(
-      0,
-      "Tecnicas de programacao 1",
-      600,
-      professor,
-      new ArrayList<>() // NOVA LISTA
+        0,
+        "Tecnicas de programacao 1",
+        600,
+        professor,
+        new ArrayList<>() // NOVA LISTA
     );
 
     // 3. Disciplina Eletiva (usa duas listas, ambas devem ser novas)
     DisciplinaEletiva disciplinaEletiva = new DisciplinaEletiva(
-            0,
-            "Desenvolvimento mobile",
-            200,
-            professor,
-            new ArrayList<>(),
-            new ArrayList<>()
-    );
+        0,
+        "Desenvolvimento mobile",
+        200,
+        professor,
+        new ArrayList<>(),
+        new ArrayList<>());
 
     // Adiciona ao repositório para persistir e atribuir IDs
     disciplinaRepository.adicionarDisciplina(disciplinaObrigatoria1);
