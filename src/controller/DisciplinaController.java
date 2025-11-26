@@ -50,12 +50,10 @@ public class DisciplinaController {
 
     novaDisciplina = this.disciplinaRepository.adicionarDisciplina(novaDisciplina);
 
-    List<Disciplina> disciplinasProfessor = professor.getDisciplinas();
-    int qtdeDisciplinaAtual = disciplinasProfessor.size();
     List<String> disciplinas = new ArrayList<>();
     disciplinas.add(novaDisciplina.getNome());
 
-    professorController.atualizarDisciplinas(qtdeDisciplinaAtual, disciplinas, professor);
+    professorController.atualizarDisciplinas(1, disciplinas, professor);
 
     return novaDisciplina;
 
@@ -354,42 +352,9 @@ public class DisciplinaController {
 
   public void criarMockDiscipliba() throws Exception {
 
-    // Apenas a lista de alunos (opcional, pode ser removida)
-    // List<Disciplina> mock = new ArrayList<>();
-
-    Professor professor = ProfessorRepository.getInstance().findByMatricula("XX0001");
-
-    // 1. Disciplina Obrigatória 1
-    DisciplinaObrigatoria disciplinaObrigatoria1 = new DisciplinaObrigatoria(
-        0,
-        "Programacao orientada a objetos",
-        600,
-        professor,
-        new ArrayList<>() // NOVA LISTA
-    );
-
-    // 2. Disciplina Obrigatória 2
-    DisciplinaObrigatoria disciplinaObrigatoria2 = new DisciplinaObrigatoria(
-        0,
-        "Tecnicas de programacao 1",
-        600,
-        professor,
-        new ArrayList<>() // NOVA LISTA
-    );
-
-    // 3. Disciplina Eletiva (usa duas listas, ambas devem ser novas)
-    DisciplinaEletiva disciplinaEletiva = new DisciplinaEletiva(
-        0,
-        "Desenvolvimento mobile",
-        200,
-        professor,
-        new ArrayList<>(),
-        new ArrayList<>());
-
-    // Adiciona ao repositório para persistir e atribuir IDs
-    disciplinaRepository.adicionarDisciplina(disciplinaObrigatoria1);
-    disciplinaRepository.adicionarDisciplina(disciplinaObrigatoria2);
-    disciplinaRepository.adicionarDisciplina(disciplinaEletiva);
+    Disciplina disciplinaObrigatoria1 = adicionarDisciplina("Programacao orientada a objetos", 600, "XX0001", 1);
+    Disciplina disciplinaObrigatoria2 = adicionarDisciplina("Tecnicas de programacao 1", 600, "XX0001", 1);
+    Disciplina disciplinaEletiva1 = adicionarDisciplina("Desenvolvimento mobile", 600, "XX0001", 2);
 
     List<Alunos> alunos = AlunoRepository.getInstance().getTodos();
 
@@ -405,8 +370,8 @@ public class DisciplinaController {
 
     // Matrícula e Declaração de Interesse na Eletiva
     for (Alunos aluno : alunos) {
-      matricularAlunoDisciplina(disciplinaEletiva.getId(), aluno.getMatricula());
-      declararInteresseDisciplina(disciplinaEletiva.getId(), aluno.getMatricula());
+      matricularAlunoDisciplina(disciplinaEletiva1.getId(), aluno.getMatricula());
+      declararInteresseDisciplina(disciplinaEletiva1.getId(), aluno.getMatricula());
     }
   }
 }

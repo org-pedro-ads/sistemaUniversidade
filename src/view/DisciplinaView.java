@@ -235,10 +235,6 @@ public class DisciplinaView extends BaseView {
 
     Disciplina disciplina = disciplinaController.removerProfessorResponsavel(idDisciplina);
 
-    if (disciplina != null) {
-      sucesso("Professor removido com sucesso!");
-      exibirDetalhesDisciplina(disciplina);
-    }
   }
 
   public void declararInteresseDisciplina() throws Exception {
