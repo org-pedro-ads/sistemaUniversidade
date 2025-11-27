@@ -1,11 +1,9 @@
 package view;
 
-import controller.ProfessorController;
 import model.*;
 import util.MatriculaGenerator;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,8 +11,7 @@ import java.util.stream.Collectors;
 
 public class ProfessorView {
     private Scanner sc = new Scanner(System.in);
-    private static final ProfessorController controller = new ProfessorController();
-    public void cadastrarProfessor() throws Exception {
+    public Professor cadastrarProfessor() throws Exception {
         System.out.println("===== Cadastro de Professor =====");
 
         System.out.print("Nome: ");
@@ -56,6 +53,28 @@ public class ProfessorView {
             }
         };
 
+        // Se quiser pegar informações extras dependendo do tipo
+        Professor novoProfessor = null;
+        if (tipo == TipoProfessor.SUBSTITUTO) {
+            System.out.print("Horas de trabalho semanal: ");
+            double horas = sc.nextDouble();
+            sc.nextLine();
+
+            System.out.print("Data término de contrato (AAAA-MM-DD): ");
+            LocalDate data = LocalDate.parse(sc.nextLine());
+            novoProfessor = new ProfessorSubstituto(nome, matricula, titulo, tipo, null, horas, data);
+        } else {
+            System.out.print("Qual é o salario base do professor: ");
+            Double salarioBase = sc.nextDouble();
+            sc.nextLine();
+            novoProfessor = new ProfessorVitalicio(nome, matricula, titulo, tipo, null, null, salarioBase);
+        }
+
+        System.out.println("\nProfessor cadastrado com sucesso!");
+        return novoProfessor;
+    }
+
+    public List<String> capturaDisicplinas(){
         System.out.println("Quantas disciplinas ele leciona?");
         int qtd = sc.nextInt();
         sc.nextLine();
@@ -68,43 +87,28 @@ public class ProfessorView {
             nomeDisciplinas.add(nomeDisc);
         }
 
-        // Se quiser pegar informações extras dependendo do tipo
-        if (tipo == TipoProfessor.SUBSTITUTO) {
-            System.out.print("Horas de trabalho semanal: ");
-            double horas = sc.nextDouble();
-            sc.nextLine();
-
-            System.out.print("Data término de contrato (AAAA-MM-DD): ");
-            LocalDate data = LocalDate.parse(sc.nextLine());
-
-            controller.cadastroProfessorSubstituto(nome, matricula, titulo, tipo, qtd, nomeDisciplinas, horas, data);
-        } else if (tipo == TipoProfessor.VITALICIO) {
-            System.out.println("Quantos projetos de pesquisa ele orienta?");
-            qtd = sc.nextInt();
-            sc.nextLine();
-
-            List<String> nomesProjetosPesquisa = new ArrayList<>();
-
-            for (int i = 0; i < qtd; i++) {
-                System.out.print("Nome do projeto de pesquisa " + (i + 1) + ": ");
-                String nomeDisc = sc.nextLine();
-                nomesProjetosPesquisa.add(nomeDisc);
-            }
-
-            System.out.print("Qual é o salario base do professor: ");
-            Double salarioBase = sc.nextDouble();
-            sc.nextLine();
-            controller.cadastrarProfessorVitalicio(nome, matricula, titulo, tipo,qtd, nomeDisciplinas, nomesProjetosPesquisa, salarioBase);
-        }
-
-        System.out.println("\nProfessor cadastrado com sucesso!");
+        return nomeDisciplinas;
     }
 
-    public void listarProfessores() throws Exception {
+    public List<String> capturaProjetosPesquisa(){
+        System.out.println("Quantos projetos de pesquisa ele orienta?");
+        int qtd = sc.nextInt();
+        sc.nextLine();
+
+        List<String> nomesProjetosPesquisa = new ArrayList<>();
+
+        for (int i = 0; i < qtd; i++) {
+            System.out.print("Nome do projeto de pesquisa " + (i + 1) + ": ");
+            String nomeDisc = sc.nextLine();
+            nomesProjetosPesquisa.add(nomeDisc);
+        }
+
+        return nomesProjetosPesquisa;
+    }
+
+    public void listarProfessores(List<Professor> professores) {
 
         System.out.println("\n===== LISTA DE PROFESSORES =====");
-
-        List<Professor> professores = controller.listarProfessores();
 
         if (professores.isEmpty()) {
             System.out.println("Nenhum professor cadastrado.\n");
@@ -133,183 +137,299 @@ public class ProfessorView {
         System.out.println("----------------------------------\n");
     }
 
-    public void removerProfessor() {
+    public String removerProfessor() {
         System.out.println("\n===== REMOÇÃO DE PROFESSOR =====");
 
         System.out.print("Informe a matrícula do professor: ");
         String matricula = sc.nextLine();
-
-        try {
-            boolean removido = controller.removerProfessor(matricula);
-
-            if (removido) {
-                System.out.println("\nProfessor removido com sucesso!\n");
-            } else {
-                System.out.println("\nProfessor não encontrado!\n");
-            }
-
-        } catch (Exception e) {
-            System.out.println("\nErro ao remover professor: " + e.getMessage());
-        }
+        return matricula;
     }
 
-    public void calcularSalarioProfessor() {
+    public void mostrarMensagemRemocaoProfessor(String mensagem){
+        System.out.println(mensagem);
+    }
+
+    public String calcularSalarioProfessor() {
         System.out.println("\n===== CÁLCULO DE SALÁRIO DO PROFESSOR =====");
 
         System.out.print("Informe a matrícula do professor: ");
         String matricula = sc.nextLine();
-
-        try {
-            Double salario = controller.calcularSalario(matricula);
-            System.out.println("Salário calculado: R$ " + salario);
-        } catch (Exception e) {
-            System.out.println("Erro ao calcular salário: " + e.getMessage());
-        }
-
-        System.out.println();
+        return matricula;
     }
 
-    public void editarProfessor() throws Exception {
+    public void mostrarSalario(Double salario){
+        System.out.println("Salário calculado: R$ " + salario);
+    }
+
+    public String editarProfessor() throws Exception {
         System.out.println("==== EDITAR PROFESSOR ====");
 
-        // listar para escolha
-        listarProfessores();
-
-        System.out.print("Digite a matricula do professor que deseja editar: ");
+        System.out.print("Com base na lista de professores\nDigite a matricula do professor que deseja editar: ");
         String matriucla = sc.nextLine();
-
-        Professor professor = controller.encontrarProfessor(matriucla);
-
-        if (professor == null) {
-            System.out.println("Professor não encontrado!");
-            return;
-        }
-
-        System.out.println("O que deseja editar?");
-        System.out.println("1 - Nome");
-        System.out.println("2 - Título (GRADUACAO, POS_GRADUACAO, MESTRADO, DOUTORADO)");
-        System.out.println("3 - Disciplinas");
-        System.out.println("4 - Dados específicos (Substituto / Vitalício)");
-        System.out.println("0 - Cancelar");
-        System.out.print("Escolha: ");
-        int opcao = Integer.parseInt(sc.nextLine());
-
-        switch (opcao) {
-            case 1:
-                System.out.print("Novo nome: ");
-                professor.setNome(sc.nextLine());
-                break;
-
-            case 2:
-                System.out.print("Novo título: ");
-                professor.setTitulo(TituloProfessor.valueOf(sc.nextLine()));
-                break;
-
-            case 3:
-                editarDisciplinas(professor);
-                break;
-
-            case 4:
-                editarTipoEspecifico(professor);
-                break;
-
-            case 0:
-                System.out.println("Operação cancelada.");
-                return;
-
-            default:
-                System.out.println("Opção inválida!");
-                return;
-        }
-
-        controller.atualizacaoCompleta(professor);
-        System.out.println("Professor atualizado com sucesso!");
+        return matriucla;
     }
 
-    private void editarDisciplinas(Professor professor) throws Exception {
+    public int capturaCampoEditarProfessor(Professor professor){
+        int opcao;
+        do {
+            System.out.println("O que deseja editar?");
+            System.out.println("1 - Nome");
+            System.out.println("2 - Título (GRADUACAO, POS_GRADUACAO, MESTRADO, DOUTORADO)");
+            System.out.println("3 - Disciplinas");
+            System.out.println("4 - Dados específicos (Substituto / Vitalício)");
+            System.out.println("0 - Cancelar");
+            System.out.print("Escolha: ");
+            opcao = sc.nextInt();
+            sc.nextLine();
+
+                switch (opcao) {
+                    case 1:
+                        System.out.print("Novo nome: ");
+                        professor.setNome(sc.nextLine());
+                        return 1;
+
+                    case 2:
+                        System.out.print("Novo título: ");
+                        professor.setTitulo(TituloProfessor.valueOf(sc.nextLine()));
+                        return 2;
+
+                    case 3:
+                        return 3;
+
+                    case 4:
+                        return 4;
+
+                    case 0:
+                        System.out.println("Operação cancelada.");
+                        return 0;
+
+                    default:
+                        System.out.println("Opção inválida!");
+                }
+        } while(opcao != 0);
+
+        return opcao;
+    }
+
+    public void gerarRelatorioProfessores(List<Professor> professores, List<Double> salario) throws Exception {
+
+        System.out.println("\n===== RELATÓRIO DE PROFESSORES =====");
+        int i = 0;
+        for (Professor p : professores) {
+            System.out.println(
+                    "Nome: " + p.getNome() +
+                            " | Disciplinas: " + p.getDisciplinas().size() +
+                            " | Salário: R$ " + salario.get(i)
+            );
+            i++;
+        }
+
+        System.out.println("=====================================\n");
+    }
+
+    public List<String> editarDisciplinas(Professor professor) throws Exception {
         System.out.println("== EDITAR DISCIPLINAS ==");
         System.out.println("Disciplinas atuais: " +
                 professor.getDisciplinas().stream()
                         .map(Disciplina::getNome)
                         .collect(Collectors.joining(", "))
         );
+        int escolha;
+        List<String>nomes = new ArrayList<>();
+        do {
+            System.out.println("1 - Remover todas e adicionar novas");
+            System.out.println("2 - Acrescentar novas");
+            System.out.println("0 - Cancelar");
+            System.out.print("Escolha: ");
+            escolha = Integer.parseInt(sc.nextLine());
+                switch (escolha) {
+                    case 1:
+                        professor.setDisciplinas(new ArrayList<>());
+                        return nomes;
+                    case 2:
+                        System.out.println("Quantas disciplinas deseja cadastrar?");
+                        int qtd = Integer.parseInt(sc.nextLine());
 
-        System.out.println("1 - Remover todas e adicionar novas");
-        System.out.println("2 - Acrescentar novas");
-        System.out.print("Escolha: ");
-        int escolha = Integer.parseInt(sc.nextLine());
-
-        switch (escolha) {
-            case 1:
-                professor.getDisciplinas().clear();
-            case 2:
-                System.out.println("Quantas disciplinas deseja cadastrar?");
-                int qtd = Integer.parseInt(sc.nextLine());
-
-                List<String> nomes = new ArrayList<>();
-                for (int i = 0; i < qtd; i++) {
-                    System.out.print("Nome da disciplina: ");
-                    String nome = sc.nextLine();
-                    nomes.add(nome);
+                        nomes = professor.getDisciplinas().stream()
+                                .map(Disciplina::getNome)
+                                .collect(Collectors.toList());
+                        for (int i = 0; i < qtd; i++) {
+                            System.out.print("Nome da disciplina: ");
+                            String nome = sc.nextLine();
+                            nomes.add(nome);
+                        }
+                        return nomes;
+                    case 0:
+                        return null;
+                    default:
+                        System.out.println("Opção inválida!");
                 }
-                controller.atualizarDisciplinas(qtd, nomes, professor);
-                break;
-            default:
-                System.out.println("Opção inválida!");
-        }
+        }while (escolha != 0);
+        return nomes;
     }
 
-    public void gerarRelatorioProfessores() throws Exception {
-
-        System.out.println("\n===== RELATÓRIO DE PROFESSORES =====");
-        List<Professor> professores = controller.listarProfessores();
-        for (Professor p : professores) {
-            double salario = controller.calcularSalario(p.getMatricula());
-            System.out.println(
-                    "Nome: " + p.getNome() +
-                            " | Disciplinas: " + p.getDisciplinas().size() +
-                            " | Salário: R$ " + salario
-            );
-        }
-
-        System.out.println("=====================================\n");
-    }
-
-    private void editarTipoEspecifico(Professor professor) {
-
+    public List<String> editarTipoEspecifico(Professor professor) {
+        List<String> nomeProjetoPesqueisa = new ArrayList<>();
         if (professor instanceof ProfessorSubstituto sub) {
-            System.out.println("== EDITAR PROFESSOR SUBSTITUTO ==");
-            System.out.print("Nova carga horária: ");
-            double horasAulas = sc.nextDouble();
-            sc.nextLine();
-            sub.setHorasAula(horasAulas);
-
-            System.out.print("Nova data fim contrato (yyyy-MM-dd): ");
-            LocalDate tempoContrato = LocalDate.parse(sc.nextLine());
-            sub.setTempoDeContrato(tempoContrato);
+            editarProfessorSubstituto(sub);
         }
         else if (professor instanceof ProfessorVitalicio vit) {
-            System.out.println("== EDITAR PROFESSOR VITALÍCIO ==");
-            System.out.println("Quantos projetos de pesquisa ele orienta?");
-            int qtd = sc.nextInt();
+            nomeProjetoPesqueisa = editarProfessorVitalicio(vit);
+        }
+        else {
+            System.out.println("Tipo desconhecido.");
+        }
+
+        return nomeProjetoPesqueisa;
+    }
+    private void editarProfessorSubstituto(ProfessorSubstituto sub) {
+        int opcao;
+
+        do {
+            System.out.println("\n== EDITAR PROFESSOR SUBSTITUTO ==");
+            System.out.println("1. Alterar carga horária");
+            System.out.println("2. Alterar data de fim do contrato");
+            System.out.println("0. Voltar");
+            System.out.print("→ Escolha: ");
+
+            opcao = sc.nextInt();
             sc.nextLine();
 
-            List<String> nomesProjetosPesquisa = vit.getProjetos().stream()
+            switch (opcao) {
+                case 1 -> {
+                    System.out.print("Nova carga horária: ");
+                    double horas = Double.parseDouble(sc.nextLine());
+                    sub.setHorasAula(horas);
+                    System.out.println("Carga horária atualizada!");
+                    return;
+                }
+
+                case 2 -> {
+                    System.out.print("Nova data fim contrato (yyyy-MM-dd): ");
+                    LocalDate fimContrato = LocalDate.parse(sc.nextLine());
+                    sub.setTempoDeContrato(fimContrato);
+                    System.out.println("Data de contrato atualizada!");
+                    return;
+                }
+
+                case 0 -> {
+                    System.out.println("Voltando...");
+                    return;
+                }
+
+                default -> System.out.println("Opção inválida!");
+            }
+        } while (opcao != 0);
+    }
+
+    private List<String> editarProfessorVitalicio(ProfessorVitalicio vit) {
+        int opcao;
+        List<String> nomeProjetoPesqusia = new ArrayList<>();
+        do{
+            System.out.println("\n== EDITAR PROFESSOR VITALÍCIO ==");
+            System.out.println("1. Editar projetos orientados");
+            System.out.println("2. Alterar salário base");
+            System.out.println("0. Voltar");
+            System.out.print("→ Escolha: ");
+
+            opcao = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcao) {
+                case 1 -> {
+                    nomeProjetoPesqusia = editarProjetosPesquisa(vit);
+                }
+
+                case 2 -> {
+                    System.out.print("Novo salário base: ");
+                    double salario = Double.parseDouble(sc.nextLine());
+                    vit.setSalarioBase(salario);
+                    System.out.println("Salário atualizado!");
+                    return null;
+                }
+
+                case 0 -> {
+                    System.out.println("Voltando...");
+                    return null;
+                }
+
+                default -> System.out.println("Opção inválida!");
+            }
+        } while(opcao != 0);
+        return nomeProjetoPesqusia;
+    }
+
+    private List<String> editarProjetosPesquisa(ProfessorVitalicio vit) {
+        int opcao;
+        List<String> nomeProjetoPesqusia = new ArrayList<>();
+        do{
+            System.out.println("\n== EDITAR PROJETOS DE PESQUISA ==");
+            System.out.println("Projetos atuais:");
+
+            List<String> projetos = vit.getProjetos()
+                    .stream()
                     .map(ProjetoPesquisa::getTitulo)
                     .collect(Collectors.toList());
 
-            for (int i = 0; i < qtd; i++) {
-                System.out.print("Nome do projeto de pesquisa " + (i + 1) + ": ");
-                String nomeDisc = sc.nextLine();
-                nomesProjetosPesquisa.add(nomeDisc);
+            if (projetos.isEmpty()) {
+                System.out.println("(Nenhum projeto cadastrado)");
+            } else {
+                for (int i = 0; i < projetos.size(); i++) {
+                    System.out.println((i + 1) + ". " + projetos.get(i));
+                }
             }
 
-            System.out.print("Qual é o salario base do professor: ");
-            Double salarioBase = sc.nextDouble();
+            System.out.println("\n1. Adicionar novos projetos");
+            System.out.println("2. Remover TODOS os projetos");
+            System.out.println("0. Voltar");
+            System.out.print("→ Escolha: ");
+
+            opcao = sc.nextInt();
             sc.nextLine();
-            vit.setSalarioBase(salarioBase);
-        } else {
-            System.out.println("Tipo desconhecido.");
-        }
+
+            switch (opcao) {
+                case 1 -> nomeProjetoPesqusia = adicionarProjetos(vit, projetos);
+                case 2 -> nomeProjetoPesqusia = removerTodosProjetos(vit);
+                case 0 -> {
+                    System.out.println("Voltando...");
+                    return projetos;
+                }
+                default -> System.out.println("Opção inválida!");
+            }
+        } while(opcao != 0);
+        return nomeProjetoPesqusia;
     }
+
+    private List<String> adicionarProjetos(ProfessorVitalicio vit, List<String> projetos) {
+        List<String> nomeProjetoPesqusia = new ArrayList<>();
+        System.out.print("Quantos projetos deseja adicionar? ");
+        int qtd = Integer.parseInt(sc.nextLine());
+
+        nomeProjetoPesqusia = vit.getProjetos().stream()
+                .map(ProjetoPesquisa::getTitulo)
+                .collect(Collectors.toList());
+
+        for (int i = 0; i < qtd; i++) {
+            System.out.print("Nome do novo projeto " + (i + 1) + ": ");
+            projetos.add(sc.nextLine());
+        }
+
+        System.out.println("Projetos adicionados com sucesso!");
+        return nomeProjetoPesqusia;
+    }
+
+    private List<String> removerTodosProjetos(ProfessorVitalicio vit) {
+        List<String> nomeProjetoPesqusia = new ArrayList<>();
+        System.out.print("Tem certeza que deseja remover TODOS os projetos? (s/n): ");
+        String confirmacao = sc.nextLine().trim().toLowerCase();
+
+        if (confirmacao.equals("s")) {
+            vit.setProjetos(new ArrayList<>());
+            System.out.println("Todos os projetos foram removidos.");
+        } else {
+            System.out.println("Operação cancelada.");
+        }
+        return nomeProjetoPesqusia;
+    }
+
 }

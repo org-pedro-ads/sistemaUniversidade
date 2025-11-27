@@ -14,10 +14,8 @@ public class ProfessorRepository {
 
     private final List<Professor> professores = new ArrayList<>();
 
-    // Construtor privado
     private ProfessorRepository() {}
 
-    // Método para obter a única instância
     public static ProfessorRepository getInstance() {
         if (instance == null) {
             instance = new ProfessorRepository();

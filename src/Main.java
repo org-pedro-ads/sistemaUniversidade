@@ -5,7 +5,9 @@ import controller.DisciplinaController;
 import controller.ProfessorController;
 import controller.ProjetoPesquisaController;
 import model.Alunos;
+import model.Professor;
 import repository.AlunoRepository;
+import repository.DisciplinaRepository;
 import repository.ProfessorRepository;
 import repository.ProjetoPesquisaRepository;
 import view.AlunoView;
@@ -16,20 +18,27 @@ import view.ProjetoPesquisaView;
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
 
-    private static final AlunoRepository alunoRepository = AlunoRepository.getInstance();
-    private static final DisciplinaController disciplinaController = new DisciplinaController();
-    private static final ProfessorController professorController = new ProfessorController();
-    private static final ProjetoPesquisaRepository projetoPesquisaRepository = new ProjetoPesquisaRepository();
-    private static final AlunoView alunoView = new AlunoView();
-    private static final ProfessorView professorView = new ProfessorView();
-    private static final AlunoController alunoController = new AlunoController(alunoRepository, alunoView);
-    private static final ProjetoPesquisaView projetoPesquisaView = new ProjetoPesquisaView();
-    private static final ProfessorRepository professorRepository = ProfessorRepository.getInstance();
-    private static final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(
-            projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
-    private static final DisciplinaView disciplinaView = new DisciplinaView();
-
     public static void main(String[] args) throws Exception {
+        //repositorys
+        ProfessorRepository professorRepository = ProfessorRepository.getInstance();
+        DisciplinaRepository disciplinaRepository = DisciplinaRepository.getInstance();
+        ProjetoPesquisaRepository projetoPesquisaRepository = ProjetoPesquisaRepository.getInstance();
+        AlunoRepository alunoRepository = AlunoRepository.getInstance();
+
+        //views
+        ProfessorView professorView = new ProfessorView();
+        AlunoView alunoView = new AlunoView();
+        ProjetoPesquisaView projetoPesquisaView = new ProjetoPesquisaView();
+        DisciplinaView disciplinaView = new DisciplinaView();
+
+        //controllers
+        ProfessorController professorController = new ProfessorController
+                (professorRepository, disciplinaRepository, projetoPesquisaRepository, professorView);
+        DisciplinaController disciplinaController = new DisciplinaController();
+        AlunoController alunoController = new AlunoController(alunoRepository, alunoView);
+        ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(
+                projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
+
         try {
             alunoRepository.criarMockAlunos();
             professorController.criarMockProfessor();
@@ -48,12 +57,12 @@ public class Main {
                 opcao = lerInteiro("→ Digite a opção desejada: ");
 
                 switch (opcao) {
-                    case 1 -> menuProfessores();
+                    case 1 -> menuProfessores(professorView, professorController);
                     case 2 -> menuDisciplinas();
                     case 3 -> menuAlunos();
                     case 4 -> menuVinculosEProjetos();
                     case 5 -> menuEletivasInteresse();
-                    case 6 -> menuRelatorios();
+                    case 6 -> menuRelatorios(professorController);
                     case 7 -> menuAjudaSobre();
                     case 0 -> {
                         System.out.println("Saindo do sistema... Até logo!");
@@ -83,7 +92,8 @@ public class Main {
     }
 
     // ====================== MENU PROFESSORES ======================
-    private static void menuProfessores() throws Exception {
+    private static void menuProfessores(ProfessorView professorView,
+                                        ProfessorController professorController) throws Exception {
         String escolha;
         do {
             System.out.println("\n>>> PROFESSORES");
@@ -99,23 +109,28 @@ public class Main {
             switch (escolha) {
                 case "a" -> {
                     System.out.println("Cadastrar professor...");
-                    professorView.cadastrarProfessor();
+                    Professor novoProfessor = professorView.cadastrarProfessor();
+                    professorController.cadastrarProfessor(novoProfessor);
                 }
                 case "b" -> {
                     System.out.println("Listar professores...");
-                    professorView.listarProfessores();
+                    professorController.listarProfessores();
                 }
                 case "c" -> {
                     System.out.println("Editar professor...");
-                    professorView.editarProfessor();
+                    professorController.listarProfessores();
+                    String matricula = professorView.editarProfessor();
+                    professorController.editarProfessor(matricula);
                 }
                 case "d" -> {
                     System.out.println("Remover professor...");
-                    professorView.removerProfessor();
+                    String matricula = professorView.removerProfessor();
+                    professorController.removerProfessor(matricula);
                 }
                 case "e" -> {
                     System.out.println("Calcular salário...");
-                    professorView.calcularSalarioProfessor();
+                    String matricula = professorView.calcularSalarioProfessor();
+                    professorController.calcularSalarioRetorno(matricula);
                 }
                 case "0" -> {
                     System.out.println("Voltando ao menu principal...\n");
@@ -228,7 +243,7 @@ public class Main {
     }
 
     // ====================== MENU RELATÓRIOS ======================
-    private static void menuRelatorios() throws Exception {
+    private static void menuRelatorios(ProfessorController professorController) throws Exception {
         String escolha;
         do {
             System.out.println("\n>>> RELATÓRIOS");
@@ -240,7 +255,7 @@ public class Main {
 
             switch (escolha) {
                 case "a" -> {
-                    professorView.gerarRelatorioProfessores();
+                    professorController.gerarRelatorio();
                 }
                 case "b" -> {
                     disciplinaView.gerarRelatorioDisciplina();
