@@ -1,10 +1,11 @@
 package controller;
 
 import model.*;
-import repository.AlunoRepository;
 import repository.DisciplinaRepository;
-import repository.ProfessorRepository;
-import view.AlunoView;
+import view.DisciplinaView;
+import controller.ProfessorController;
+import controller.AlunoController;
+import repository.AlunoRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,19 +18,32 @@ public class DisciplinaController {
   private final AlunoController alunoController;
 
   public DisciplinaController(
-      DisciplinaRepository disciplinaRepository, 
-      DisciplinaView disciplinaView,
-      AlunoController alunoController,
-      ProfessorController professorController
-      ) 
+    DisciplinaRepository disciplinaRepository, 
+    AlunoController alunoController,
+    ProfessorController professorController
+  ) 
   {
     this.disciplinaRepository = disciplinaRepository;
-    this.disciplinaView = disciplinaView;
+    this.disciplinaView = new DisciplinaView(this);
     this.alunoController = alunoController;
     this.professorController = professorController;
   }
 
-  // ==================================================================================
+  // =================================================================================
+  // CRIACAO DOS MENUS
+  // =================================================================================
+  
+  public void menuDisciplinas()                   { this.disciplinaView.menuDisciplinas(); }
+  public void menuMatricularAlunoEmDisciplina()   { this.disciplinaView.matricularAlunoEmDisciplina(); }
+  public void menuDesmatricularAlunoDisciplina()  { this.disciplinaView.desmatricularAlunoEmDisciplina(); }
+  public void menuAtribuirDisciplinaAProfessor()  { this.disciplinaView.atribuirDisciplinaAProfessor(); }
+  public void menuRemoverProfessorResponsavel()   { this.disciplinaView.removerProfessorDisciplina(); }
+  public void menuDeclararInteresseDisciplina()   { this.disciplinaView.declararInteresseDisciplina(); }
+  public void menuCalcularInteresseDisciplina()   { this.disciplinaView.calcularIndiceInteresseDisciplina(); }
+  public void menuRelatorioPopulariadeDisciplina(){ this.disciplinaView.relatorioPopularidadeDisciplina(); }
+  public void menuGerarRelatorioDisciplina()      { this.disciplinaView.gerarRelatorioDisciplina(); }
+
+  // ============================invalido======================================================
   // CRIACAO (Create)
   // ==================================================================================
 
@@ -61,10 +75,14 @@ public class DisciplinaController {
 
     novaDisciplina = this.disciplinaRepository.adicionarDisciplina(novaDisciplina);
 
-    List<String> disciplinas = new ArrayList<>();
-    disciplinas.add(novaDisciplina.getNome());
+    List<Disciplina> disciplinas = professor.getDisciplinas();
+    List<String> nomeDisciplinas = new ArrayList();
 
-    professorController.atualizarDisciplinas(1, disciplinas, professor);
+    for(Disciplina d : disciplinas) { nomeDisciplinas.add(d.getNome()); }
+
+    nomeDisciplinas.add(novaDisciplina.getNome());
+
+    professorController.atualizarDisciplinas(nomeDisciplinas, professor);
 
     return novaDisciplina;
 
@@ -79,7 +97,20 @@ public class DisciplinaController {
     if (disciplina == null) {
       throw new Exception("Erro: Id invalido");
     }
+
+    String matriculaProfessor = disciplina.getProfessorResponsavel().getMatricula();
+    Professor professor = professorController.encontrarProfessor(matriculaProfessor);
+    List<Disciplina> disciplinasProfessor = professor.getDisciplinas();
+    List<String> nomeDisciplinas = new ArrayList();
+    
+    for(Disciplina d : disciplinasProfessor){ nomeDisciplinas.add(d.getNome()); }; 
+
+
+    nomeDisciplinas.remove(disciplina.getNome());
+
+    professorController.atualizarDisciplinas(nomeDisciplinas, professor);
     this.disciplinaRepository.removerDisciplina(id);
+
   }
 
   // ==================================================================================
@@ -200,15 +231,19 @@ public class DisciplinaController {
       throw new Exception("Professor com matricula '" + matriculaProfessor + "' nao encontrado.");
     }
 
+    removerProfessorResponsavel(disciplina.getId());
+
     disciplina.setProfessorResponsavel(professor);
     this.disciplinaRepository.atualizarDisciplina(disciplina);
 
     List<Disciplina> disciplinasProfessor = professor.getDisciplinas();
-    int qtdeDisciplinaAtual = disciplinasProfessor.size();
-    List<String> disciplinas = new ArrayList<>();
-    disciplinas.add(disciplina.getNome());
+    List<String> nomesDisciplinas = new ArrayList();
 
-    professorController.atualizarDisciplinas(qtdeDisciplinaAtual, disciplinas, professor);
+    for(Disciplina d : disciplinasProfessor) { nomesDisciplinas.add(d.getNome()); }
+
+    nomesDisciplinas.add(disciplina.getNome());
+
+    professorController.atualizarDisciplinas(nomesDisciplinas, professor);
 
     return disciplina;
   }
@@ -220,7 +255,16 @@ public class DisciplinaController {
         throw new Exception("Erro: Id invalido");
       }
 
+      Professor professor = disciplina.getProfessorResponsavel();
+      List<Disciplina> disciplinasProfessor = professor.getDisciplinas();
+      List<String> nomesDisciplinas = new ArrayList();
+
+      for(Disciplina d : disciplinasProfessor) { nomesDisciplinas.add(d.getNome()); }
+
+      nomesDisciplinas.remove(disciplina.getNome());
+
       disciplina.setProfessorResponsavel(null);
+      professorController.atualizarDisciplinas(nomesDisciplinas, professor);
       disciplinaRepository.atualizarDisciplina(disciplina);
       return disciplina;
 

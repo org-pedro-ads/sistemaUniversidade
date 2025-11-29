@@ -14,12 +14,45 @@ public class DisciplinaView extends BaseView {
   private final DisciplinaController disciplinaController;
   private final Scanner scanner = new Scanner(System.in);
 
-  public DisciplinaView() {
-    this.disciplinaController = new DisciplinaController();
+  public DisciplinaView(DisciplinaController disciplinaController) {
+    this.disciplinaController = disciplinaController;
   }
 
   public void print(String s) {
     System.out.println(s);
+  }
+  
+  // ====================== MENU DISCIPLINAS ======================
+  public void menuDisciplinas() {
+    String escolha;
+
+    do {
+      System.out.println("\n>>>DISCIPLINAS");
+      System.out.println("a) Cadastrar disciplina (obrigatória / eletiva)");
+      System.out.println("b) Listar disciplinas");
+      System.out.println("c) Editar disciplina");
+      System.out.println("d) Remover disciplina");
+      System.out.println("e) Visualizar alunos matriculados em uma disciplina");
+      System.out.println("0) Voltar");
+      System.out.print("→ Opção: ");
+      escolha = scanner.nextLine().trim().toLowerCase();
+
+      try {
+        switch (escolha) {
+          case "a" -> cadastrarDisciplina();
+          case "b" -> listarDisciplinas();
+          case "c" -> editarDisciplina();
+          case "d" -> removerDisciplina();
+          case "e" -> listarAlunosMatriculados();
+          case "0" -> info("Voltando ao menu principal...\n");
+          default -> erro("Opção inválida!");
+        }
+
+      } catch (Exception e) {
+        System.out.println("Ocorreu um erro: " + e.getMessage());
+      }
+
+    } while (!escolha.equals("0"));
   }
 
   public void exibirDetalhesDisciplina(Disciplina disciplina) {
