@@ -11,11 +11,22 @@ import java.util.List;
 
 public class DisciplinaController {
 
-  private final DisciplinaRepository disciplinaRepository = DisciplinaRepository.getInstance();
-  private final ProfessorController professorController = new ProfessorController();
-  private final AlunoController alunoController = new AlunoController(AlunoRepository.getInstance(), new AlunoView());
+  private final DisciplinaRepository disciplinaRepository;
+  private final DisciplinaView disciplinaView;
+  private final ProfessorController professorController;
+  private final AlunoController alunoController;
 
-  public DisciplinaController() {
+  public DisciplinaController(
+      DisciplinaRepository disciplinaRepository, 
+      DisciplinaView disciplinaView,
+      AlunoController alunoController,
+      ProfessorController professorController
+      ) 
+  {
+    this.disciplinaRepository = disciplinaRepository;
+    this.disciplinaView = disciplinaView;
+    this.alunoController = alunoController;
+    this.professorController = professorController;
   }
 
   // ==================================================================================
