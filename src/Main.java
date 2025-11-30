@@ -44,7 +44,6 @@ public class Main {
     try {
       alunoRepository.criarMockAlunos();
       professorController.criarMockProfessor();
-      professorController.listarProfessores();
       disciplinaController.criarMockDiscipliba();
 
       System.out.println("""
