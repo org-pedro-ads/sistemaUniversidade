@@ -4,6 +4,7 @@ import model.*;
 import repository.ProfessorRepository;
 import repository.DisciplinaRepository;
 import repository.ProjetoPesquisaRepository;
+import util.MatriculaGenerator;
 import view.ProfessorView;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class ProfessorController {
 
         ProfessorVitalicio professor = new ProfessorVitalicio(
           "Anisio Santos", 
-          "XX0001", 
+          MatriculaGenerator.gerarParaProfessor(), 
           DOUTORADO, 
           VITALICIO, 
           disciplinas, 
