@@ -17,25 +17,25 @@ public class ProjetoPesquisaView extends BaseView {
             AlunoRepository.getInstance(),
             this);
 
-    public void cadastrarProjeto() {
-        this.exibirTitulo("CADASTRAR NOVO PROJETO DE PESQUISA");
-        String titulo = this.lerTituloProjeto();
+    // public void cadastrarProjeto() {
+    //     this.exibirTitulo("CADASTRAR NOVO PROJETO DE PESQUISA");
+    //     String titulo = this.lerTituloProjeto();
 
-        String descricao = this.lerDescricaoProjeto();
+    //     String descricao = this.lerDescricaoProjeto();
 
-        String matriculaProf = this.lerMatriculaOrientador();
+    //     String matriculaProf = this.lerMatriculaOrientador();
 
-        this.projetoPesquisaController.cadastrarProjeto(titulo, descricao, matriculaProf);
-    }
+    //     this.projetoPesquisaController.cadastrarProjeto(titulo, descricao, matriculaProf);
+    // }
 
-    public void listarProjetosDoProfessor() {
-        this.exibirTitulo("BUSCAR PROJETOS POR ORIENTADOR");
+    // public void listarProjetosDoProfessor() {
+    //     this.exibirTitulo("BUSCAR PROJETOS POR ORIENTADOR");
 
-        String matricula = this.lerString("Matrícula do professor: ");
+    //     String matricula = this.lerString("Matrícula do professor: ");
 
-        this.projetoPesquisaController.listarProjetosDoProfessor(matricula);
+    //     this.projetoPesquisaController.listarProjetosDoProfessor(matricula);
 
-    }
+    // }
 
     // // ====================== EXIBIÇÃO DE TÍTULOS ======================
     // public void exibirTitulo(String titulo) {

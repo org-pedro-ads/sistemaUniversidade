@@ -61,8 +61,8 @@ public class Main {
         switch (opcao) {
           case 1 -> menuProfessores(professorView, professorController);
           case 2 -> disciplinaController.menuDisciplinas();
-          case 3 -> menuAlunos(disciplinaController, alunoView);
-          case 4 -> menuVinculosEProjetos(disciplinaController, projetoPesquisaView);
+          case 3 -> menuAlunos(disciplinaController, alunoController);
+          case 4 -> menuVinculosEProjetos(disciplinaController, projetoPesquisaController);
           case 5 -> menuEletivasInteresse(disciplinaController);
           case 6 -> menuRelatorios(professorController, disciplinaController);
           case 7 -> menuAjudaSobre();
@@ -144,7 +144,7 @@ public class Main {
   }
 
   // ====================== MENU ALUNOS ======================
-  private static void menuAlunos(DisciplinaController disciplinaController, AlunoView alunoView) throws Exception {
+  private static void menuAlunos(DisciplinaController disciplinaController, AlunoController alunoController) throws Exception {
       // alunoView.menuAlunos();
       String escolha;
       do {
@@ -158,8 +158,8 @@ public class Main {
           escolha = scanner.nextLine().trim().toLowerCase();
 
           switch (escolha) {
-              case "a" -> alunoView.cadastrarAluno();
-              case "b" -> alunoView.listarAlunos();
+              case "a" -> alunoController.cadastrarAluno();
+              case "b" -> alunoController.listarAlunos();
               case "c" -> disciplinaController.menuMatricularAlunoEmDisciplina();
               case "d" -> disciplinaController.menuDesmatricularAlunoDisciplina();
               case "0" -> System.out.println("Voltando...\n");
@@ -169,7 +169,7 @@ public class Main {
   }
 
   // ====================== MENU VÍNCULOS E PROJETOS ======================
-  private static void menuVinculosEProjetos(DisciplinaController disciplinaController, ProjetoPesquisaView projetoPesquisaView) throws Exception {
+  private static void menuVinculosEProjetos(DisciplinaController disciplinaController, ProjetoPesquisaController projetoPesquisaController) throws Exception {
       String escolha;
       do {
           System.out.println("\n>>> VÍNCULOS E PROJETOS");
@@ -182,10 +182,10 @@ public class Main {
           escolha = scanner.nextLine().trim().toLowerCase();
 
           switch (escolha) {
-              case "a" -> disciplinaController.menuAtribuirDisciplinaAProfessor(); // Pedro
-              case "b" -> disciplinaController.menuRemoverProfessorResponsavel();  // Pedro
-              case "c" -> projetoPesquisaView.cadastrarProjeto(); // davi
-              case "d" -> projetoPesquisaView.listarProjetosDoProfessor(); // davi
+              case "a" -> disciplinaController.menuAtribuirDisciplinaAProfessor();
+              case "b" -> disciplinaController.menuRemoverProfessorResponsavel();
+              case "c" -> projetoPesquisaController.cadastrarProjeto();
+              case "d" -> projetoPesquisaController.listarProjetosDoProfessor();
               case "0" -> System.out.println("Voltando...\n");
               default -> System.out.println("Opção inválida!");
           }

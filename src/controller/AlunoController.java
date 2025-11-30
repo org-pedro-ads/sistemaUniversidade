@@ -15,7 +15,10 @@ public class AlunoController {
 
     }
 
-    public void cadastrarAluno(String nome) {
+    public void cadastrarAluno() {
+        this.view.exibirTitulo("CADASTRAR ALUNO");
+        String nome = this.view.lerNome();
+
         if (nome.isBlank()) {
             view.erro("O nome não pode estar vazio!");
             view.pausar();
@@ -56,8 +59,4 @@ public class AlunoController {
     public Alunos encontrarAluno(String matricula) {
         return repository.buscarPorMatricula(matricula);
     }
-
-    // public void matricularAlunoEmDisciplina(Alunos aluno, String codigoDisciplina) {
-    //     // Lógica para matricular o aluno na disciplina
-    // }
 }

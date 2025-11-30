@@ -40,7 +40,7 @@ public class ProfessorController {
           VITALICIO, 
           disciplinas, 
           projetosPesquisas,
-          2500.00
+          25000.00
         ); 
 
         this.cadastrarProfessorVitalicio(

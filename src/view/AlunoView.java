@@ -20,12 +20,12 @@ public class AlunoView extends BaseView {
     //     new AlunoController(AlunoRepository.getInstance(), this)
     // );
 
-    public void cadastrarAluno() {
-        this.exibirTitulo("CADASTRAR ALUNO");
-        String nome = this.lerNome();
+    // public void cadastrarAluno() {
+    //     this.exibirTitulo("CADASTRAR ALUNO");
+    //     String nome = this.lerNome();
 
-        this.alunoController.cadastrarAluno(nome);
-    }
+    //     this.alunoController.cadastrarAluno(nome);
+    // }
 
     public void listarAlunos() {
         this.alunoController.listarAlunos();

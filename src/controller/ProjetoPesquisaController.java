@@ -27,10 +27,11 @@ public class ProjetoPesquisaController {
         this.view = view;
     }
 
-    public void cadastrarProjeto(String titulo, String descricao, String matriculaProf) {
-        // view.exibirTitulo("CADASTRAR NOVO PROJETO DE PESQUISA");
+    public void cadastrarProjeto() {
+        view.exibirTitulo("CADASTRAR NOVO PROJETO DE PESQUISA");
 
-        // String titulo = view.lerTituloProjeto();
+        String titulo = view.lerTituloProjeto();
+
         if (titulo.isBlank()) {
             view.erro("O título não pode estar vazio!");
             view.pausar();
@@ -43,9 +44,9 @@ public class ProjetoPesquisaController {
             return;
         }
 
-        // String descricao = view.lerDescricaoProjeto();
+        String descricao = view.lerDescricaoProjeto();
 
-        // String matriculaProf = view.lerMatriculaOrientador();
+        String matriculaProf = view.lerMatriculaOrientador();
         Professor orientador = professorRepo.findByMatricula(matriculaProf);
 
         if (orientador == null) {
@@ -77,10 +78,10 @@ public class ProjetoPesquisaController {
     // view.pausar();
     // }
 
-    public void listarProjetosDoProfessor(String matricula) {
-        // view.exibirTitulo("BUSCAR PROJETOS POR ORIENTADOR");
+    public void listarProjetosDoProfessor() {
+        view.exibirTitulo("BUSCAR PROJETOS POR ORIENTADOR");
 
-        // String matricula = view.lerString("Matrícula do professor: ");
+        String matricula = view.lerString("Matrícula do professor: ");
         Professor prof = professorRepo.findByMatricula(matricula);
 
         if (prof == null) {
