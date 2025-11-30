@@ -120,7 +120,7 @@ public class DisciplinaController {
 
     for(Disciplina d : disciplinas) { nomeDisciplinas.add(d.getNome()); }
 
-    nomeDisciplinas.add(novaDisciplina.getNome());
+      nomeDisciplinas.add(novaDisciplina.getNome());
 
     professorController.atualizarDisciplinas(nomeDisciplinas, professor);
 

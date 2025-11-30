@@ -53,13 +53,16 @@ public class ProjetoPesquisaController {
             return;
         }
 
-        if (!(orientador instanceof ProfessorVitalicio)) {
+        ProjetoPesquisa projeto = new ProjetoPesquisa(titulo, descricao, orientador);
+        if (orientador instanceof ProfessorVitalicio professorVitalicio) {
+            professorVitalicio.getProjetos().add(projeto);
+        } else {
             view.erro("Apenas professores vitalícios podem orientar projetos de pesquisa!");
             view.pausar();
             return;
         }
 
-        ProjetoPesquisa projeto = new ProjetoPesquisa(titulo, descricao, orientador);
+        professorRepo.update(orientador);
         projetoRepo.cadastrarProjeto(projeto);
         view.sucesso("Projeto de pesquisa cadastrado com sucesso!");
         view.pausar();

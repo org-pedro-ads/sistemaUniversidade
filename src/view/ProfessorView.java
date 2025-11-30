@@ -55,6 +55,7 @@ public class ProfessorView {
 
         // Se quiser pegar informações extras dependendo do tipo
         Professor novoProfessor = null;
+        List<Disciplina> disciplina = new ArrayList<>();
         if (tipo == TipoProfessor.SUBSTITUTO) {
             System.out.print("Horas de trabalho semanal: ");
             double horas = sc.nextDouble();
@@ -62,48 +63,17 @@ public class ProfessorView {
 
             System.out.print("Data término de contrato (AAAA-MM-DD): ");
             LocalDate data = LocalDate.parse(sc.nextLine());
-            novoProfessor = new ProfessorSubstituto(nome, matricula, titulo, tipo, null, horas, data);
+            novoProfessor = new ProfessorSubstituto(nome, matricula, titulo, tipo, disciplina, horas, data);
         } else {
+            List<ProjetoPesquisa> projetos = new ArrayList<>();
             System.out.print("Qual é o salario base do professor: ");
             Double salarioBase = sc.nextDouble();
             sc.nextLine();
-            novoProfessor = new ProfessorVitalicio(nome, matricula, titulo, tipo, null, null, salarioBase);
+            novoProfessor = new ProfessorVitalicio(nome, matricula, titulo, tipo, disciplina, projetos, salarioBase);
         }
 
         System.out.println("\nProfessor cadastrado com sucesso!");
         return novoProfessor;
-    }
-
-    public List<String> capturaDisicplinas(){
-        System.out.println("Quantas disciplinas ele leciona?");
-        int qtd = sc.nextInt();
-        sc.nextLine();
-
-        List<String> nomeDisciplinas = new ArrayList<>();
-
-        for (int i = 0; i < qtd; i++) {
-            System.out.print("Nome da disciplina " + (i + 1) + ": ");
-            String nomeDisc = sc.nextLine();
-            nomeDisciplinas.add(nomeDisc);
-        }
-
-        return nomeDisciplinas;
-    }
-
-    public List<String> capturaProjetosPesquisa(){
-        System.out.println("Quantos projetos de pesquisa ele orienta?");
-        int qtd = sc.nextInt();
-        sc.nextLine();
-
-        List<String> nomesProjetosPesquisa = new ArrayList<>();
-
-        for (int i = 0; i < qtd; i++) {
-            System.out.print("Nome do projeto de pesquisa " + (i + 1) + ": ");
-            String nomeDisc = sc.nextLine();
-            nomesProjetosPesquisa.add(nomeDisc);
-        }
-
-        return nomesProjetosPesquisa;
     }
 
     public void listarProfessores(List<Professor> professores) {
@@ -125,7 +95,8 @@ public class ProfessorView {
                                                                     .map(Disciplina::getNome)
                                                                     .collect(Collectors.joining(", ")));
             if (p instanceof ProfessorVitalicio pv) {
-                System.out.println("Projeto de Pesquisa: " + pv.getProjetos());
+                System.out.println("Projeto de Pesquisa: " + pv.getProjetos().stream()
+                        .map(ProjetoPesquisa::getTitulo).collect(Collectors.joining(", ")));
                 System.out.println("Salário base: " + pv.getSalarioBase());
             }
             else if (p instanceof ProfessorSubstituto ps) {
@@ -235,7 +206,7 @@ public class ProfessorView {
                         .collect(Collectors.joining(", "))
         );
         int escolha;
-        List<String>nomes = new ArrayList<>();
+        List<String> nomes = new ArrayList<>();
         do {
             System.out.println("1 - Remover todas e adicionar novas");
             System.out.println("2 - Acrescentar novas");

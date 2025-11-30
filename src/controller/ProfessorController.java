@@ -9,6 +9,7 @@ import view.ProfessorView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static model.TipoProfessor.VITALICIO;
 import static model.TituloProfessor.DOUTORADO;
@@ -44,10 +45,8 @@ public class ProfessorController {
           25000.00
         ); 
 
-        this.cadastrarProfessorVitalicio(
-                professor,
-                nomeDisciplina,
-                nomeProjetosPesquisas
+        this.cadastrarProfessor(
+                professor
         );
     }
 
@@ -56,69 +55,13 @@ public class ProfessorController {
             if(professor.getNome().isBlank()){
                 throw new Exception("Nome nao pode ser vazio");
             }
-            List<String> nomeDisciplinas = professorView.capturaDisicplinas();
-            if(professor instanceof ProfessorVitalicio professorVitalicio){
-                List<String> nomeProjestosPesquisa = professorView.capturaProjetosPesquisa();
-                cadastrarProfessorVitalicio(professorVitalicio, nomeDisciplinas, nomeProjestosPesquisa);
-                for (ProjetoPesquisa p : professorVitalicio.getProjetos()) {
-                    p.setOrientador(professorVitalicio);
-                    projetoPesquisaRepository.atualizarProjeto(p);
-                }
-            } else if(professor instanceof ProfessorSubstituto professorSubstituto){
-                cadastroProfessorSubstituto(professorSubstituto, nomeDisciplinas);
-            }
-            for(Disciplina d : professor.getDisciplinas()){
-                d.setProfessorResponsavel(professor);
-                disciplinaRepository.atualizarDisciplina(d);
-            }
             professorRepository.save(professor);
         } catch (Exception e) {
             throw new Exception("Erro ao cadastrar professor - " + e.getMessage());
         }
     }
 
-    private void cadastrarProfessorVitalicio(
-            ProfessorVitalicio professorVitalicio, List<String> nomeDisciplinas, List<String> projetoPesquisa) throws Exception {
-        try {
-            //add validacao de disciplina
-            if(nomeDisciplinas.size() > 3){
-                throw new Exception("Professor vitalicio nao pode ter mais de 3 disciplinas");
-            }
-            List<Disciplina> disciplinas = capturaDisciplinas(nomeDisciplinas);
-            List<ProjetoPesquisa> projetos = new ArrayList<>();
-            for (String nomeProjeto : projetoPesquisa) {
-                ProjetoPesquisa projeto = projetoPesquisaRepository.buscarPorTitulo(nomeProjeto);
-                if (projeto == null) {
-                    throw new Exception("Projeto não encontrado: " + nomeProjeto);
-                }
-                if (projetos.contains(projeto)) {
-                    throw new Exception("Projeto duplicada: " + projeto);
-                }
-                projetos.add(projeto);
-            }
-            professorVitalicio.setDisciplinas(disciplinas);
-            professorVitalicio.setProjetos(projetos);
-            professorRepository.save(professorVitalicio);
-        } catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
-    }
-
-    private void cadastroProfessorSubstituto(ProfessorSubstituto professorSubstituto, List<String> nomeDisciplinas) throws Exception {
-        try {
-            //add validacao de disciplina
-            if(nomeDisciplinas.size() > 2){
-                throw new Exception("Professor suubstituto nao pode ter mais de 2 disciplinas");
-            }
-            List<Disciplina> disciplinas = capturaDisciplinas(nomeDisciplinas);
-            professorSubstituto.setDisciplinas(disciplinas);
-        } catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
-
-    }
-
-    private List<Disciplina> capturaDisciplinas(List<String> nomeDisciplinas) throws Exception {
+    private List<Disciplina> capturaDisciplinas(List<String> nomeDisciplinas, Professor professor) throws Exception {
         try{
             List<Disciplina> disciplinas = new ArrayList<>();
             for(String nomeDisciplina : nomeDisciplinas){
@@ -128,6 +71,11 @@ public class ProfessorController {
                 }
                 if (disciplinas.contains(consultarDisciplina)) {
                     throw new Exception("Disciplina duplicada: " + nomeDisciplina);
+                }
+                if(consultarDisciplina.getProfessorResponsavel().getMatricula() != professor.getMatricula()){
+                    Professor professor1 = professorRepository.findByMatricula(consultarDisciplina.getProfessorResponsavel().getMatricula());
+                    professor1.getDisciplinas().removeIf(d -> d.getNome().equals(nomeDisciplina));
+                    professorRepository.update(professor1);
                 }
                 disciplinas.add(consultarDisciplina);
             }
@@ -149,13 +97,26 @@ public class ProfessorController {
     public void removerProfessor(String matricula) throws Exception{
         try{
             if(encontrarProfessor(matricula) != null){
+                Professor professor = professorRepository.findByMatricula(matricula);
+                List<Disciplina> disciplinas = professor.getDisciplinas();
+                for(Disciplina d : disciplinas){
+                    Disciplina consultaDisicplina = disciplinaRepository.buscarDisciplinaPorNome(d.getNome());
+                    consultaDisicplina.setProfessorResponsavel(null);
+                    disciplinaRepository.atualizarDisciplina(consultaDisicplina);
+                }
+                if(professor instanceof ProfessorVitalicio professorVitalicio){
+                    List<ProjetoPesquisa> projetos = professorVitalicio.getProjetos();
+                    if(!projetos.isEmpty()){
+                        throw new Exception("Professor vitalicio nao pode ter projetos pesquisas, vinculada ao seu professor");
+                    }
+                }
                 professorRepository.delete(matricula);
                 professorView.mostrarMensagemRemocaoProfessor("\nProfessor removido com sucesso!\n");
             } else {
                 professorView.mostrarMensagemRemocaoProfessor("\nProfessor não encontrado!\n");
             }
         } catch (Exception e){
-            throw new Exception("Erro ao remover professor");
+            throw new Exception("Erro ao remover professor" + e.getMessage());
         }
     }
 
@@ -192,15 +153,15 @@ public class ProfessorController {
     public void atualizarDisciplinas(List<String> nomeDisciplinas, Professor professor) throws Exception{
         try{
             if(professor.getTipo() == VITALICIO) {
-                if (nomeDisciplinas.size() > 3) {
+                if (professor.getDisciplinas().size() >= 3) {
                     throw new Exception("Professor vitalicio nao pode ter mais de 3 disciplinas");
                 }
             }else {
-                if(nomeDisciplinas.size() > 2){
+                if(professor.getDisciplinas().size() >= 2){
                     throw new Exception("Professor substituto nao pode ter mais de 2 disciplinas");
                 }
             }
-            List<Disciplina> disciplinas = capturaDisciplinas(nomeDisciplinas);
+            List<Disciplina> disciplinas = capturaDisciplinas(nomeDisciplinas, professor);
             professor.setDisciplinas(disciplinas);
             professorRepository.update(professor);
             for(Disciplina d : disciplinas){
