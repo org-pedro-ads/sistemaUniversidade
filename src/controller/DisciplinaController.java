@@ -480,7 +480,7 @@ public class DisciplinaController {
       alunosMatriculados = new ArrayList<>();
 
     if (alunosMatriculados.contains(matricula)) {
-      throw new Exception("Aluno ja esta matriculado nesta disciplina." + aluno.getMatricula() + disciplina.getId());
+      throw new Exception("Aluno ja esta matriculado nesta disciplina." + aluno.getMatricula() + "Disciplina ID: " + disciplina.getId());
     }
 
     aluno.adicionarDisciplina(idDisciplina);
