@@ -28,24 +28,25 @@ public class ProfessorController {
 
 
     public void criarMockProfessor() throws Exception {
-        List<Disciplina> disciplinas =  disciplinaRepository.listarDisciplinas();
+        List<Disciplina> disciplinas =  new ArrayList<>();
         List<String> nomeDisciplina = new ArrayList<>();
-        List<String> projetoPesquisas = new ArrayList<>();
+        List<ProjetoPesquisa> projetosPesquisas = new ArrayList<>();
+        List<String> nomeProjetosPesquisas = new ArrayList<>();
 
-        for (Disciplina disciplina : disciplinas) {
-            nomeDisciplina.add(disciplina.getNome());
-        }
-
+        ProfessorVitalicio professor = new ProfessorVitalicio(
+          "Anisio Santos", 
+          "XX0001", 
+          DOUTORADO, 
+          VITALICIO, 
+          disciplinas, 
+          projetosPesquisas,
+          2500.00
+        ); 
 
         this.cadastrarProfessorVitalicio(
-                "Anisio Santos",
-                "XX0001",
-                DOUTORADO,
-                VITALICIO,
-                3,
+                professor,
                 nomeDisciplina,
-                projetoPesquisas,
-                25000.00
+                nomeProjetosPesquisas
         );
     }
 
@@ -97,6 +98,7 @@ public class ProfessorController {
             }
             professorVitalicio.setDisciplinas(disciplinas);
             professorVitalicio.setProjetos(projetos);
+            professorRepository.save(professorVitalicio);
         } catch (Exception e){
             throw new Exception("Erro ao cadastrar professor - " + e.getMessage());
         }

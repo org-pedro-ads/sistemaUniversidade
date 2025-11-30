@@ -33,16 +33,18 @@ public class Main {
     ProfessorView professorView = new ProfessorView();
     AlunoView alunoView = new AlunoView();
     ProjetoPesquisaView projetoPesquisaView = new ProjetoPesquisaView();
+    DisciplinaView disciplinaView = new DisciplinaView();
 
     //controllers
     ProfessorController professorController = new ProfessorController(professorRepository, disciplinaRepository, projetoPesquisaRepository, professorView);
     AlunoController alunoController = new AlunoController(alunoRepository, alunoView);
     ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
-    DisciplinaController disciplinaController = new DisciplinaController(disciplinaRepository, alunoController, professorController);
+    DisciplinaController disciplinaController = new DisciplinaController(disciplinaRepository, disciplinaView, alunoController, professorController);
 
     try {
       alunoRepository.criarMockAlunos();
       professorController.criarMockProfessor();
+      professorController.listarProfessores();
       disciplinaController.criarMockDiscipliba();
 
       System.out.println("""

@@ -18,13 +18,14 @@ public class DisciplinaController {
   private final AlunoController alunoController;
 
   public DisciplinaController(
-    DisciplinaRepository disciplinaRepository, 
+    DisciplinaRepository disciplinaRepository,
+    DisciplinaView disciplinaView,
     AlunoController alunoController,
     ProfessorController professorController
   ) 
   {
     this.disciplinaRepository = disciplinaRepository;
-    this.disciplinaView = new DisciplinaView(this);
+    this.disciplinaView = disciplinaView;
     this.alunoController = alunoController;
     this.professorController = professorController;
   }
@@ -33,23 +34,63 @@ public class DisciplinaController {
   // CRIACAO DOS MENUS
   // =================================================================================
   
-  public void menuDisciplinas()                   { this.disciplinaView.menuDisciplinas(); }
-  public void menuMatricularAlunoEmDisciplina()   { this.disciplinaView.matricularAlunoEmDisciplina(); }
-  public void menuDesmatricularAlunoDisciplina()  { this.disciplinaView.desmatricularAlunoEmDisciplina(); }
-  public void menuAtribuirDisciplinaAProfessor()  { this.disciplinaView.atribuirDisciplinaAProfessor(); }
-  public void menuRemoverProfessorResponsavel()   { this.disciplinaView.removerProfessorDisciplina(); }
-  public void menuDeclararInteresseDisciplina()   { this.disciplinaView.declararInteresseDisciplina(); }
-  public void menuCalcularInteresseDisciplina()   { this.disciplinaView.calcularIndiceInteresseDisciplina(); }
-  public void menuRelatorioPopulariadeDisciplina(){ this.disciplinaView.relatorioPopularidadeDisciplina(); }
-  public void menuGerarRelatorioDisciplina()      { this.disciplinaView.gerarRelatorioDisciplina(); }
+  public void menuDisciplinas() throws Exception {
+    String escolha = "0";
+
+    do {
+      escolha = this.disciplinaView.menuDisciplinas();
+      
+      try {
+        switch(escolha) {
+          case "a" -> getInfoCadDisciplina();
+          case "b" -> listarAlunosMatriculados();
+          case "c" -> editarDisciplina();
+          case "d" -> removerDisciplina(disciplinaView.removerDisciplina());
+          case "e" -> listarAlunosMatriculados();
+          case "0" -> this.disciplinaView.info("Voldando ao menu principal");
+          default -> this.disciplinaView.erro("Opcao invalida!");
+        }
+      } catch (Exception e) {
+        this.disciplinaView.erro(e.getMessage());
+      }
+    } while (!escolha.equals("0"));
+  }
+
+  public void menuMatricularAlunoEmDisciplina() throws Exception { getInfoMatriculaAluno(); }
+  public void menuDesmatricularAlunoDisciplina() throws Exception {}
+  public void menuAtribuirDisciplinaAProfessor() throws Exception {}
+  public void menuRemoverProfessorResponsavel() throws Exception {}
+  public void menuDeclararInteresseDisciplina() throws Exception {}
+  public void menuCalcularInteresseDisciplina() throws Exception {}
+  public void menuRelatorioPopulariadeDisciplina() throws Exception {}
+  public void menuGerarRelatorioDisciplina() throws Exception {}
 
   // ============================invalido======================================================
   // CRIACAO (Create)
   // ==================================================================================
+  
+  public void getInfoCadDisciplina() {
+    try {
+    disciplinaView.exibirTitulo("Cadastro de disciplina");
+    String nomeDisciplina = disciplinaView.lerString("\nInforme o nome do disciplina: ");
+    int cargaHoraria = disciplinaView.lerInteiro("\nInforme a carga horaria da disciplina: ");
+    String matriculaProfessor = disciplinaView.lerString("\nInforme a matricula do professor responsavel: ");
+    int tipoDisciplina = disciplinaView.lerInteiro("\nInforme a tipo de disciplina: 1 - Disciplina obrigatoria, 2 - Disciplina eletiva: ");
+    
+    adicionarDisciplina(nomeDisciplina, cargaHoraria, matriculaProfessor, tipoDisciplina);
+    } catch (Exception e) {
+      disciplinaView.erro(e.getMessage());
+    }
+  }
 
-  public Disciplina adicionarDisciplina(String nomeDisciplina, int cargaHoraria, String matriculaProfessor,
-      int tipoDisciplina) throws Exception {
-
+  public void adicionarDisciplina(
+    String nomeDisciplina, 
+    int cargaHoraria, 
+    String matriculaProfessor, 
+    int tipoDisciplina
+  ) throws Exception 
+  {
+ 
     Professor professor = this.professorController.encontrarProfessor(matriculaProfessor);
 
     if (professor == null)
@@ -76,7 +117,7 @@ public class DisciplinaController {
     novaDisciplina = this.disciplinaRepository.adicionarDisciplina(novaDisciplina);
 
     List<Disciplina> disciplinas = professor.getDisciplinas();
-    List<String> nomeDisciplinas = new ArrayList();
+    List<String> nomeDisciplinas = new ArrayList<>();
 
     for(Disciplina d : disciplinas) { nomeDisciplinas.add(d.getNome()); }
 
@@ -84,7 +125,8 @@ public class DisciplinaController {
 
     professorController.atualizarDisciplinas(nomeDisciplinas, professor);
 
-    return novaDisciplina;
+    disciplinaView.sucesso("Disciplina cadastrada com sucesso");
+    disciplinaView.exibirDetalhesDisciplina(novaDisciplina);
 
   }
 
@@ -101,7 +143,7 @@ public class DisciplinaController {
     String matriculaProfessor = disciplina.getProfessorResponsavel().getMatricula();
     Professor professor = professorController.encontrarProfessor(matriculaProfessor);
     List<Disciplina> disciplinasProfessor = professor.getDisciplinas();
-    List<String> nomeDisciplinas = new ArrayList();
+    List<String> nomeDisciplinas = new ArrayList<>();
     
     for(Disciplina d : disciplinasProfessor){ nomeDisciplinas.add(d.getNome()); }; 
 
@@ -111,6 +153,9 @@ public class DisciplinaController {
     professorController.atualizarDisciplinas(nomeDisciplinas, professor);
     this.disciplinaRepository.removerDisciplina(id);
 
+    disciplinaView.limparTela();
+    disciplinaView.sucesso("Disciplina exluida com sucesso");
+    disciplinaView.pausar();
   }
 
   // ==================================================================================
@@ -120,12 +165,22 @@ public class DisciplinaController {
   public Disciplina buscarDisciplinaPorId(int id) {
     return this.disciplinaRepository.buscarDisciplinaPorId(id);
   }
-
-  public List<Disciplina> listarDisciplinas() {
-    return this.disciplinaRepository.listarDisciplinas();
+  
+  public void listarDisciplinas() {
+    disciplinaView.listarDisciplinas(disciplinaRepository.listarDisciplinas());
   }
 
   // --- Listar Alunos Matriculados ---
+  
+  public void listarAlunosMatriculados() throws Exception {
+    disciplinaView.exibirTitulo("Listar alunos matriculados");
+
+    int idDisciplina = disciplinaView.lerInteiro("Digite o id da disciplina: ");
+    List<Alunos> alunos = listarAlunosMatriculados(idDisciplina);
+    Disciplina disciplina = buscarDisciplinaPorId(idDisciplina);
+
+    disciplinaView.listarAlunosMatriculados(alunos, disciplina);
+  }
 
   public List<Alunos> listarAlunosMatriculados(int id) throws Exception {
 
@@ -175,6 +230,59 @@ public class DisciplinaController {
   // ==================================================================================
   // ATUALIZACAO - DADOS BASICOS
   // ==================================================================================
+
+ public void editarDisciplina() throws Exception {
+    disciplinaView.exibirTitulo("Editar disciplina");
+
+    int id = disciplinaView.lerInteiro("\nDigite o ID da disciplina: ");
+    Disciplina disciplina = buscarDisciplinaPorId(id);
+
+    if (disciplina == null)
+      throw new Exception("ID invalido");
+
+    disciplinaView.exibirDetalhesDisciplina(disciplina);
+
+    String escolha;
+    Disciplina disciplinaAtualizada = null;
+
+    disciplinaView.print("\n\n === Selecione a propriedade que deseja editar: ");
+    disciplinaView.print("1. Nome");
+    disciplinaView.print("2. Carga horaria");
+    disciplinaView.print("3. Professor responsavel");
+    disciplinaView.print("4. Voltar");
+    escolha = disciplinaView.lerString("\nDigite a sua escolha: ");
+
+    switch (escolha) {
+      case "1":
+        String nome = disciplinaView.lerString("Digite o nome do disciplina: ");
+        disciplinaAtualizada = atualizarNome(id, nome);
+        break;
+
+      case "2":
+        int cargaHoraria = disciplinaView.lerInteiro("Digite o carga horaria da disciplina: ");
+        disciplinaAtualizada = atualizarCargaHoraria(id, cargaHoraria);
+        break;
+
+      case "3":
+        String matriculaProfessor = disciplinaView.lerString("Digite o matricula do professor: ");
+        disciplinaAtualizada = atualizarProfessorResponsavel(id, matriculaProfessor);
+        break;
+
+      case "4":
+        return;
+
+      default:
+        disciplinaView.erro("\n\nOpção inválida, tente novamente: ");
+    }
+
+    if (disciplinaAtualizada != null) {
+      alterarDisciplina(disciplinaAtualizada);
+      disciplinaView.limparTela();
+      disciplinaView.sucesso("Disciplina alterada com sucesso");
+      disciplinaView.exibirDetalhesDisciplina(disciplinaAtualizada);
+    }
+  }
+
 
   public void alterarDisciplina(Disciplina disciplina1) throws Exception {
     try {
@@ -237,7 +345,7 @@ public class DisciplinaController {
     this.disciplinaRepository.atualizarDisciplina(disciplina);
 
     List<Disciplina> disciplinasProfessor = professor.getDisciplinas();
-    List<String> nomesDisciplinas = new ArrayList();
+    List<String> nomesDisciplinas = new ArrayList<>();
 
     for(Disciplina d : disciplinasProfessor) { nomesDisciplinas.add(d.getNome()); }
 
@@ -257,7 +365,7 @@ public class DisciplinaController {
 
       Professor professor = disciplina.getProfessorResponsavel();
       List<Disciplina> disciplinasProfessor = professor.getDisciplinas();
-      List<String> nomesDisciplinas = new ArrayList();
+      List<String> nomesDisciplinas = new ArrayList<>();
 
       for(Disciplina d : disciplinasProfessor) { nomesDisciplinas.add(d.getNome()); }
 
@@ -274,13 +382,77 @@ public class DisciplinaController {
 
   }
 
+  public void atribuirDisciplinaAProfessor() throws Exception {
+    try {
+
+      disciplinaView.exibirTitulo("Atribuir professor responsavel");
+
+      int idDisciplina = disciplinaView.lerInteiro("Digite o ID da disciplina: ");
+      String matriculaProfessor = disciplinaView.lerString("Digite a matricula da professor: ");
+
+      atualizarProfessorResponsavel(idDisciplina, matriculaProfessor);
+      disciplinaView.sucesso("Disciplina atribuida ao professor com sucesso");
+      disciplinaView.pausar();
+    } catch (Exception e) {
+      disciplinaView.erro("Erro ao atribuir disciplina ao professor: " + e.getMessage());
+    }
+  }
+
+  public void removerProfessorDisciplina() throws Exception {
+    try {
+      disciplinaView.exibirTitulo("Remover professor responsavel");
+
+      int idDisciplina = disciplinaView.lerInteiro("Digite o ID da disciplina: ");
+
+      removerProfessorResponsavel(idDisciplina);
+      disciplinaView.sucesso("Professor removido com sucesso");
+      disciplinaView.pausar();
+    } catch (Exception e) {
+      disciplinaView.erro("Erro ao remover professor da disciplina: " + e.getMessage());
+    }
+  }
+
+  public void declararInteresseDisciplina() throws Exception {
+    try {
+
+      int idDisciplina = disciplinaView.lerInteiro("Digite o ID disciplina: ");
+      String matrculaAluno = disciplinaView.lerString("Digite a matricula da aluno: ");
+
+      declararInteresseDisciplina(idDisciplina, matrculaAluno);
+
+    } catch (Exception e) {
+      disciplinaView.erro("Erro ao declarar interesse na disciplina: " + e.getMessage());
+      disciplinaView.pausar();
+    }
+  }
+
+  public void calcularIndiceInteresseDisciplina() throws Exception {
+    int idDisciplina = disciplinaView.lerInteiro("Digite o ID disciplina: ");
+    int interesse = getPopularidadeDisciplina(idDisciplina);
+
+    disciplinaView.info(">>> Interesse na disciplina: " + interesse);
+  }
+
+
   // ==================================================================================
   // GERENCIAMENTO DE ALUNOS (Matricula)
   // ==================================================================================
 
+  public void getInfoMatriculaAluno() throws Exception {
+    
+    int idDisciplina = disciplinaView.lerInteiro("Digite o ID da disciplina: ");
+    String matricula = disciplinaView.lerString("Digite a matricula do aluno: ");
+    
+    matricularAlunoDisciplina(idDisciplina, matricula);
+
+  }
+
   public Disciplina matricularAlunoDisciplina(int idDisciplina, String matricula) throws Exception {
+    
+    disciplinaView.exibirTitulo("Matricular aluno em disciplina");
 
     Disciplina disciplina = buscarDisciplinaPorId(idDisciplina);
+    
     if (disciplina == null) {
       throw new Exception("Erro: Id invalido");
     }
@@ -306,7 +478,12 @@ public class DisciplinaController {
     return disciplina;
   }
 
-  public Disciplina desmatricularAlunoDisciplina(int id, String matricula) throws Exception {
+  public Disciplina desmatricularAlunoDisciplina() throws Exception {
+
+    disciplinaView.exibirTitulo("Desmatricular aluno");
+    int id = disciplinaView.lerInteiro("Digite o ID da disciplina: ");
+    String matricula = disciplinaView.lerString("Digite a matricula do aluno: ");
+
     Disciplina disciplina = buscarDisciplinaPorId(id);
     if (disciplina == null) {
       throw new Exception("Erro: Id invalido");
@@ -405,28 +582,38 @@ public class DisciplinaController {
 
   }
 
+
+  // Relatorio de disciplina
+  public void gerarRelatorioDisciplina() throws Exception {
+    disciplinaView.gerarRelatorioDisciplina(disciplinaRepository.listarDisciplinas());
+  }
+
+  public void relatorioPopularidadeDisciplina() throws Exception {
+    disciplinaView.relatorioPopularidadeDisciplina(disciplinaRepository.listarDisciplinas());
+  }
+
   public void criarMockDiscipliba() throws Exception {
 
-    Disciplina disciplinaObrigatoria1 = adicionarDisciplina("Programacao orientada a objetos", 600, "XX0001", 1);
-    Disciplina disciplinaObrigatoria2 = adicionarDisciplina("Tecnicas de programacao 1", 600, "XX0001", 1);
-    Disciplina disciplinaEletiva1 = adicionarDisciplina("Desenvolvimento mobile", 600, "XX0001", 2);
+    adicionarDisciplina("Programacao orientada a objetos", 600, "XX0001", 1);
+    adicionarDisciplina("Tecnicas de programacao 1", 600, "XX0001", 1);
+    adicionarDisciplina("Desenvolvimento mobile", 600, "XX0001", 2);
 
     List<Alunos> alunos = AlunoRepository.getInstance().getTodos();
 
     // Matrícula na Obrigatória 1 (usando o ID gerado pelo repositório)
     for (Alunos aluno : alunos) {
-      matricularAlunoDisciplina(disciplinaObrigatoria1.getId(), aluno.getMatricula());
+      matricularAlunoDisciplina(1, aluno.getMatricula());
     }
 
     // Matrícula na Obrigatória 2
     for (Alunos aluno : alunos) {
-      matricularAlunoDisciplina(disciplinaObrigatoria2.getId(), aluno.getMatricula());
+      matricularAlunoDisciplina(2, aluno.getMatricula());
     }
 
     // Matrícula e Declaração de Interesse na Eletiva
     for (Alunos aluno : alunos) {
-      matricularAlunoDisciplina(disciplinaEletiva1.getId(), aluno.getMatricula());
-      declararInteresseDisciplina(disciplinaEletiva1.getId(), aluno.getMatricula());
+      matricularAlunoDisciplina(3, aluno.getMatricula());
+      declararInteresseDisciplina(3, aluno.getMatricula());
     }
   }
 }
