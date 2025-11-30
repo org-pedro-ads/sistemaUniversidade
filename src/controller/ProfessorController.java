@@ -64,7 +64,6 @@ public class ProfessorController {
                     projetoPesquisaRepository.atualizarProjeto(p);
                 }
             } else if(professor instanceof ProfessorSubstituto professorSubstituto){
-                List<String> nomeProjestosPesquisa = professorView.capturaProjetosPesquisa();
                 cadastroProfessorSubstituto(professorSubstituto, nomeDisciplinas);
             }
             for(Disciplina d : professor.getDisciplinas()){

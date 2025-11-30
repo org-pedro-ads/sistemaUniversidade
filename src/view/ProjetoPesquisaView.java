@@ -1,50 +1,11 @@
 package view;
 
 import model.ProjetoPesquisa;
-import repository.AlunoRepository;
-import repository.ProfessorRepository;
-import repository.ProjetoPesquisaRepository;
 import model.Alunos;
 
 import java.util.List;
 
-import controller.ProjetoPesquisaController;
-
 public class ProjetoPesquisaView extends BaseView {
-    private final ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(
-            ProjetoPesquisaRepository.getInstance(),
-            ProfessorRepository.getInstance(),
-            AlunoRepository.getInstance(),
-            this);
-
-    // public void cadastrarProjeto() {
-    //     this.exibirTitulo("CADASTRAR NOVO PROJETO DE PESQUISA");
-    //     String titulo = this.lerTituloProjeto();
-
-    //     String descricao = this.lerDescricaoProjeto();
-
-    //     String matriculaProf = this.lerMatriculaOrientador();
-
-    //     this.projetoPesquisaController.cadastrarProjeto(titulo, descricao, matriculaProf);
-    // }
-
-    // public void listarProjetosDoProfessor() {
-    //     this.exibirTitulo("BUSCAR PROJETOS POR ORIENTADOR");
-
-    //     String matricula = this.lerString("Matrícula do professor: ");
-
-    //     this.projetoPesquisaController.listarProjetosDoProfessor(matricula);
-
-    // }
-
-    // // ====================== EXIBIÇÃO DE TÍTULOS ======================
-    // public void exibirTitulo(String titulo) {
-    //     System.out.println("\n" + "=".repeat(70));
-    //     System.out.println(" ".repeat((70 - titulo.length()) / 2) + titulo);
-    //     System.out.println("=".repeat(70));
-    // }
-
-    // ====================== LEITURA DE DADOS ======================
     public String lerTituloProjeto() {
         System.out.print("Título do projeto: ");
         return scanner.nextLine().trim();

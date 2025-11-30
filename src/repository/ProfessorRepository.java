@@ -1,10 +1,6 @@
 package repository;
 
 import model.Professor;
-import model.ProfessorVitalicio;
-import model.TipoProfessor;
-import model.TituloProfessor;
-
 import java.util.ArrayList;
 import java.util.List;
 

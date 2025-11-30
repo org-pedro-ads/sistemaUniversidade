@@ -5,7 +5,6 @@ import model.ProjetoPesquisa;
 import model.Professor;
 import model.ProfessorVitalicio;
 import repository.AlunoRepository;
-import repository.DisciplinaRepository;
 import repository.ProfessorRepository;
 import repository.ProjetoPesquisaRepository;
 import view.ProjetoPesquisaView;

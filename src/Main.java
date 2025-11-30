@@ -1,4 +1,3 @@
-import java.util.List;
 import java.util.Scanner;
 
 import controller.AlunoController;
@@ -6,7 +5,6 @@ import controller.DisciplinaController;
 import controller.ProfessorController;
 import controller.ProjetoPesquisaController;
 
-import model.Alunos;
 import model.Professor;
 
 import repository.AlunoRepository;

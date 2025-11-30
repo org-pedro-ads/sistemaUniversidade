@@ -1,6 +1,5 @@
 package view;
 
-import controller.DisciplinaController;
 import model.Alunos;
 import model.Disciplina;
 import model.DisciplinaEletiva;
@@ -135,7 +134,6 @@ public class DisciplinaView extends BaseView {
     int interesse = 0;
 
     for (Disciplina d : disciplinas) {
-      List<String> listaInteressados = null;
       if (d instanceof DisciplinaEletiva) {
         DisciplinaEletiva de = (DisciplinaEletiva) d;
         interesse = de.listarInteressados().size();

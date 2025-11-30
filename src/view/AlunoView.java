@@ -1,31 +1,14 @@
 package view;
 
 import model.Alunos;
-import model.Disciplina;
 import repository.AlunoRepository;
-import repository.DisciplinaRepository;
 
 import java.util.List;
 
 import controller.AlunoController;
-import controller.DisciplinaController;
-import controller.ProfessorController;
 
 public class AlunoView extends BaseView {
     private final AlunoController alunoController = new AlunoController(AlunoRepository.getInstance(), this);
-    // private final DisciplinaController disciplinaController = new DisciplinaController(
-    //     DisciplinaRepository.getInstance(), 
-    //     DisciplinaView.getInstance(), 
-    //     new ProfessorController(),
-    //     new AlunoController(AlunoRepository.getInstance(), this)
-    // );
-
-    // public void cadastrarAluno() {
-    //     this.exibirTitulo("CADASTRAR ALUNO");
-    //     String nome = this.lerNome();
-
-    //     this.alunoController.cadastrarAluno(nome);
-    // }
 
     public void listarAlunos() {
         this.alunoController.listarAlunos();

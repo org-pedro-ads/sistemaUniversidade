@@ -3,8 +3,6 @@ package controller;
 import model.*;
 import repository.DisciplinaRepository;
 import view.DisciplinaView;
-import controller.ProfessorController;
-import controller.AlunoController;
 import repository.AlunoRepository;
 
 import java.util.ArrayList;
