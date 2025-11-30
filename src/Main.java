@@ -88,7 +88,7 @@ public class Main {
     System.out.println("2. Disciplinas");
     System.out.println("3. Alunos");
     System.out.println("4. Vínculos e Projetos");
-    System.out.println("5. Eletivas — Interesse dos Alunos");
+    System.out.println("5. Eletivas - Interesse dos Alunos");
     System.out.println("6. Relatórios");
     System.out.println("7. Ajuda / Sobre");
     System.out.println("0. Sair");
@@ -198,7 +198,7 @@ public class Main {
   private static void menuEletivasInteresse(DisciplinaController disciplinaController) throws Exception{
       String escolha;
       do {
-          System.out.println("\n>>> ELETIVAS — INTERESSE DOS ALUNOS");
+          System.out.println("\n>>> ELETIVAS - INTERESSE DOS ALUNOS");
           System.out.println("a) Registrar interesse em disciplina eletiva");
           System.out.println("b) Calcular índice de popularidade");
           System.out.println("c) Relatório de popularidade das eletivas");
