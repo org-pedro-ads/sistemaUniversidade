@@ -100,7 +100,7 @@ public class ProfessorController {
             professorVitalicio.setProjetos(projetos);
             professorRepository.save(professorVitalicio);
         } catch (Exception e){
-            throw new Exception("Erro ao cadastrar professor - " + e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
 
@@ -113,7 +113,7 @@ public class ProfessorController {
             List<Disciplina> disciplinas = capturaDisciplinas(nomeDisciplinas);
             professorSubstituto.setDisciplinas(disciplinas);
         } catch (Exception e){
-            throw new Exception("Erro ao cadastrar professor - " + e.getMessage());
+            throw new Exception(e.getMessage());
         }
 
     }
