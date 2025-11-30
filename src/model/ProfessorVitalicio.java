@@ -7,7 +7,7 @@ public class ProfessorVitalicio extends Professor{
     private Double salarioBase;
 
     public ProfessorVitalicio(String nome, String matricula, TituloProfessor titulo, TipoProfessor tipo,
-                               List<Disciplina> disciplinas, List<ProjetoPesquisa> projetos, Double salarioBase){
+    List<Disciplina> disciplinas, List<ProjetoPesquisa> projetos, Double salarioBase){
         super(nome, matricula, titulo, tipo, disciplinas);
         this.projetos = projetos;
         this.salarioBase = salarioBase;

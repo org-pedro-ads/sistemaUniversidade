@@ -7,7 +7,6 @@ public class Alunos {
     private String matricula;
     private final List<Integer> disciplinas = new ArrayList<>();
 
-    // Construtor com parâmetros
     public Alunos(String nome, String matricula) {
         this.nome = nome;
         this.matricula = matricula;

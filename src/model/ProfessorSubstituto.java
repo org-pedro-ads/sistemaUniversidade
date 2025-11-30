@@ -8,7 +8,7 @@ public class ProfessorSubstituto extends Professor{
     private LocalDate tempoDeContrato;
 
     public ProfessorSubstituto(String nome, String matricula, TituloProfessor titulo, TipoProfessor tipo,
-                               List<Disciplina> disciplinas, Double horasAula, LocalDate tempoDeContrato){
+    List<Disciplina> disciplinas, Double horasAula, LocalDate tempoDeContrato){
         super(nome, matricula, titulo, tipo, disciplinas);
         this.horasAula = horasAula;
         this.tempoDeContrato = tempoDeContrato;

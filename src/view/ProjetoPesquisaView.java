@@ -66,30 +66,4 @@ public class ProjetoPesquisaView extends BaseView {
         System.out.println("─".repeat(90));
         System.out.println("Total de projetos: " + projetos.size());
     }
-
-    // // ====================== MENSAGENS ======================
-    // public void sucesso(String mensagem) {
-    //     System.out.println("SUCESSO: " + mensagem);
-    // }
-
-    // public void erro(String mensagem) {
-    //     System.out.println("ERRO: " + mensagem);
-    // }
-
-    // public void info(String mensagem) {
-    //     System.out.println("INFO: " + mensagem);
-    // }
-
-    // // ====================== PAUSA ======================
-    // public void pausar() {
-    //     System.out.print("\nPressione ENTER para continuar...");
-    //     scanner.nextLine();
-    // }
-
-    // Utilitário para não quebrar a tabela
-    // private String truncar(String texto, int max) {
-    //     if (texto == null)
-    //         return "";
-    //     return texto.length() > max ? texto.substring(0, max - 3) + "..." : texto;
-    // }
 }

@@ -65,18 +65,6 @@ public class ProjetoPesquisaController {
         view.pausar();
     }
 
-    // (d) LISTAR TODOS OS PROJETOS
-    // public void listarTodosProjetos() {
-    // view.exibirTitulo("TODOS OS PROJETOS DE PESQUISA");
-
-    // if (projetoRepo.getTodosProjetos().isEmpty()) {
-    // System.out.println("Nenhum projeto de pesquisa cadastrado.");
-    // return;
-    // }
-    // view.exibirListaProjetos(projetoRepo.getTodosProjetos());
-    // view.pausar();
-    // }
-
     public void listarProjetosDoProfessor() {
         view.exibirTitulo("BUSCAR PROJETOS POR ORIENTADOR");
 

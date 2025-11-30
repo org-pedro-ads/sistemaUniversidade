@@ -8,7 +8,6 @@ import java.util.List;
 
 public class AlunoRepository {
     private List<Alunos> alunos = new ArrayList<>();
-    private int sequenceId = 1;
     private static AlunoRepository instance;
 
     public static AlunoRepository getInstance() {
@@ -21,7 +20,6 @@ public class AlunoRepository {
     public void cadastrarAluno(Alunos aluno) {
         if (aluno != null && buscarPorMatricula(aluno.getMatricula()) == null) {
             alunos.add(aluno);
-            this.sequenceId++;
             System.out.println("Aluno cadastrado: " + aluno);
         } else {
             System.out.println("Erro: Matrícula já existe ou aluno inválido.");
@@ -39,10 +37,6 @@ public class AlunoRepository {
                     a.getMatricula(), a.getNome(), a.getDisciplinasMatriculadas().size());
         }
         System.out.println("Total: " + alunos.size() + "\n");
-    }
-
-    public int getNewId() {
-        return this.sequenceId;
     }
 
     public Alunos buscarPorMatricula(String matricula) {
