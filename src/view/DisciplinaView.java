@@ -80,19 +80,18 @@ public class DisciplinaView extends BaseView {
           : "N/A";
 
       System.out.printf(
-          formato,
-          disciplina.getId(),
-          disciplina.getNome(),
-          nomeProfessor,
-          tipoDisciplina,
-          qtdeAlunos);
+        formato,
+        disciplina.getId(),
+        disciplina.getNome(),
+        nomeProfessor,
+        tipoDisciplina,
+        qtdeAlunos
+      );
     }
 
     System.out.printf(separador);
     pausar();
-  }
-
- 
+  } 
 
   public int removerDisciplina() throws Exception {
     exibirTitulo("Remocao de disciplina");

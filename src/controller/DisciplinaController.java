@@ -514,7 +514,8 @@ public class DisciplinaController {
     aluno.removerDisciplina(id);
     alunosMatriculados.remove(matricula);
     disciplina.setAlunos(alunosMatriculados);
-    this.disciplinaRepository.atualizarDisciplina(disciplina);
+    disciplinaRepository.atualizarDisciplina(disciplina);
+    disciplinaView.sucesso("Aluno desmatriculado com sucesso");
 
     return disciplina;
   }

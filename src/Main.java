@@ -39,41 +39,45 @@ public class Main {
     ProjetoPesquisaController projetoPesquisaController = new ProjetoPesquisaController(projetoPesquisaRepository, professorRepository, alunoRepository, projetoPesquisaView);
     DisciplinaController disciplinaController = new DisciplinaController(disciplinaRepository, disciplinaView, alunoController, professorController);
 
-    try {
-      alunoRepository.criarMockAlunos();
-      professorController.criarMockProfessor();
-      disciplinaController.criarMockDiscipliba();
+  alunoRepository.criarMockAlunos();
+  professorController.criarMockProfessor();
+  disciplinaController.criarMockDiscipliba();
 
-      System.out.println("""
-              ╔══════════════════════════════════════════════════╗
-              ║    SISTEMA DE GESTÃO ACADÊMICA - IFSP 2025       ║
-              ║        Programação Orientada a Objetos           ║
-              ╚══════════════════════════════════════════════════╝
-              """);
+  System.out.println("""
+          ╔══════════════════════════════════════════════════╗
+          ║    SISTEMA DE GESTÃO ACADÊMICA - IFSP 2025       ║
+          ║        Programação Orientada a Objetos           ║
+          ╚══════════════════════════════════════════════════╝
+          """);
+      try{
+          int opcao;
+          do {
+              try {
+                  exibirMenuPrincipal();
+                  opcao = lerInteiro("→ Digite a opção desejada: ");
 
-      int opcao;
-      do {
-        exibirMenuPrincipal();
-        opcao = lerInteiro("→ Digite a opção desejada: ");
+                  switch (opcao) {
+                      case 1 -> menuProfessores(professorView, professorController);
+                      case 2 -> disciplinaController.menuDisciplinas();
+                      case 3 -> menuAlunos(disciplinaController, alunoController);
+                      case 4 -> menuVinculosEProjetos(disciplinaController, projetoPesquisaController);
+                      case 5 -> menuEletivasInteresse(disciplinaController);
+                      case 6 -> menuRelatorios(professorController, disciplinaController);
+                      case 7 -> menuAjudaSobre();
+                      case 0 -> {
+                          System.out.println("Saindo do sistema... Até logo!");
+                          return;
+                      }
+                      default -> System.out.println("Opção inválida! Tente novamente.");
+                  }
 
-        switch (opcao) {
-          case 1 -> menuProfessores(professorView, professorController);
-          case 2 -> disciplinaController.menuDisciplinas();
-          case 3 -> menuAlunos(disciplinaController, alunoController);
-          case 4 -> menuVinculosEProjetos(disciplinaController, projetoPesquisaController);
-          case 5 -> menuEletivasInteresse(disciplinaController);
-          case 6 -> menuRelatorios(professorController, disciplinaController);
-          case 7 -> menuAjudaSobre();
-          case 0 -> {
-            System.out.println("Saindo do sistema... Até logo!");
-            return;
-          }
-          default -> System.out.println("Opção inválida! Tente novamente.");
-        }
-      } while (true);
-    } catch (Exception e) {
-      System.out.println("Ocorreu um erro inesperado: " + e.getMessage());
-    }
+              } catch (Exception e) {
+                  System.out.println("Erro: " + e.getMessage());
+              }
+          } while (true);
+        } catch (Exception e) {
+          System.out.println("Erro fatal: " + e.getMessage());
+      }
   }
 
   private static void exibirMenuPrincipal() {
