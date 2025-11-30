@@ -132,17 +132,20 @@ public class DisciplinaView extends BaseView {
 
   public void gerarRelatorioDisciplina(List<Disciplina> disciplinas) throws Exception {
 
+    int interesse = 0;
+
     for (Disciplina d : disciplinas) {
       List<String> listaInteressados = null;
       if (d instanceof DisciplinaEletiva) {
         DisciplinaEletiva de = (DisciplinaEletiva) d;
-        listaInteressados = de.listarInteressados();
+        interesse = de.listarInteressados().size();
       }
       print(
         "Nome: " + d.getNome() +
         " | Tipo: " + d.getTipo() +
-        " | Alunos Matriculados: " + d.getAlunos() +
-        " | Popularidade: " + listaInteressados.size());
+        " | Alunos Matriculados: " + d.getAlunos().size() +
+        " | Popularidade: " + interesse
+      );
     }
     print("=====================================\n");
   }

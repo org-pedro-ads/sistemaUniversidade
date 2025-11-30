@@ -43,7 +43,7 @@ public class DisciplinaController {
       try {
         switch(escolha) {
           case "a" -> getInfoCadDisciplina();
-          case "b" -> listarAlunosMatriculados();
+          case "b" -> listarDisciplinas();
           case "c" -> editarDisciplina();
           case "d" -> removerDisciplina(disciplinaView.removerDisciplina());
           case "e" -> listarAlunosMatriculados();
@@ -61,7 +61,7 @@ public class DisciplinaController {
   public void menuAtribuirDisciplinaAProfessor() throws Exception { atribuirDisciplinaAProfessor(); }
   public void menuRemoverProfessorResponsavel() throws Exception { removerProfessorDisciplina(); }
   public void menuDeclararInteresseDisciplina() throws Exception { declararInteresseDisciplina(); }
-  public void menuCalcularInteresseDisciplina() throws Exception { removerInteresseDisciplina(); }
+  public void menuCalcularInteresseDisciplina() throws Exception { calcularIndiceInteresseDisciplina(); }
   public void menuRelatorioPopulariadeDisciplina() throws Exception { relatorioPopularidadeDisciplina(); }
   public void menuGerarRelatorioDisciplina() throws Exception { gerarRelatorioDisciplina(); }
 
