@@ -230,54 +230,58 @@ public class DisciplinaController {
   // ==================================================================================
 
   public void editarDisciplina() throws Exception {
-    disciplinaView.exibirTitulo("Editar disciplina");
+    try{
+      disciplinaView.exibirTitulo("Editar disciplina");
 
-    int id = disciplinaView.lerInteiro("\nDigite o ID da disciplina: ");
-    Disciplina disciplina = buscarDisciplinaPorId(id);
+      int id = disciplinaView.lerInteiro("\nDigite o ID da disciplina: ");
+      Disciplina disciplina = buscarDisciplinaPorId(id);
 
-    if (disciplina == null)
-      throw new Exception("ID invalido");
+      if (disciplina == null)
+        throw new Exception("ID invalido");
 
-    disciplinaView.exibirDetalhesDisciplina(disciplina);
+      disciplinaView.exibirDetalhesDisciplina(disciplina);
 
-    String escolha;
-    Disciplina disciplinaAtualizada = null;
+      String escolha;
+      Disciplina disciplinaAtualizada = null;
 
-    disciplinaView.print("\n\n === Selecione a propriedade que deseja editar: ");
-    disciplinaView.print("1. Nome");
-    disciplinaView.print("2. Carga horaria");
-    disciplinaView.print("3. Professor responsavel");
-    disciplinaView.print("4. Voltar");
-    escolha = disciplinaView.lerString("\nDigite a sua escolha: ");
+      disciplinaView.print("\n\n === Selecione a propriedade que deseja editar: ");
+      disciplinaView.print("1. Nome");
+      disciplinaView.print("2. Carga horaria");
+      disciplinaView.print("3. Professor responsavel");
+      disciplinaView.print("4. Voltar");
+      escolha = disciplinaView.lerString("\nDigite a sua escolha: ");
 
-    switch (escolha) {
-      case "1":
-        String nome = disciplinaView.lerString("Digite o nome do disciplina: ");
-        disciplinaAtualizada = atualizarNome(id, nome);
-        break;
+      switch (escolha) {
+        case "1":
+          String nome = disciplinaView.lerString("Digite o nome do disciplina: ");
+          disciplinaAtualizada = atualizarNome(id, nome);
+          break;
 
-      case "2":
-        int cargaHoraria = disciplinaView.lerInteiro("Digite o carga horaria da disciplina: ");
-        disciplinaAtualizada = atualizarCargaHoraria(id, cargaHoraria);
-        break;
+        case "2":
+          int cargaHoraria = disciplinaView.lerInteiro("Digite o carga horaria da disciplina: ");
+          disciplinaAtualizada = atualizarCargaHoraria(id, cargaHoraria);
+          break;
 
-      case "3":
-        String matriculaProfessor = disciplinaView.lerString("Digite o matricula do professor: ");
-        disciplinaAtualizada = atualizarProfessorResponsavel(id, matriculaProfessor);
-        break;
+        case "3":
+          String matriculaProfessor = disciplinaView.lerString("Digite o matricula do professor: ");
+          disciplinaAtualizada = atualizarProfessorResponsavel(id, matriculaProfessor);
+          break;
 
-      case "4":
-        return;
+        case "4":
+          return;
 
-      default:
-        disciplinaView.erro("\n\nOpção inválida, tente novamente: ");
-    }
+        default:
+          disciplinaView.erro("\n\nOpção inválida, tente novamente: ");
+      }
 
-    if (disciplinaAtualizada != null) {
-      alterarDisciplina(disciplinaAtualizada);
-      disciplinaView.limparTela();
-      disciplinaView.sucesso("Disciplina alterada com sucesso");
-      disciplinaView.exibirDetalhesDisciplina(disciplinaAtualizada);
+      if (disciplinaAtualizada != null) {
+        alterarDisciplina(disciplinaAtualizada);
+        disciplinaView.limparTela();
+        disciplinaView.sucesso("Disciplina alterada com sucesso");
+        disciplinaView.exibirDetalhesDisciplina(disciplinaAtualizada);
+      }
+    } catch(Exception e) {
+      throw new Exception("Erro ao atualizar disciplina: " + e.getMessage());
     }
   }
 
@@ -297,28 +301,37 @@ public class DisciplinaController {
   }
 
   public Disciplina atualizarNome(int id, String nome) throws Exception {
-    Disciplina disciplina = buscarDisciplinaPorId(id);
-    if (disciplina == null) {
-      throw new Exception("Erro: Id invalido");
-    }
+    try {
+      Disciplina disciplina = buscarDisciplinaPorId(id);
+      if (disciplina == null) {
+        throw new Exception("Erro: Id invalido");
+      }
 
-    disciplina.setNome(nome);
-    this.disciplinaRepository.atualizarDisciplina(disciplina);
-    return disciplina;
+      disciplina.setNome(nome);
+      this.disciplinaRepository.atualizarDisciplina(disciplina);
+      return disciplina;
+
+    } catch (Exception e) {
+      throw new Exception("Erro ao atualizar nome: " + e.getMessage());
+    }
   }
 
   public Disciplina atualizarCargaHoraria(int id, int cargaHoraria) throws Exception {
-    Disciplina disciplina = buscarDisciplinaPorId(id);
-    if (disciplina == null) {
-      throw new Exception("Erro: Id invalido");
+    try {
+      Disciplina disciplina = buscarDisciplinaPorId(id);
+      if (disciplina == null) {
+        throw new Exception("Erro: Id invalido");
+      }
+
+      if (cargaHoraria < 10)
+        throw new Exception("Carga horaria deve ser ao menos 10 horas.");
+
+      disciplina.setCargaHoraria(cargaHoraria);
+      this.disciplinaRepository.atualizarDisciplina(disciplina);
+      return disciplina;
+    } catch (Exception e) {
+      throw new Exception("Erro ao atualizar carga horaria: " + e.getMessage());
     }
-
-    if (cargaHoraria < 10)
-      throw new Exception("Carga horaria deve ser ao menos 10 horas.");
-
-    disciplina.setCargaHoraria(cargaHoraria);
-    this.disciplinaRepository.atualizarDisciplina(disciplina);
-    return disciplina;
   }
 
   // ==================================================================================
@@ -595,7 +608,6 @@ public class DisciplinaController {
     }
 
   }
-
 
   // Relatorio de disciplina
   public void gerarRelatorioDisciplina() throws Exception {
