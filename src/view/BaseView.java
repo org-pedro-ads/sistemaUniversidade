@@ -32,11 +32,19 @@ public abstract class BaseView {
     return scanner.nextLine().trim();
   }
 
-  public int lerInteiro(String mensagem) {
-    System.out.print(mensagem);
-    int num = scanner.nextInt();
-    scanner.nextLine(); // Adicionado para limpar buffer
-    return num;
+  public int lerInteiro(String mensagem) throws Exception {
+    try {
+      
+      System.out.print(mensagem);
+      int num = scanner.nextInt();
+      scanner.nextLine(); // Adicionado para limpar buffer
+      return num;
+    
+    } catch (Exception e) {
+      scanner.nextLine(); // limpar buffer
+      throw new Exception("Entrada invalida: Valor nao numerico");
+    }
+   
 
   }
 
