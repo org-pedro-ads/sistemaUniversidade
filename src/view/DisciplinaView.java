@@ -123,7 +123,7 @@ public class DisciplinaView extends BaseView {
         DisciplinaEletiva disciplinaEletiva = (DisciplinaEletiva) disciplina;
         print("Disciplina: " + disciplinaEletiva.getNome());
         print("Professor responsavel: " + disciplinaEletiva.getProfessorResponsavel().getNome());
-       print("Popularidade: " + disciplinaEletiva.listarInteressados().size());
+        print("Popularidade: " + disciplinaEletiva.listarInteressados().size());
       }
     }
 

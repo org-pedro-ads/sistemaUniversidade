@@ -57,13 +57,13 @@ public class DisciplinaController {
   }
 
   public void menuMatricularAlunoEmDisciplina() throws Exception { getInfoMatriculaAluno(); }
-  public void menuDesmatricularAlunoDisciplina() throws Exception {}
-  public void menuAtribuirDisciplinaAProfessor() throws Exception {}
-  public void menuRemoverProfessorResponsavel() throws Exception {}
-  public void menuDeclararInteresseDisciplina() throws Exception {}
-  public void menuCalcularInteresseDisciplina() throws Exception {}
-  public void menuRelatorioPopulariadeDisciplina() throws Exception {}
-  public void menuGerarRelatorioDisciplina() throws Exception {}
+  public void menuDesmatricularAlunoDisciplina() throws Exception { desmatricularAlunoDisciplina(); }
+  public void menuAtribuirDisciplinaAProfessor() throws Exception { atribuirDisciplinaAProfessor(); }
+  public void menuRemoverProfessorResponsavel() throws Exception { removerProfessorDisciplina(); }
+  public void menuDeclararInteresseDisciplina() throws Exception { declararInteresseDisciplina(); }
+  public void menuCalcularInteresseDisciplina() throws Exception { removerInteresseDisciplina(); }
+  public void menuRelatorioPopulariadeDisciplina() throws Exception { relatorioPopularidadeDisciplina(); }
+  public void menuGerarRelatorioDisciplina() throws Exception { gerarRelatorioDisciplina(); }
 
   // ============================invalido======================================================
   // CRIACAO (Create)
@@ -231,7 +231,7 @@ public class DisciplinaController {
   // ATUALIZACAO - DADOS BASICOS
   // ==================================================================================
 
- public void editarDisciplina() throws Exception {
+  public void editarDisciplina() throws Exception {
     disciplinaView.exibirTitulo("Editar disciplina");
 
     int id = disciplinaView.lerInteiro("\nDigite o ID da disciplina: ");
@@ -423,6 +423,21 @@ public class DisciplinaController {
     } catch (Exception e) {
       disciplinaView.erro("Erro ao declarar interesse na disciplina: " + e.getMessage());
       disciplinaView.pausar();
+    }
+  }
+
+  public void removerInteresseDisciplina() throws Exception {
+    try {
+
+      disciplinaView.exibirTitulo("Remover interesse de disciplina");
+      
+      int id = disciplinaView.lerInteiro("Digite o id da disciplina: ");
+      String matricula = disciplinaView.lerString("Digite a matricula do aluno: ");
+
+      removerInteresseDisciplina(id, matricula);
+
+    } catch (Exception e) {
+      disciplinaView.erro("Erro ao remover interesse de disciplina: " + e.getMessage());
     }
   }
 
