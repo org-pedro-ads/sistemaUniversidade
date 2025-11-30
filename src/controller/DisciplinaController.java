@@ -465,7 +465,9 @@ public class DisciplinaController {
   // ==================================================================================
 
   public void getInfoMatriculaAluno() throws Exception {
-    
+     
+    disciplinaView.exibirTitulo("Matricular aluno em disciplina");
+
     int idDisciplina = disciplinaView.lerInteiro("Digite o ID da disciplina: ");
     String matricula = disciplinaView.lerString("Digite a matricula do aluno: ");
     
@@ -474,8 +476,7 @@ public class DisciplinaController {
   }
 
   public Disciplina matricularAlunoDisciplina(int idDisciplina, String matricula) throws Exception {
-    
-    disciplinaView.exibirTitulo("Matricular aluno em disciplina");
+
 
     Disciplina disciplina = buscarDisciplinaPorId(idDisciplina);
     
@@ -499,7 +500,8 @@ public class DisciplinaController {
     aluno.adicionarDisciplina(idDisciplina);
     alunosMatriculados.add(matricula);
     disciplina.setAlunos(alunosMatriculados);
-    this.disciplinaRepository.atualizarDisciplina(disciplina);
+    disciplinaRepository.atualizarDisciplina(disciplina);
+    disciplinaView.sucesso("Aluno matriculado com sucesso");
 
     return disciplina;
   }
