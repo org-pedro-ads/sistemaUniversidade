@@ -69,6 +69,7 @@ public class DisciplinaController {
   
   public void getInfoCadDisciplina() {
     try {
+    disciplinaView.limparTela();
     disciplinaView.exibirTitulo("Cadastro de disciplina");
     String nomeDisciplina = disciplinaView.lerString("\nInforme o nome do disciplina: ");
     int cargaHoraria = disciplinaView.lerInteiro("\nInforme a carga horaria da disciplina: ");
@@ -231,6 +232,7 @@ public class DisciplinaController {
 
   public void editarDisciplina() throws Exception {
     try{
+      disciplinaView.limparTela();
       disciplinaView.exibirTitulo("Editar disciplina");
 
       int id = disciplinaView.lerInteiro("\nDigite o ID da disciplina: ");
