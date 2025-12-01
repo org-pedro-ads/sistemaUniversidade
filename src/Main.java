@@ -42,9 +42,9 @@ public class Main {
         DisciplinaController disciplinaController = new DisciplinaController(disciplinaRepository, disciplinaView,
                 alunoController, professorController);
 
-        alunoRepository.criarMockAlunos();
-        professorController.criarMockProfessor();
-        disciplinaController.criarMockDiscipliba();
+        // alunoRepository.criarMockAlunos();
+        // professorController.criarMockProfessor();
+        // disciplinaController.criarMockDiscipliba();
 
         System.out.println("""
                 ╔══════════════════════════════════════════════════╗
