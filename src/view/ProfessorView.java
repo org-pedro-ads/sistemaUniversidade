@@ -309,6 +309,7 @@ public class ProfessorView {
             switch (opcao) {
                 case 1 -> {
                     nomeProjetoPesqusia = editarProjetosPesquisa(vit);
+                    return nomeProjetoPesqusia;
                 }
 
                 case 2 -> {
@@ -342,16 +343,11 @@ public class ProfessorView {
                     .map(ProjetoPesquisa::getTitulo)
                     .collect(Collectors.toList());
 
-            if (projetos.isEmpty()) {
-                System.out.println("(Nenhum projeto cadastrado)");
-            } else {
-                for (int i = 0; i < projetos.size(); i++) {
-                    System.out.println((i + 1) + ". " + projetos.get(i));
-                }
+            for (int i = 0; i < projetos.size(); i++) {
+                System.out.println((i + 1) + ". " + projetos.get(i));
             }
 
             System.out.println("\n1. Adicionar novos projetos");
-            System.out.println("2. Remover TODOS os projetos");
             System.out.println("0. Voltar");
             System.out.print("→ Escolha: ");
 
@@ -359,8 +355,10 @@ public class ProfessorView {
             sc.nextLine();
 
             switch (opcao) {
-                case 1 -> nomeProjetoPesqusia = adicionarProjetos(vit, projetos);
-                case 2 -> nomeProjetoPesqusia = removerTodosProjetos(vit);
+                case 1 -> {
+                    nomeProjetoPesqusia = adicionarProjetos(vit, projetos);
+                    return nomeProjetoPesqusia;
+                }
                 case 0 -> {
                     System.out.println("Voltando...");
                     return projetos;
@@ -372,35 +370,14 @@ public class ProfessorView {
     }
 
     private List<String> adicionarProjetos(ProfessorVitalicio vit, List<String> projetos) {
-        List<String> nomeProjetoPesqusia = new ArrayList<>();
         System.out.print("Quantos projetos deseja adicionar? ");
         int qtd = Integer.parseInt(sc.nextLine());
 
-        nomeProjetoPesqusia = vit.getProjetos().stream()
-                .map(ProjetoPesquisa::getTitulo)
-                .collect(Collectors.toList());
-
         for (int i = 0; i < qtd; i++) {
             System.out.print("Nome do novo projeto " + (i + 1) + ": ");
-            projetos.add(sc.nextLine());
+            String projeto = sc.nextLine();
+            projetos.add(projeto);
         }
-
-        System.out.println("Projetos adicionados com sucesso!");
-        return nomeProjetoPesqusia;
+        return projetos;
     }
-
-    private List<String> removerTodosProjetos(ProfessorVitalicio vit) {
-        List<String> nomeProjetoPesqusia = new ArrayList<>();
-        System.out.print("Tem certeza que deseja remover TODOS os projetos? (s/n): ");
-        String confirmacao = sc.nextLine().trim().toLowerCase();
-
-        if (confirmacao.equals("s")) {
-            vit.setProjetos(new ArrayList<>());
-            System.out.println("Todos os projetos foram removidos.");
-        } else {
-            System.out.println("Operação cancelada.");
-        }
-        return nomeProjetoPesqusia;
-    }
-
 }

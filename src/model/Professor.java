@@ -60,15 +60,17 @@ public abstract class Professor {
     public abstract Double calcularSalario(Double horasTrabalhadas);
 
     public void adicionarDisciplina(Disciplina disciplina){
-
+        if(!this.disciplinas.contains(disciplina)){
+            this.disciplinas.add(disciplina);
+        }
     }
 
     public void removerDisciplina(Disciplina disciplina){
-
+        this.disciplinas.removeIf(d -> d.getNome().equals(disciplina.getNome()));
     }
 
     public List<Disciplina> listarDisciplinas(){
-        return null;
+        return disciplinas;
     }
     
 }

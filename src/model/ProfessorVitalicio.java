@@ -2,6 +2,8 @@ package model;
 
 import java.util.List;
 
+import static model.TituloProfessor.DOUTORADO;
+
 public class ProfessorVitalicio extends Professor{
     private List<ProjetoPesquisa> projetos;
     private Double salarioBase;
@@ -31,10 +33,23 @@ public class ProfessorVitalicio extends Professor{
 
     @Override
     public Double calcularSalario(Double horasTrabalhadas) {
+        if(getTitulo() == DOUTORADO){
+            salarioBase = salarioBase + (salarioBase*0.2);
+        }
         return salarioBase;
     }
 
-    public ProjetoPesquisa listarProjetos() {
-        return null;
+    public void adicionarProjeto(ProjetoPesquisa p) {
+        if (!projetos.contains(p)) {
+            projetos.add(p);
+        }
+    }
+
+    public void removerProjeto(ProjetoPesquisa p) {
+        projetos.removeIf(d -> d.getTitulo().equals(p.getTitulo()));
+    }
+
+    public List<ProjetoPesquisa> listarProjetos() {
+        return projetos;
     }
 }

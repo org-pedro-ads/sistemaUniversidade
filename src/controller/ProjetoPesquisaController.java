@@ -182,9 +182,16 @@ public class ProjetoPesquisaController {
             view.erro("Apenas professores vitalícios podem ser orientadores!");
             view.pausar();
             return;
+        }else{
+            ProfessorVitalicio antigoOrientador = (ProfessorVitalicio) professorRepo.findByMatricula(projeto.getOrientador().getMatricula());
+            antigoOrientador.removerProjeto(projeto);
+            professorRepo.update(antigoOrientador);
         }
 
         projeto.alterarOrientador((ProfessorVitalicio) novoOrientador);
+        ((ProfessorVitalicio) novoOrientador).adicionarProjeto(projeto);
+        professorRepo.update(novoOrientador);
+        projetoRepo.atualizarProjeto(projeto);
         view.sucesso("Orientador alterado com sucesso!");
 
         view.exibirProjetoDetalhado(projeto);

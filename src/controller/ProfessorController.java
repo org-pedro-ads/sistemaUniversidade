@@ -72,9 +72,9 @@ public class ProfessorController {
                 if (disciplinas.contains(consultarDisciplina)) {
                     throw new Exception("Disciplina duplicada: " + nomeDisciplina);
                 }
-                if(consultarDisciplina.getProfessorResponsavel().getMatricula() != professor.getMatricula()){
+                if(consultarDisciplina.getProfessorResponsavel() != null && consultarDisciplina.getProfessorResponsavel().getMatricula() != professor.getMatricula()){
                     Professor professor1 = professorRepository.findByMatricula(consultarDisciplina.getProfessorResponsavel().getMatricula());
-                    professor1.getDisciplinas().removeIf(d -> d.getNome().equals(nomeDisciplina));
+                    professor1.removerDisciplina(consultarDisciplina);
                     professorRepository.update(professor1);
                 }
                 disciplinas.add(consultarDisciplina);
@@ -98,17 +98,17 @@ public class ProfessorController {
         try{
             if(encontrarProfessor(matricula) != null){
                 Professor professor = professorRepository.findByMatricula(matricula);
-                List<Disciplina> disciplinas = professor.getDisciplinas();
-                for(Disciplina d : disciplinas){
-                    Disciplina consultaDisicplina = disciplinaRepository.buscarDisciplinaPorNome(d.getNome());
-                    consultaDisicplina.setProfessorResponsavel(null);
-                    disciplinaRepository.atualizarDisciplina(consultaDisicplina);
-                }
                 if(professor instanceof ProfessorVitalicio professorVitalicio){
                     List<ProjetoPesquisa> projetos = professorVitalicio.getProjetos();
                     if(!projetos.isEmpty()){
                         throw new Exception("Professor vitalicio nao pode ter projetos pesquisas, vinculada ao seu professor");
                     }
+                }
+                List<Disciplina> disciplinas = professor.getDisciplinas();
+                for(Disciplina d : disciplinas){
+                    Disciplina consultaDisicplina = disciplinaRepository.buscarDisciplinaPorNome(d.getNome());
+                    consultaDisicplina.setProfessorResponsavel(null);
+                    disciplinaRepository.atualizarDisciplina(consultaDisicplina);
                 }
                 professorRepository.delete(matricula);
                 professorView.mostrarMensagemRemocaoProfessor("\nProfessor removido com sucesso!\n");
@@ -135,6 +135,7 @@ public class ProfessorController {
             } else if (opcaoEscolhida == 4) {
                 List<String> nomeProjetoPesquesa = professorView.editarTipoEspecifico(professor);
                 atualizacaoCompleta(nomeProjetoPesquesa, professor);
+                System.out.println("Projeto de pesquisa do Professor atualizado com sucesso");
             }
             professorRepository.update(professor);
         } catch (Exception e){
@@ -185,6 +186,11 @@ public class ProfessorController {
                     if (projetos.contains(projeto)) {
                         throw new Exception("projeto duplicada: " + projeto);
                     }
+                    if(projeto.getOrientador() != null && projeto.getOrientador().getMatricula() != professor.getMatricula()){
+                        Professor professor1 = professorRepository.findByMatricula(projeto.getOrientador().getMatricula());
+                        ((ProfessorVitalicio) professor1).removerProjeto(projeto);
+                        professorRepository.update(professor1);
+                    }
                     projetos.add(projeto);
                 }
                 professorVitalicio.setProjetos(projetos);
@@ -195,7 +201,7 @@ public class ProfessorController {
             }
             professorRepository.update(professor);
         } catch (Exception e){
-            throw new Exception("Erro ao atualizar professor");
+            throw new Exception("Erro ao atualizar professor - "+e.getMessage());
         }
     }
 
@@ -243,9 +249,6 @@ public class ProfessorController {
     private Double calcularSalarioProfessorVitalicio(TituloProfessor titulo, Professor professor) {
         ProfessorVitalicio professorVitalicio = (ProfessorVitalicio) professor;
         Double salarioProfessor = professorVitalicio.calcularSalario(0.0);
-        if(titulo == DOUTORADO){
-            salarioProfessor = salarioProfessor + (salarioProfessor*0.2);
-        }
         return salarioProfessor;
     }
 }
